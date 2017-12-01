@@ -48,12 +48,19 @@ public class IAPManager : IStoreListener
             string dataAsYaml = obj.ToString();
             Deserializer deserializer = new Deserializer();
             Dictionary<string, int> dic = deserializer.Deserialize<Dictionary<string, int>>(new StringReader(dataAsYaml));
-            foreach (KeyValuePair<string, int> kv in dic)
-            {
-                builder.AddProduct(kv.Key, productType[kv.Value]);
+            if(dic!=null){
+                foreach (KeyValuePair<string, int> kv in dic)
+                {
+                    builder.AddProduct(kv.Key, productType[kv.Value]);
+                }
+                UnityPurchasing.Initialize(this, builder);
+            }else{
+                Debug.LogWarning("QIPAWORLD:没有商品ID 配置文件位置 Resources/IAP/IAPDATA");
             }
+        }else{
+            Debug.LogWarning("QIPAWORLD:没有商品配置文件 Resources/IAP/IAPDATA");
         }
-        UnityPurchasing.Initialize(this, builder);
+        
     }
     /// <summary>
     /// Called when Unity IAP is ready to make purchases.

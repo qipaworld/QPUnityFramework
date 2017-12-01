@@ -48,17 +48,24 @@ public class UADManager
             string dataAsYaml = obj.ToString();
             Deserializer deserializer = new Deserializer();
             Dictionary<string, string> dic = deserializer.Deserialize<Dictionary<string, string>>(new StringReader(dataAsYaml));
+            string key = "";
 #if UNITY_IOS
-            string gameId = dic["ios"];
+            key = "ios";
 #elif UNITY_ANDROID
-            string gameId = dic["android"];
+            key = "android";
 #endif
-            Advertisement.Initialize(gameId);
-            Debug.Log("QIPAWORLD:广告ID"+gameId);
-
+            if (dic != null && dic.ContainsKey (key)) {
+                string gameId = dic[key];
+                Advertisement.Initialize(gameId);
+                Debug.LogWarning("QIPAWORLD:广告ID"+gameId);
+            }
+            else{
+                Debug.LogWarning("QIPAWORLD:没有广告ID 配置文件位置Resources/UAD/UADDATA");
+                UIController.Instance.PushHint("没有广告ID","没有广告ID 配置文件位置Resources/UAD/UADDATA",null,true);
+            }
         }else{
-            Debug.LogError("QIPAWORLD:没有广告ID");
-            UIController.Instance.PushHint("没有广告ID","没有广告ID",null,true);
+            Debug.LogError("QIPAWORLD:没有广告配置文件 Resources/UAD/UADDATA");
+            UIController.Instance.PushHint("没有广告ID","没有广告配置文件 Resources/UAD/UADDATA",null,true);
         }
     }
     
