@@ -6,6 +6,12 @@
 
 <hr>
 
+**Demo仓库 git@gitee.com:qipaworld/QPUnityFrameWorkTest.git**
+
+<hr>
+
+<hr>
+
 # Unity 框架插件，数据驱动框架 :-) #
 
 **你可以用他来快速创建游戏。他内置了UI控制器，数据控制器，本地化功能，原生分享功能，内购功能和unityAD。**
