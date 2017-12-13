@@ -5,12 +5,16 @@ using UnityEngine;
 public class FullScreenSprite : MonoBehaviour {
 
     public  SpriteRenderer spriteRenderer;
+    public DataBase DataScale2D = null;
+    Vector2 spriteSize;
     void Start () {
+        DataScale2D = DataManager.Instance.getData("Scale2D");
+        spriteSize = spriteRenderer.sprite.bounds.size;
+        DataScale2D.Bind(UpdateSize);
+    }
 
-        
-        Vector2 spriteSize = spriteRenderer.sprite.bounds.size;
+    void UpdateSize(DataBase data){
 
-        //Vector2 scale = ;
         float scale = 1;
         if (Camera.main.aspect >= spriteSize.x/ spriteSize.y)
         { 
@@ -21,7 +25,12 @@ public class FullScreenSprite : MonoBehaviour {
             scale = Scale2D.cameraSize.y / spriteSize.y;
         }
         
-        transform.localScale = new Vector3(transform.localScale.x*scale, transform.localScale.y * scale, 1);
+        transform.localScale = new Vector3(scale,  scale, 1);
+    }
+
+    void OnDestroy()
+    {
+        LocalizationManager.Instance.Unbind(UpdateSize);
     }
 
 }
