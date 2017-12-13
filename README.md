@@ -20,6 +20,16 @@
 
 <hr>
 
+## 需要插件 ##
+1.unity Ads
+2.unity IAP
+3.DOTween
+4.YamlDoNet for Unity
+
+<hr>
+
+<hr>
+
 ## 使用方法 ##
 直接放到"你的项目/Assets/Plugins"下即可使用 例如"LivingTime/Assets/Plugins/QIPAWORLD"
 
