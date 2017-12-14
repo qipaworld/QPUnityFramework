@@ -34,27 +34,16 @@ public class UIController {
 
         }
     }
-	public GameObject Push(string name){
-		GameObject ui = null;
-        if (uiDatas.GetGameObjectValue(name)==null){
-            GameObject uiLoad = uiLoadDatas.GetGameObjectValue(name);
-            if (uiLoad==null){
-				uiLoad = Resources.Load("UIPrefabs/"+name) as GameObject;
-
-                uiLoadDatas.SetGameObjectValue(name,uiLoad);
-            }
-			ui = GameObject.Instantiate(uiLoad,target) as GameObject;
-			UIData uiData = ui.AddComponent<UIData>();
-			uiData.uiName = name;
-            uiDatas.SetGameObjectValue(name,ui);
-
-        }else{
-            Debug.LogWarning("QIPAWORLD:重复添加UI--"+name);
-        }
-		return ui;
+	public GameObject Push(string name,UIChangeDelegate callback = null){
+        return PushRepeatableLayer(name,name,callback);
 	}
-	private GameObject PushRepeatableLayer(string name,string fileName){
+	private GameObject PushRepeatableLayer(string name,string fileName,UIChangeDelegate callback = null){
 		
+		if (uiDatas.GetGameObjectValue(name)!=null){
+			Debug.LogWarning("QIPAWORLD:重复添加UI--"+name);
+        	return null
+        }
+
 		GameObject uiLoad = uiLoadDatas.GetGameObjectValue(fileName);
 		if (uiLoad==null){
 			uiLoad = Resources.Load("UIPrefabs/"+fileName) as GameObject;
@@ -63,38 +52,30 @@ public class UIController {
 		GameObject ui = GameObject.Instantiate(uiLoad,target) as GameObject;
 		UIData uiData = ui.AddComponent<UIData>();
 		uiData.uiName = name;
+		uiData.changeCallback = callback;
 		uiDatas.SetGameObjectValue(name,ui);
 		return ui;
 	}
-	public GameObject PushHint(string name,string key = null,string[] value = null,bool log = false){
-		GameObject ui = null;
-		if (uiDatas.GetGameObjectValue(name)==null){
-			
-			ui = PushRepeatableLayer (name,"hintLayer");
+	public GameObject PushHint(string name,string key = null,string[] value = null,bool log = false,UIChangeDelegate callback = null){
+		GameObject ui = PushRepeatableLayer (name,"hintLayer",callback);
+		if (ui!=null){
 			if(log){
 				ui.GetComponentInChildren<Text>().text = key;
 			}
             else if(key != null){            
                 ui.GetComponentInChildren<Text>().text = LocalizationManager.Instance.GetLocalizedValue(key,value);
             }
-
-		}else{
-			Debug.LogWarning("QIPAWORLD:重复添加UI--"+name);
 		}
 		return ui;
 	}
-	public GameObject PushLoading(string name,string key = null,string[] value = null){
-		GameObject ui = null;
-		if (uiDatas.GetGameObjectValue(name)==null){
-			ui = PushRepeatableLayer (name,"Loading");
+	public GameObject PushLoading(string name,string key = null,string[] value = null,UIChangeDelegate callback = null){
+		GameObject ui = PushRepeatableLayer (name,"Loading",callback);
+		if (ui!=null){
 			uiLoadingLayerDatas.SetStringValue (name,name);
 			loadingLayerNum++;
 			if(key != null){            
 				ui.GetComponentInChildren<Text>().text = LocalizationManager.Instance.GetLocalizedValue(key,value);
 			}
-
-		}else{
-			Debug.LogWarning("QIPAWORLD:重复添加UI--"+name);
 		}
 		return ui;
 	}
@@ -102,11 +83,11 @@ public class UIController {
 		GameObject ui = uiDatas.GetGameObjectValue(name);
         if(ui!=null){
             uiDatas.RemoveGameObjectValue (name);
-            GameObject.Destroy(ui);    
 			if(uiLoadingLayerDatas.GetStringValue(name)!=null){
 				loadingLayerNum--;
 				uiLoadingLayerDatas.RemoveStringValue(name);
 			}
+			GameObject.Destroy(ui);
         }else{
             Debug.LogWarning("QIPAWORLD:没有找到UI--"+name);
         }
