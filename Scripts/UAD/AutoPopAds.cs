@@ -39,7 +39,7 @@ void Update () {
 		while (true) {
 			if (UIController.Instance.getLayerNum() != 0)
 				yield return new WaitForSeconds (1f);
-			else if (!UADManager.Instance.PopAd ())
+			else if (!UADManager.Instance.PopAd (null,true))
 				yield return new WaitForSeconds (1f);
 			else
 				break;

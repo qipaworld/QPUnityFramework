@@ -41,7 +41,7 @@ public class UIController {
 		
 		if (uiDatas.GetGameObjectValue(name)!=null){
 			Debug.LogWarning("QIPAWORLD:重复添加UI--"+name);
-        	return null
+        	return null;
         }
 
 		GameObject uiLoad = uiLoadDatas.GetGameObjectValue(fileName);
@@ -63,7 +63,13 @@ public class UIController {
 				ui.GetComponentInChildren<Text>().text = key;
 			}
             else if(key != null){            
-                ui.GetComponentInChildren<Text>().text = LocalizationManager.Instance.GetLocalizedValue(key,value);
+                var text = ui.GetComponentInChildren<Text>();
+				text.text = LocalizationManager.Instance.GetLocalizedValue(key,value);
+                var bg = ui.transform.Find("Bg");
+                if(bg){
+                    var rectTransform = bg.GetComponent<RectTransform>();
+                    rectTransform.sizeDelta = new Vector2( rectTransform.sizeDelta.x, text.preferredHeight + 100);
+                }
             }
 		}
 		return ui;

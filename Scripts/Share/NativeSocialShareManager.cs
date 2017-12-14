@@ -1,12 +1,12 @@
 
 using UnityEngine;  
-#if UNITY_IPHONE && !UNITY_EDITOR  
+#if UNITY_IOS && !UNITY_EDITOR  
 using System.Runtime.InteropServices;  
 #endif  
 public delegate void ShareCallBackDelegate(bool success ,string platform);  
   
 public class NativeSocialShareManager : MonoBehaviour {  
-    #if UNITY_IPHONE && !UNITY_EDITOR  
+    #if UNITY_IOS && !UNITY_EDITOR  
     [DllImport ("__Internal")]  
 	private static extern void _GJC_NativeShare(string text, string encodedMedia);  
     #endif  
@@ -51,8 +51,8 @@ public class NativeSocialShareManager : MonoBehaviour {
         AndroidJavaObject uriObject = uriClass.CallStatic<AndroidJavaObject>("parse", "file://" + screenShotPath);
 
         intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_STREAM"), uriObject);
-        intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_TEXT"), body);
-        intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_SUBJECT"), subject);
+        // intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_TEXT"), body);
+        // intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_SUBJECT"), subject);
         intentObject.Call<AndroidJavaObject>("setType", "image/png");
         AndroidJavaClass unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject>("currentActivity");

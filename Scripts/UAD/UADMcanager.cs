@@ -74,26 +74,41 @@ public class UADManager
     public  bool isShowing { get { return Advertisement.isShowing; }}
 	public  bool isSupported { get { return Advertisement.isSupported; }}
 	public  bool isInitialized { get { return Advertisement.isInitialized; }}
-
-	public  bool ShowAd (string zoneID = null, HandleShowResultDelegate handleFinished = null)
+    void ShowAdEx(string zoneID = null, HandleShowResultDelegate handleFinished = null){
+        handleShowResultDelegate = handleFinished;
+        ShowOptions options = new ShowOptions();
+        options.resultCallback = HandleShowResult;
+        Advertisement.Show(zoneID, options);
+    }
+	public  bool ShowAd (string zoneID = null, HandleShowResultDelegate handleFinished = null,bool excuse = false)
 	{
 		if (string.IsNullOrEmpty(zoneID)) zoneID = null;
         if (Advertisement.IsReady(zoneID))
-        {
-            handleShowResultDelegate = handleFinished;
-            ShowOptions options = new ShowOptions();
-            options.resultCallback = HandleShowResult;
-            Advertisement.Show(zoneID, options);
+        {   if(excuse)
+            {
+                UIChangeDelegate uiChange = delegate(UIData data) 
+                {   
+                    if(data.uiChangeType == UIChangeType.Pop){
+                        ShowAdEx(zoneID,handleFinished); 
+                    }
+                };
+
+                UIController.Instance.PushHint("ShowAdExcuse","致歉",null,false,uiChange);
+            }
+            else
+            {
+                ShowAdEx(zoneID,handleFinished);
+            }
             return true;
         }
         return false;
 	}
-    public bool PopAd( HandleShowResultDelegate handleFinished = null)
+    public bool PopAd( HandleShowResultDelegate handleFinished = null,bool excuse = false)
     {
 		UADManager uad = UADManager.Instance;
-        if (uad.ShowAd("video", handleFinished)) { return true; }
-        if (uad.ShowAd("display", handleFinished)) { return true; }
-        if (uad.ShowAd("rewardedVideo", handleFinished)) { return true; }
+        if (uad.ShowAd("video", handleFinished,excuse)) { return true; }
+        if (uad.ShowAd("display", handleFinished,excuse)) { return true; }
+        if (uad.ShowAd("rewardedVideo", handleFinished,excuse)) { return true; }
         return false;
     }
     public void ShowRewardedAd( HandleShowResultDelegate handleFinished = null)

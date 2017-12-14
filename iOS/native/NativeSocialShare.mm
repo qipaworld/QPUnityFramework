@@ -24,7 +24,7 @@ static NativeSocialShare * instance;
     NSData *imageData = [[NSData alloc]initWithBase64EncodedString:media options:0];  
     UIImage *image = [[UIImage alloc] initWithData:imageData];  
           
-    UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:@[text, image] applicationActivities:nil];  
+    UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:@[image] applicationActivities:nil];  
       
     UIViewController *vc =  UnityGetGLViewController();  
       
