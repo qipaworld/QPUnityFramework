@@ -12,6 +12,11 @@ public class IAPManager : IStoreListener
 {
 
     public static IAPManager instance = null;
+    private int initNumMax = 3;
+    private int initNum = 0;
+    private bool isFailed = false;
+    ConfigurationBuilder builder = null;
+    private bool notInitSotre = false;
     static public IAPManager Instance
     {
         get
@@ -41,26 +46,38 @@ public class IAPManager : IStoreListener
         initStore();   
     }
     void initStore(){
-        var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
-        Object obj = Resources.Load("IAP/IAPDATA");
-        if (obj)
-        {
-            string dataAsYaml = obj.ToString();
-            Deserializer deserializer = new Deserializer();
-            Dictionary<string, int> dic = deserializer.Deserialize<Dictionary<string, int>>(new StringReader(dataAsYaml));
-            if(dic!=null){
-                foreach (KeyValuePair<string, int> kv in dic)
-                {
-                    builder.AddProduct(kv.Key, productType[kv.Value]);
-                }
-                UnityPurchasing.Initialize(this, builder);
-            }else{
-                Debug.LogWarning("QIPAWORLD:没有商品ID 配置文件位置 Resources/IAP/IAPDATA");
-            }
-        }else{
-            Debug.LogWarning("QIPAWORLD:没有商品配置文件 Resources/IAP/IAPDATA");
+    
+        if (initNum>=initNumMax || notInitSotre){
+            isFailed = true;
+            return;
         }
-        
+        initNum++;
+        if (builder == null){
+            var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
+            Object obj = Resources.Load("IAP/IAPDATA");
+            if (obj)
+            {
+                string dataAsYaml = obj.ToString();
+                Deserializer deserializer = new Deserializer();
+                Dictionary<string, int> dic = deserializer.Deserialize<Dictionary<string, int>>(new StringReader(dataAsYaml));
+                if(dic!=null){
+                    foreach (KeyValuePair<string, int> kv in dic)
+                    {
+                        builder.AddProduct(kv.Key, productType[kv.Value]);
+                    }
+                    UnityPurchasing.Initialize(this, builder);
+                }else{
+                    notInitSotre = true;
+                    Debug.LogWarning("QIPAWORLD:没有商品ID 配置文件位置 Resources/IAP/IAPDATA");
+                }
+            }else{
+                notInitSotre = true;
+                Debug.LogWarning("QIPAWORLD:没有商品配置文件 Resources/IAP/IAPDATA");
+            }
+        }
+        else{
+            UnityPurchasing.Initialize(this, builder);
+        }
     }
     /// <summary>
     /// Called when Unity IAP is ready to make purchases.
@@ -137,12 +154,12 @@ public class IAPManager : IStoreListener
             // On Apple stores, receipts contain multiple products.
             var result = validator.Validate(e.purchasedProduct.receipt);
             // For informational purposes, we list the receipt(s)
-            foreach (IPurchaseReceipt productReceipt in result)
-            {
-                Debug.Log(productReceipt.productID);
-                Debug.Log(productReceipt.purchaseDate);
-                Debug.Log(productReceipt.transactionID);
-            }
+            // foreach (IPurchaseReceipt productReceipt in result)
+            // {
+                // Debug.Log(productReceipt.productID);
+                // Debug.Log(productReceipt.purchaseDate);
+                // Debug.Log(productReceipt.transactionID);
+            // }
         }
         catch (IAPSecurityException)
         {
@@ -172,6 +189,11 @@ public class IAPManager : IStoreListener
                     UIController.Instance.PushHint("iapError","您似乎禁止了购买");
                 }else if(iapError == InitializationFailureReason.NoProductsAvailable){
                     UIController.Instance.PushHint("iapError","开发人员配置错误没有商品");
+                }
+                if(isFailed){
+                    isFailed = false;
+                    initNum = 0;
+                    initStore();
                 }
             }
             else{
