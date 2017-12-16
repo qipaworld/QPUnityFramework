@@ -53,7 +53,7 @@ public class IAPManager : IStoreListener
         }
         initNum++;
         if (builder == null){
-            var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
+            builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
             Object obj = Resources.Load("IAP/IAPDATA");
             if (obj)
             {
@@ -66,7 +66,9 @@ public class IAPManager : IStoreListener
                         builder.AddProduct(kv.Key, productType[kv.Value]);
                     }
                     UnityPurchasing.Initialize(this, builder);
-                }else{
+                }
+                else
+                {
                     notInitSotre = true;
                     Debug.LogWarning("QIPAWORLD:没有商品ID 配置文件位置 Resources/IAP/IAPDATA");
                 }
@@ -87,6 +89,7 @@ public class IAPManager : IStoreListener
         this.controller = controller;
         this.extensions = extensions;
         isInitializeFailed = false;
+
 //		Restore ();
     }
     
@@ -192,6 +195,7 @@ public class IAPManager : IStoreListener
                 }
                 if(isFailed){
                     isFailed = false;
+                    isInitializeFailed = false;
                     initNum = 0;
                     initStore();
                 }
@@ -213,6 +217,7 @@ public class IAPManager : IStoreListener
     }
     public void OnPurchaseClicked(string productId,IAPFinish callback)
     {
+
         if(IsBusy()){
             return;
         }
