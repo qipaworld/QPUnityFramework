@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 #endif  
 public delegate void ShareCallBackDelegate(bool success ,string platform);  
   
-public class NativeSocialShareManager : MonoBehaviour {  
+public class NativeSocialShareManager  {  
     #if UNITY_IOS && !UNITY_EDITOR  
     [DllImport ("__Internal")]  
 	private static extern void _GJC_NativeShare(string text, string encodedMedia);  
@@ -15,7 +15,10 @@ public class NativeSocialShareManager : MonoBehaviour {
 
     private static NativeSocialShareManager instance = null;  
     public static NativeSocialShareManager Instance {  
-        get {  
+        get {
+            if (instance == null) {
+                instance = new NativeSocialShareManager();
+            }
             return instance;  
         }  
 		set{ 
@@ -25,7 +28,6 @@ public class NativeSocialShareManager : MonoBehaviour {
   
 	public void NativeShare(string text, Texture2D texture,ShareCallBackDelegate shareCallBack = null,string screenShotPath = null) {  
 		this.shareCallBack = shareCallBack;
-        Debug.Log("NativeShare");
 #if UNITY_IOS && !UNITY_EDITOR
             Debug.Log("NativeShare: Texture");  
             byte[] val = texture.EncodeToPNG();  

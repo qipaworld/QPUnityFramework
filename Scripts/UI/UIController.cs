@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class UIController {
 
 	public static UIController instance = null;
-	public Transform target;
 
     DataBase uiDatas;
 	DataBase uiLoadDatas;
@@ -30,8 +29,6 @@ public class UIController {
             instance.uiDatas = DataManager.Instance.addData("UIDatas");
 			instance.uiLoadDatas = DataManager.Instance.addData("UILoadDatas");
 			instance.uiLoadingLayerDatas = DataManager.Instance.addData("uiLoadingLayerDatas");
-			instance.target = GameObject.Find ("Canvas").transform;
-
         }
     }
 	public GameObject Push(string name,UIChangeDelegate callback = null){
@@ -49,7 +46,7 @@ public class UIController {
 			uiLoad = Resources.Load("UIPrefabs/"+fileName) as GameObject;
 			uiLoadDatas.SetGameObjectValue(name,uiLoad);
 		}
-		GameObject ui = GameObject.Instantiate(uiLoad,target) as GameObject;
+		GameObject ui = GameObject.Instantiate(uiLoad, GameObject.Find("Canvas").transform) as GameObject;
 		UIData uiData = ui.AddComponent<UIData>();
 		uiData.uiName = name;
 		uiData.changeCallback = callback;

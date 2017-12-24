@@ -57,7 +57,7 @@ public class TouchClickBase : MonoBehaviour
             TouchBegin(Input.mousePosition);
         }
       
-        else if (Event.current.type == EventType.mouseUp)
+        else if (Event.current.type == EventType.MouseUp)
         {
             TouchEnd(Input.mousePosition);
         }

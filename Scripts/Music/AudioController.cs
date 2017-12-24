@@ -7,16 +7,11 @@ public class AudioController : MonoBehaviour {
     string saveKey;
     string musicName;
     DataBase data;
-	void Awake ()
-	{
-        
-    }
-    
     void Start() {
         musicName = musicType.ToString();
         saveKey = musicName + "AudioController";
         data = DataManager.Instance.getData("musicData").GetDataValue(musicName);
-        data.SetIntValue("musicStatus", EncryptionManager.GetInt(saveKey, 1));
+        //data.SetIntValue("musicStatus", EncryptionManager.GetInt(saveKey, 1));
     }
 	public void change(){
         if (getStatus() == 1)

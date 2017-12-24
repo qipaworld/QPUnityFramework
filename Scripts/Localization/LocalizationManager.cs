@@ -152,7 +152,7 @@ public class LocalizationManager: DataBase
         else
         {   
         #if UNITY_EDITOR
-            stringDic.Add(key,key);
+            //stringDic.Add(key,key);
         #endif
         }
         #if UNITY_EDITOR
