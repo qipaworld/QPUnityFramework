@@ -8,7 +8,6 @@ public class UIController {
 	public static UIController instance = null;
 
     DataBase uiDatas;
-	DataBase uiLoadDatas;
 	DataBase uiLoadingLayerDatas;
 	int loadingLayerNum = 0;
     static public UIController Instance
@@ -27,7 +26,6 @@ public class UIController {
         {
             instance = new UIController();
             instance.uiDatas = DataManager.Instance.addData("UIDatas");
-			instance.uiLoadDatas = DataManager.Instance.addData("UILoadDatas");
 			instance.uiLoadingLayerDatas = DataManager.Instance.addData("uiLoadingLayerDatas");
         }
     }
@@ -41,11 +39,8 @@ public class UIController {
         	return null;
         }
 
-		GameObject uiLoad = uiLoadDatas.GetGameObjectValue(fileName);
-		if (uiLoad==null){
-			uiLoad = Resources.Load("UIPrefabs/"+fileName) as GameObject;
-			uiLoadDatas.SetGameObjectValue(name,uiLoad);
-		}
+		GameObject uiLoad = LoadObjManager.Instance.GetLoadObj<GameObject>("UIPrefabs/"+fileName);
+		
 		GameObject ui = GameObject.Instantiate(uiLoad, GameObject.Find("Canvas").transform) as GameObject;
 		UIData uiData = ui.AddComponent<UIData>();
 		uiData.uiName = name;

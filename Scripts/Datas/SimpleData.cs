@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SimpleData : MonoBehaviour {
 
-    public string name = "";
+    public string dataName = "";
     public int num = 0;
     public bool ready = false;
 }

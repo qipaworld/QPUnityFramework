@@ -7,7 +7,6 @@ public class GameObjManager : MonoBehaviour {
 
 	public static GameObjManager instance = null;
 	protected Dictionary<string, List<GameObject>> gameObjDatas = new Dictionary<string, List<GameObject>>();
-    protected Dictionary<string, GameObject> gameObjLoadDatas = new Dictionary<string, GameObject>();
 
 	static public GameObjManager Instance
 	{
@@ -40,22 +39,15 @@ public class GameObjManager : MonoBehaviour {
         }
 
         foreach (var o in objs) {
-            if (!o.active)
+            if (!o.activeSelf)
             {
             	o.SetActive(true);
                 return o;
             }
         }
-        GameObject objLoad = null;
-        if (gameObjLoadDatas.ContainsKey(key))
-        {
-            objLoad = gameObjLoadDatas[key];
-        }
-        else {
-            objLoad = Resources.Load(key) as GameObject;
-            gameObjLoadDatas.Add(key, objLoad);
-        }
-        GameObject obj = GameObject.Instantiate(objLoad, target) as GameObject;
+        GameObject objLoad = LoadObjManager.Instance.GetLoadObj<GameObject>(key);
+     
+        GameObject obj = GameObject.Instantiate<GameObject>(objLoad, target);
         objs.Add(obj);
         return obj;
     }
@@ -82,7 +74,7 @@ public class GameObjManager : MonoBehaviour {
     	}
     }
     public void RecycleObj(GameObject o){
-    	if (o.active)
+    	if (o.activeSelf)
         {
 	        o.transform.parent = transform;
 	        o.SetActive(false);
