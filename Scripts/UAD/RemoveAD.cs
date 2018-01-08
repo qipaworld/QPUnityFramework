@@ -12,7 +12,7 @@ public class RemoveAD : MonoBehaviour {
 	}
 	public void change(DataBase data)
 	{
-		if (data.GetIntValue("popAdStatus") == 1)
+		if (data.GetNumberValue("popAdStatus") == 1)
 		{
 			gameObject.SetActive(false);
 		}

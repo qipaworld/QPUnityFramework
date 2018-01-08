@@ -19,9 +19,18 @@ public class TouchMoveCamera2D : MonoBehaviour
         if (eyeCamera == null) {
             eyeCamera = Camera.main;
         }
-        if (Bounds) {
+        if (Bounds)
+        {
             minVec3 = Bounds.bounds.min;//包围盒  
             maxVec3 = Bounds.bounds.max;
+        }
+        else {
+            DataBase GameBounds = DataManager.Instance.getData("GameBounds");
+            if (GameBounds != null)
+            {
+                minVec3 = GameBounds.GetVectorValue("min");//包围盒  
+                maxVec3 = GameBounds.GetVectorValue("max");
+            }
         }
 
     }

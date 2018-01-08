@@ -6,7 +6,7 @@ public class TouchCameraSize : MonoBehaviour {
 
     private Touch oldTouch1;  //上次触摸点1(手指1)       
     private Touch oldTouch2;  //上次触摸点2(手指2)       
-    public float zoomFactor = 1000; //缩放因子
+    public float zoomFactor = 1; //缩放因子
     public float maxScale = 2;
     public float minScale = 0.5f;
     public Camera eyeCamera = null; // 视图相机
@@ -26,6 +26,14 @@ public class TouchCameraSize : MonoBehaviour {
         {
             minVec3 = Bounds.bounds.min;//包围盒  
             maxVec3 = Bounds.bounds.max;
+        }
+        else {
+            DataBase GameBounds = DataManager.Instance.getData("GameBounds");
+            if (GameBounds != null)
+            {
+                minVec3 = GameBounds.GetVectorValue("min");//包围盒  
+                maxVec3 = GameBounds.GetVectorValue("max");
+            }
         }
 
     }

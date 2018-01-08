@@ -34,7 +34,7 @@ public class UIController {
 	}
 	private GameObject PushRepeatableLayer(string name,string fileName,UIChangeDelegate callback = null){
 		
-		if (uiDatas.GetGameObjectValue(name)!=null){
+		if (uiDatas.GetObjectValue(name)!=null){
 			Debug.LogWarning("QIPAWORLD:重复添加UI--"+name);
         	return null;
         }
@@ -45,7 +45,7 @@ public class UIController {
 		UIData uiData = ui.AddComponent<UIData>();
 		uiData.uiName = name;
 		uiData.changeCallback = callback;
-		uiDatas.SetGameObjectValue(name,ui);
+		uiDatas.SetObjectValue(name,ui);
 		return ui;
 	}
 	public GameObject PushHint(string name,string key = null,string[] value = null,bool log = false,UIChangeDelegate callback = null){
@@ -78,9 +78,9 @@ public class UIController {
 		return ui;
 	}
     public void Pop(string name)	{
-		GameObject ui = uiDatas.GetGameObjectValue(name);
+		GameObject ui = uiDatas.GetObjectValue(name) as GameObject;
         if(ui!=null){
-            uiDatas.RemoveGameObjectValue (name);
+            uiDatas.RemoveObjectValue (name);
 			if(uiLoadingLayerDatas.GetStringValue(name)!=null){
 				loadingLayerNum--;
 				uiLoadingLayerDatas.RemoveStringValue(name);
@@ -92,13 +92,13 @@ public class UIController {
 
     }
 	public GameObject getLayer(string name){
-		return uiDatas.GetGameObjectValue(name);
+		return uiDatas.GetObjectValue(name) as GameObject;
 	}
 	public int getLoadingLayerNum(){
 		return loadingLayerNum;
 	}
 	public int getLayerNum(){
-		return uiDatas.GetGameObjectDicCount();
+		return uiDatas.GetObjectDicCount();
 	}
     //越小越靠前
     public void SetSequence(int index)   {
@@ -106,7 +106,7 @@ public class UIController {
     }
 
     public void ToTop(string name)   {
-        GameObject ui = uiDatas.GetGameObjectValue(name);
+        GameObject ui = uiDatas.GetObjectValue(name) as GameObject;
         if (ui!=null){
 			ui.transform.position = new Vector3 (ui.transform.position.x, ui.transform.position.y, -1);
         }else{

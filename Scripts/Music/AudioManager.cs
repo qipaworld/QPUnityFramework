@@ -18,7 +18,7 @@ public class AudioManager : MonoBehaviour {
     }
 	public void change(DataBase data)
     {
-        if (data.GetIntValue("musicStatus") == 1) {
+        if (data.GetNumberValue("musicStatus") == 1) {
 			play ();
 		} else {
 			pause ();

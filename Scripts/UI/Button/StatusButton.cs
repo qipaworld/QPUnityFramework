@@ -32,7 +32,7 @@ public class StatusButton : MonoBehaviour {
         }
     }
 	public void setSatus(DataBase data){
-        status = data.GetIntValue(dataValueKey);
+        status = System.Convert.ToInt32( data.GetNumberValue(dataValueKey));
         if (image && Sprites.Length > status)
         {
             image.sprite = Sprites[status];

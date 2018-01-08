@@ -17,7 +17,7 @@ public class ButtonAudio : MonoBehaviour, IPointerDownHandler {
 	}	
 	public void change(DataBase data)
 	{
-		isPlay = (data.GetIntValue ("musicStatus") == 1);
+		isPlay = (data.GetNumberValue ("musicStatus") == 1);
 	}
 	public void OnPointerDown(PointerEventData eventData)
 	{

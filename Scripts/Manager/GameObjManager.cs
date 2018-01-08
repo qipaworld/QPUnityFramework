@@ -26,7 +26,7 @@ public class GameObjManager : MonoBehaviour {
         }
         Init();
     }
-	public GameObject GetGameObj(string key,Transform target = null){
+	public GameObject GetGameObj(string key,Transform target = null,bool notActive = false){
         List<GameObject> objs = null;
         if (gameObjDatas.ContainsKey(key))
         {
@@ -41,7 +41,9 @@ public class GameObjManager : MonoBehaviour {
         foreach (var o in objs) {
             if (!o.activeSelf)
             {
-            	o.SetActive(true);
+                if (!notActive) {
+                    o.SetActive(true);
+                }
                 return o;
             }
         }
