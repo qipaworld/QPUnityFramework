@@ -30,7 +30,11 @@ public class TouchCameraSize : MonoBehaviour {
 
     }
 
-    void Update()
+    protected void Update()
+    {
+        UpdateCameraSize();
+    }
+    protected virtual void UpdateCameraSize()
     {
         
         if (Input.touchCount != 2)
