@@ -48,7 +48,16 @@ public class UIController {
 		uiDatas.SetObjectValue(name,ui);
 		return ui;
 	}
-	public GameObject PushHint(string name,string key = null,string[] value = null,bool log = false,UIChangeDelegate callback = null){
+	/// <summary>
+    /// 添加一个提示layer
+    /// </summary>
+    /// <value>name 名字.</value>
+    /// <value>key 文本的key.</value>
+    /// <value>value 可变化文本内所替换的内容.</value>
+    /// <value>log 是否是调试信息.</value>
+    /// <value>callback 操作UI时的回掉方法.</value>
+    /// <value>outTime 自动关闭UI的时间，不传为手动关闭.</value>
+	public GameObject PushHint(string name,string key = null,string[] value = null,bool log = false,UIChangeDelegate callback = null,float outTime = 0f){
 		GameObject ui = PushRepeatableLayer (name,"hintLayer",callback);
 		if (ui!=null){
 			if(log){
@@ -62,6 +71,9 @@ public class UIController {
                     var rectTransform = bg.GetComponent<RectTransform>();
                     rectTransform.sizeDelta = new Vector2( rectTransform.sizeDelta.x, text.preferredHeight + 100);
                 }
+            }
+            if(outTime != 0){
+            	Timer.Instance.DelayInvoke(outTime,()=>{Pop(name);});
             }
 		}
 		return ui;

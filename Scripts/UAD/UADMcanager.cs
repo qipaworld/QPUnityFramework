@@ -93,7 +93,7 @@ public class UADManager
                     }
                 };
 
-                UIController.Instance.PushHint("ShowAdExcuse","致歉",null,false,uiChange);
+                UIController.Instance.PushHint("ShowAdExcuse","致歉",null,false,uiChange,1.5f);
             }
             else
             {
