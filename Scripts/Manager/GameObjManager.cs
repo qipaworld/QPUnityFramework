@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameObjManager : MonoBehaviour {
+public class GameObjManager {
 
 	public static GameObjManager instance = null;
 	protected Dictionary<string, List<GameObject>> gameObjDatas = new Dictionary<string, List<GameObject>>();
-
+    public Transform target = null;
 	static public GameObjManager Instance
 	{
 	   get {
@@ -15,17 +15,11 @@ public class GameObjManager : MonoBehaviour {
 	   }
 	   // set {instance = value; }
 	}
-	public void Init(){
-		instance = this;
-		GameObject.DontDestroyOnLoad(transform.gameObject);
+	public static void Init(Transform t){
+		instance = new GameObjManager();
+        instance.target = t;
 	}
-	void Awake()
-    {
-        if (instance != null) {
-            return;
-        }
-        Init();
-    }
+	
 	public GameObject GetGameObj(string key,Transform target = null,bool notActive = false){
         List<GameObject> objs = null;
         if (gameObjDatas.ContainsKey(key))
@@ -78,7 +72,7 @@ public class GameObjManager : MonoBehaviour {
     public void RecycleObj(GameObject o){
     	if (o.activeSelf)
         {
-	        o.transform.parent = transform;
+	        o.transform.parent = target;
 	        o.SetActive(false);
 	    }
     }
