@@ -7,6 +7,7 @@ public class AudioManagerBase : MonoBehaviour {
 
     public MusicEnum musicType;
 	public bool isPlay = true;
+	public bool repeat = false;
 
     //音量
     void Start() {
@@ -26,7 +27,7 @@ public class AudioManagerBase : MonoBehaviour {
 		isPlay = (data.GetNumberValue ("musicStatus") == 1);
 	}
 	public void play(){
-		if (!music.isPlaying && isPlay){
+		if ((!music.isPlaying|| repeat) && isPlay){
 			music.Play();
 		}
 	}

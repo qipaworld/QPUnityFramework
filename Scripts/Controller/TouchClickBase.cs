@@ -5,6 +5,7 @@ using UnityEngine;
 /// 添加这个组件后，就可以点击到对应layerId 的物体了。
 /// 可以自己写一个类继承该组件重写OnClick方法
 /// </summary>
+[RequireComponent(typeof(AudioManagerBase))]
 public class TouchClickBase : MonoBehaviour
 {
 
@@ -14,7 +15,8 @@ public class TouchClickBase : MonoBehaviour
     public Camera eyeCamera = null; // 视图相机
     public int MaxDraction = 30;
     Vector2? beginP = null;
-
+    public bool isAudio = false;
+    AudioManagerBase audioManager;
     void Start()
     {
         if (eyeCamera == null)
@@ -22,6 +24,7 @@ public class TouchClickBase : MonoBehaviour
             eyeCamera = Camera.main;
         }
         layerMask = (1 << layerId);
+        audioManager = transform.GetComponent<AudioManagerBase>();
     }
 
     // Update is called once per frame
@@ -89,6 +92,10 @@ public class TouchClickBase : MonoBehaviour
         beginP = null;
     }
     public virtual void OnClick(RaycastHit hit) {
-        Debug.Log("QIPAWORLD:TouchClickBase.OnClick");
+        //Debug.Log("QIPAWORLD:TouchClickBase.OnClick");
+        if (isAudio)
+        {
+            audioManager.play();
+        }
     }
 }
