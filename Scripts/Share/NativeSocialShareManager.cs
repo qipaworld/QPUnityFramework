@@ -8,7 +8,7 @@ public delegate void ShareCallBackDelegate(bool success ,string platform);
 public class NativeSocialShareManager  {  
     #if UNITY_IOS && !UNITY_EDITOR  
     [DllImport ("__Internal")]  
-	private static extern void _GJC_NativeShare(string text, string encodedMedia);  
+	private static extern void IOS_NativeShare(string text, string encodedMedia);  
     #endif  
   
 	public ShareCallBackDelegate shareCallBack = null;  
@@ -32,7 +32,7 @@ public class NativeSocialShareManager  {
             Debug.Log("NativeShare: Texture");  
             byte[] val = texture.EncodeToPNG();  
             string bytesString = System.Convert.ToBase64String (val);  
-            _GJC_NativeShare(text, bytesString);  
+            IOS_NativeShare(text, bytesString);  
 #elif UNITY_ANDROID && !UNITY_EDITOR
         ShareAndroid(text, "", "", screenShotPath, "image/png", true, "");
 #else
