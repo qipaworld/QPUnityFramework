@@ -10,6 +10,8 @@ public class UIController {
     DataBase uiDatas;
 	DataBase uiLoadingLayerDatas;
 	int loadingLayerNum = 0;
+    
+    GameObject hintLayerLast;
     static public UIController Instance
     {
         get {
@@ -78,6 +80,15 @@ public class UIController {
 		}
 		return ui;
 	}
+	public GameObject PushListHint(string name,string key = null,string[] value = null,bool log = false,UIChangeDelegate callback = null){
+		GameObject ui = this.PushHint(name,key,value,log,callback);
+		if (ui!=null){
+			HintListCell hintListCell = ui.AddComponent<HintListCell>();
+			hintListCell.Init(name, new Vector2(Screen.width/2,0),new Vector2(Screen.width/2,Screen.height/2),hintLayerLast);
+			hintLayerLast = ui;
+		}
+        return ui;
+    }
 	public GameObject PushLoading(string name,string key = null,string[] value = null,UIChangeDelegate callback = null){
 		GameObject ui = PushRepeatableLayer (name,"Loading",callback);
 		if (ui!=null){

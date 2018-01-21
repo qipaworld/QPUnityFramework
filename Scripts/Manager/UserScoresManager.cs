@@ -12,6 +12,7 @@ public class UserScoresManager {
 	private static extern void IOS_PopScoreBox();  
 #endif 
 	public static UserScoresManager instance = null;
+	
 	static public UserScoresManager Instance
 	{
 		get
@@ -28,6 +29,7 @@ public class UserScoresManager {
 	static public void Init()
 	{
 		instance = new UserScoresManager ();
+
 	}
 	
 	public void PopScoreBox ()
@@ -37,17 +39,14 @@ public class UserScoresManager {
 #endif
 	}
 	
-	public void GoToStoreScore()
+	public void GoToStoreScore(string iosAppId)
 	{
-// 		#if UNITY_IOS && !UNITY_EDITOR
-//             Debug.Log("NativeShare: Texture");  
-//             byte[] val = texture.EncodeToPNG();  
-//             string bytesString = System.Convert.ToBase64String (val);  
-//             _GJC_NativeShare(text, bytesString);  
-// #elif UNITY_ANDROID && !UNITY_EDITOR
-//         ShareAndroid(text, "", "", screenShotPath, "image/png", true, "");
-// #else
-//         NativeShareSuccess("");
-// #endif
+		string url = "";
+#if UNITY_IOS && !UNITY_EDITOR
+        url = "http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id="+iosAppId+"&pageNumber=0&sortOrdering=2&type=Purple+Software&mt=8";
+#elif UNITY_ANDROID && !UNITY_EDITOR
+        url = "https://play.google.com/store/apps/details?id="+Application.identifier;
+#endif
+        Application.OpenURL(url);
 	}
 }
