@@ -1,19 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using NUnit;
+// 这个是 玩家给游戏评分的类
 #if UNITY_IOS && !UNITY_EDITOR  
 using System.Runtime.InteropServices;  
 #endif  
 
-public class UserScoresManager {
+public class ScoreTheGameManager {
 #if UNITY_IOS && !UNITY_EDITOR  
     [DllImport ("__Internal")]  
 	private static extern void IOS_PopScoreBox();  
 #endif 
-	public static UserScoresManager instance = null;
+	public static ScoreTheGameManager instance = null;
 	
-	static public UserScoresManager Instance
+	static public ScoreTheGameManager Instance
 	{
 		get
 		{
@@ -28,7 +28,7 @@ public class UserScoresManager {
 	}
 	static public void Init()
 	{
-		instance = new UserScoresManager ();
+		instance = new ScoreTheGameManager ();
 
 	}
 	

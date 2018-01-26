@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using YamlDotNet.RepresentationModel;
+using System.IO;
 
 public enum ChangeType{Add,Update,Remove};
 
@@ -13,6 +15,7 @@ public class DataBase {
     protected Dictionary<string, string> stringDic = new Dictionary<string, string>();
     protected Dictionary<string, DataBase> dataDic = new Dictionary<string, DataBase>();
     protected Dictionary<string, Object> objDic = new Dictionary<string, Object>();
+    protected Dictionary<string, YamlMappingNode> yamlMapDic = new Dictionary<string, YamlMappingNode>();
 	//数据在Manager里的key
 	public string dataName = "";
     //这一帧里变化的所有的key 和变化属性
@@ -54,8 +57,20 @@ public class DataBase {
     public void SetStringValue(string key,string value){
 		AddValueToDic<Dictionary<string, string>,string> (stringDic,key,value);
     }
-	public void SetObjectValue(string key,Object value){
-		AddValueToDic<Dictionary<string, Object>,Object> (objDic,key,value);
+    public void SetObjectValue(string key,Object value){
+        AddValueToDic<Dictionary<string, Object>,Object> (objDic,key,value);
+    }
+	public void AddYamlMapValue(string key,string fileName){
+        UnityEngine.Object obj = Resources.Load("UAD/UADDATA");
+        if (obj)
+        {
+            var yaml = new YamlStream();
+            yaml.Load(new StringReader(obj.ToString()));
+            var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
+            AddValueToDic<Dictionary<string, YamlMappingNode>,YamlMappingNode> (yamlMapDic,key,mapping);
+        }else{
+            Debug.LogError("QIPAWORLD:没有YAML文件 Resources/"+fileName);
+        }
 	}
 
     public void SetDataValue(string key, DataBase value = null)
@@ -101,7 +116,12 @@ public class DataBase {
 
     public int GetDataDicCount()
     {
-		return dataDic.Count;
+        return dataDic.Count;
+    }
+
+    public int GetYamlMapDicCount()
+    {
+		return yamlMapDic.Count;
     }
 
     public void RemoveNumberValue(string key){
@@ -120,7 +140,11 @@ public class DataBase {
     }
     public void RemoveDataValue(string key)
     {
-		RemoveValueFromDic<Dictionary<string,DataBase>,DataBase> (dataDic, key);
+        RemoveValueFromDic<Dictionary<string,DataBase>,DataBase> (dataDic, key);
+    }
+    public void RemoveYamlMapValue(string key)
+    {
+		RemoveValueFromDic<Dictionary<string,YamlMappingNode>,YamlMappingNode> (yamlMapDic, key);
     }
     //通过key从一个字典里删除值  这个是马上发送的，发送时数据没有被删，发送后删除
 	public void RemoveValueFromDic<T,V>(T dic,string key)where T: Dictionary<string,V>{
@@ -150,6 +174,10 @@ public class DataBase {
     public Vector3 GetVectorValue(string key)
     {
         return GetValueFromDic<Dictionary<string, Vector3>, Vector3>(vectorDic, key);
+    }
+    public YamlMappingNode GetYamlMapValue(string key)
+    {
+        return GetValueFromDic<Dictionary<string, YamlMappingNode>, YamlMappingNode>(yamlMapDic, key);
     }
     //通过key从一个字典里获得值
     public V GetValueFromDic<T,V>(T dic,string key)where T: Dictionary<string,V>{

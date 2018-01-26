@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -80,6 +81,74 @@ public class UIController {
 		}
 		return ui;
 	}
+	/// <summary>
+    /// 添加一个带确定按钮的提示layer
+    /// </summary>
+    /// <value>name 名字.</value>
+    /// <value>userActionCallBack 用户操作回掉.</value>
+    /// <value>key 文本的key.</value>
+    /// <value>value 可变化文本内所替换的内容.</value>
+    /// <value>callback 操作UI时的回掉方法.</value>
+	public GameObject PushSelectHint(string name,Action<bool> userActionCallBack,string key = null,string[] value = null,UIChangeDelegate callback = null){
+		GameObject ui = PushRepeatableLayer (name,"selectHintLayer",callback);
+		if (ui!=null){
+            if(key != null){            
+                var text = ui.GetComponentInChildren<Text>();
+				text.text = LocalizationManager.Instance.GetLocalizedValue(key,value);
+                var bg = ui.transform.Find("Bg");
+                if(bg){
+                    var rectTransform = bg.GetComponent<RectTransform>();
+                    rectTransform.sizeDelta = new Vector2( rectTransform.sizeDelta.x, text.preferredHeight + 100);
+                }
+            }
+            ui.GetComponent<SelectHint>().Init(name,userActionCallBack);
+		}
+		return ui;
+	}
+    /// <summary>
+    /// 添加一个带确定按钮的提示layer
+    /// </summary>
+    /// <value>name 名字.</value>
+    /// <value>items 传道具的type 和数量.</value>
+    /// <value>key 文本的key.</value>
+    /// <value>value 可变化文本内所替换的内容.</value>
+    /// <value>callback 操作UI时的回掉方法.</value>
+    public GameObject PushItemHint(string name,string[,] items,string key = null,string[] value = null,UIChangeDelegate callback = null){
+        GameObject ui = PushRepeatableLayer (name,"hintItemLayer",callback);
+        if (ui!=null){
+            float textHeight = 0;
+            if(key != null){            
+                var text = ui.GetComponentInChildren<Text>();
+                var textOriginalHeight = text.preferredHeight;
+                text.text = LocalizationManager.Instance.GetLocalizedValue(key,value);
+                textHeight = text.preferredHeight - textOriginalHeight;
+            }
+            var bg = ui.transform.Find("Bg");
+
+            var itemBase = bg.transform.Find("ItemBase").transform;
+            GameObject uiLoad = LoadObjManager.Instance.GetLoadObj<GameObject>("UIPrefabs/Icon");
+            
+            var uiLoadRectTransform = uiLoad.GetComponent<RectTransform>();
+            var itemBaseRectTransform = itemBase.GetComponent<RectTransform>();
+            int itemNum = items.GetLength(0);
+            GridLayoutGroup itemBaseGridLayoutGroup = itemBase.GetComponent<GridLayoutGroup>();
+
+            float itemBaseNowHieght = (float)(Math.Ceiling(itemNum / Math.Floor(itemBaseRectTransform.sizeDelta.x / (uiLoadRectTransform.sizeDelta.x+itemBaseGridLayoutGroup.spacing.x)))*(uiLoadRectTransform.sizeDelta.y+itemBaseGridLayoutGroup.spacing.y)+10);
+            float itemBaseHieght = itemBaseNowHieght - itemBaseRectTransform.sizeDelta.y;
+            itemBaseRectTransform.sizeDelta = new Vector2(itemBaseRectTransform.sizeDelta.x,itemBaseNowHieght);
+            itemBaseGridLayoutGroup.cellSize = uiLoadRectTransform.sizeDelta;
+            
+            for(int i = 0;i<items.GetLength(0);++i){
+                GameObject button = GameObject.Instantiate<GameObject>(uiLoad, itemBase);
+                button.GetComponent<Icon>().Reset(items[i,0],items[i,1]);
+            }
+            if(bg){
+                var rectTransform = bg.GetComponent<RectTransform>();
+                rectTransform.sizeDelta = new Vector2( rectTransform.sizeDelta.x, rectTransform.sizeDelta.y+textHeight+itemBaseHieght);
+            }
+        }
+        return ui;
+    }
 	public GameObject PushListHint(string name,string key = null,string[] value = null,bool log = false,UIChangeDelegate callback = null){
 		GameObject ui = this.PushHint(name,key,value,log,callback);
 		if (ui!=null){

@@ -9,13 +9,15 @@ public class InitSelectLanguageLayer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Object obj = Resources.Load("Localization/AllLanguage");
+        Object obj = LoadObjManager.Instance.GetLoadObj<Object>("Localization/AllLanguage");
+        
         if (obj)
         {
             string dataAsYaml = obj.ToString();
             Deserializer deserializer = new Deserializer();
             Dictionary<string, string> list = deserializer.Deserialize<Dictionary<string, string>>(new StringReader(dataAsYaml));
-            GameObject uiLoad = Resources.Load("UIPrefabs/selectLanguageButton") as GameObject;
+
+            GameObject uiLoad = LoadObjManager.Instance.GetLoadObj<GameObject>("UIPrefabs/selectLanguageButton");
             
             foreach (KeyValuePair<string, string> kv in list)
             {

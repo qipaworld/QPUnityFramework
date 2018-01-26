@@ -21,8 +21,7 @@ public class UADManager
     static public void Init()
     {
 		instance = new UADManager();
-		DataManager.Instance.addData("RemoveAD");
-		DataManager.Instance.getData("RemoveAD").SetNumberValue("popAdStatus", EncryptionManager.GetInt("RemoveAD", 0));
+		DataManager.Instance.addData("RemoveAD").SetNumberValue("popAdStatus", EncryptionManager.GetInt("RemoveAD", 0));
         instance.Start();
     }
 	static public UADManager Instance
