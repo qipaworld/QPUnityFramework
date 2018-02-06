@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+
 public class MouseCameraSize : TouchCameraSize {
 
     protected override void UpdateCameraSize()

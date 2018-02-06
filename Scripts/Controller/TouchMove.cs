@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 /// <summary>
 /// 添加这个组件后，该物体就可以被拖动
 /// 也可以把他加到一个背景上，手动指定被拖动的物体
@@ -30,6 +31,7 @@ public class TouchMove : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate()
     {
+        
         if (Input.touchCount == 1)
         {
             UpdateTargetPositon();
@@ -39,6 +41,11 @@ public class TouchMove : MonoBehaviour {
     //移动对象
     void UpdateTargetPositon()
     {
+        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        {
+            return;
+        }
+         
         RaycastHit hit;
         if (RayDetection(out hit))
         {
@@ -62,6 +69,9 @@ public class TouchMove : MonoBehaviour {
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
             return;
 #endif
+        if(EventSystem.current.IsPointerOverGameObject()){
+            return;
+        }
         if (Event.current.type == EventType.MouseDown)
         {
             RaycastHit hit;

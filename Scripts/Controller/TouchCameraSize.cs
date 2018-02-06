@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TouchCameraSize : MonoBehaviour {
 
@@ -49,6 +50,14 @@ public class TouchCameraSize : MonoBehaviour {
         {
             return;
         }
+        for (int i = 0; i < Input.touchCount; ++i)
+        {
+            if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(i).fingerId))
+            {
+                return;
+            }
+        }
+         
         //多点触摸, 放大缩小         
         Touch newTouch1 = Input.GetTouch(0);
         Touch newTouch2 = Input.GetTouch(1);

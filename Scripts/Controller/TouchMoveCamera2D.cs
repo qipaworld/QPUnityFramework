@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+
 public class TouchMoveCamera2D : MonoBehaviour
 {
     public BoxCollider2D Bounds = null; //移动的边界
@@ -40,7 +42,9 @@ public class TouchMoveCamera2D : MonoBehaviour
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
         return;
 #endif
-
+        if(EventSystem.current.IsPointerOverGameObject()){
+            return;
+        }
         if (Event.current.type == EventType.MouseDown)
         {
             MoveBegin(Input.mousePosition);
@@ -103,8 +107,17 @@ public class TouchMoveCamera2D : MonoBehaviour
     public void Update()
     {
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
+        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        {
+            return;
+        }
         UpdateTargetPositon();
+#else
+        if(EventSystem.current.IsPointerOverGameObject()){
+            return;
+        }
 #endif
+        
         if (speed == Vector3.zero)
         {
             return;

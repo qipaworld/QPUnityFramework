@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 /// <summary>
 /// 添加这个组件后，就可以点击到对应layerId 的物体了。
 /// 可以自己写一个类继承该组件重写OnClick方法
@@ -40,6 +41,13 @@ public class TouchClickBase : MonoBehaviour
     /// </summary>
     void UpdateTargetPositon()
     {
+        
+        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        {
+            return;
+        }
+        
+         
         if (beginP == null || Input.GetTouch(0).phase == TouchPhase.Began)
         {
             TouchBegin(Input.GetTouch(0).position);
@@ -55,6 +63,9 @@ public class TouchClickBase : MonoBehaviour
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
             return;
 #endif
+        if(EventSystem.current.IsPointerOverGameObject()){
+            return;
+        }
         if (Event.current.type == EventType.MouseDown)
         {
             TouchBegin(Input.mousePosition);
