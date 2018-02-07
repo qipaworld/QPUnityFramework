@@ -4,7 +4,7 @@ using System.Collections;
 using System;
 
 //给空间添加监听事件要实现的一些接口
-public class OnClickPopUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
+public class ClickPopUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
 	
     //当鼠标按下时调用 接口对应  IPointerDownHandler
@@ -19,7 +19,7 @@ public class OnClickPopUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
     //当鼠标抬起时调用  对应接口  IPointerUpHandler
     public void OnPointerUp(PointerEventData eventData)
     {
-        UIController.Instance.Pop(transform.GetComponent<UIData> ().uiName);
+        UIController.Instance.Pop(transform.parent.GetComponent<UIData> ().uiName);
     }
     
 }

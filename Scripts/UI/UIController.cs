@@ -44,7 +44,7 @@ public class UIController {
 
 		GameObject uiLoad = LoadObjManager.Instance.GetLoadObj<GameObject>("UIPrefabs/"+fileName);
 		
-		GameObject ui = GameObject.Instantiate(uiLoad, GameObject.Find("Canvas").transform) as GameObject;
+		GameObject ui = GameObject.Instantiate<GameObject>(uiLoad, GameObject.Find("Canvas").transform);
 		UIData uiData = ui.AddComponent<UIData>();
 		uiData.uiName = name;
 		uiData.changeCallback = callback;

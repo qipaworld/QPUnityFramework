@@ -21,7 +21,7 @@ public class InitSelectLanguageLayer : MonoBehaviour {
             
             foreach (KeyValuePair<string, string> kv in list)
             {
-                GameObject button = GameObject.Instantiate(uiLoad, transform) as GameObject;
+                GameObject button = GameObject.Instantiate<GameObject>(uiLoad, transform);
                 button.GetComponent<SetUserLanguage>().language = kv.Key;
                 button.GetComponentInChildren<Text>().text = kv.Value;
 
