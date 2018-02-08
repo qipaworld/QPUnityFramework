@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+/// <summary>
+/// 添加这个组件后，该物体就可以被拖动
+/// 也可以把他加到一个背景上，手动指定被拖动的物体
+/// </summary>
+public class TouchMove2D : MonoBehaviour {
 
-public class TouchMoveCamera2D : MonoBehaviour
-{
+
+
     public BoxCollider2D Bounds = null; //移动的边界
     public Vector3 deceleration = new Vector3(1,1,0);//减速度
     public Vector3
@@ -15,6 +20,13 @@ public class TouchMoveCamera2D : MonoBehaviour
     private Vector3 speed = Vector3.zero;
     public Camera eyeCamera = null; // 视图相机
     public bool isUpdateTouch = true; //是否更新touch 
+
+    public int layerId = 8; //射线碰撞层编号
+    int layerMask = 0; //射线碰撞层
+    public int rayDraction = 30; //射线长度
+    Transform target = null; //移动目标
+
+    public bool isSlide = false;
     public void Start()
     {
 
@@ -34,7 +46,7 @@ public class TouchMoveCamera2D : MonoBehaviour
                 maxVec3 = GameBounds.GetVectorValue("max");
             }
         }
-
+        layerMask = (1 << layerId);
     }
 
     public void OnGUI()
@@ -42,19 +54,24 @@ public class TouchMoveCamera2D : MonoBehaviour
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
         return;
 #endif
-        if(DataManager.Instance.getData("TouchStatus").GetNumberValue("pickUp")==1){
-            return;
-        }
         if(EventSystem.current.IsPointerOverGameObject()){
             return;
         }
         if (Event.current.type == EventType.MouseDown)
         {
-            MoveBegin(Input.mousePosition);
+            RaycastHit hit;
+            if (RayDetection(out hit))
+            { 
+                MoveBegin(Input.mousePosition,hit.transform);
+            }
         }
-        else if (Event.current.type == EventType.MouseDrag)
+        else if (Event.current.type == EventType.MouseDrag && target != null)
         {
             Moveing(Input.mousePosition);
+        }else if(Event.current.type == EventType.MouseUp||Event.current.type == EventType.MouseLeaveWindow){
+            if(!isSlide){
+                MoveEnd(Input.mousePosition);
+            }
         }
     }
     //移动对象
@@ -62,9 +79,6 @@ public class TouchMoveCamera2D : MonoBehaviour
     {
         if (Input.touchCount == 0)
         {
-            return;
-        }
-        if(DataManager.Instance.getData("TouchStatus").GetNumberValue("pickUp")==1){
             return;
         }
         if(!isUpdateTouch){
@@ -80,20 +94,30 @@ public class TouchMoveCamera2D : MonoBehaviour
         if (Input.touchCount == 1){
             if (isUpdateTouch)
             {
-                MoveBegin(Input.GetTouch(0).position);
-                isUpdateTouch = false;
+                RaycastHit hit;
+                if (RayDetection(out hit))
+                { 
+                    MoveBegin(Input.GetTouch(0).position,hit.transform);
+                    isUpdateTouch = false;
+                }
             }
-            else if (Input.GetTouch(0).phase == TouchPhase.Moved)
+            else if (Input.GetTouch(0).phase == TouchPhase.Moved && target != null)
             {
                 Moveing(Input.GetTouch(0).position);
+            }else if(Input.GetTouch(0).phase == TouchPhase.Canceled || Input.GetTouch(0).phase == TouchPhase.Ended){
+                if(!isSlide){
+                    MoveEnd(Input.mousePosition);
+                }
             }
         }
 
     }
     ///初始化位置，为接下来的move做准备
-    void MoveBegin(Vector3 point) {
+    void MoveBegin(Vector3 point,Transform t) {
+        target = t;
         beginP = point;
         speed = Vector3.zero;
+        DataManager.Instance.getData("TouchStatus").SetNumberValue("pickUp",1);
     }
     ///更新目标位置
     void Moveing(Vector3 point)
@@ -107,7 +131,10 @@ public class TouchMoveCamera2D : MonoBehaviour
     ///Move结束，清除数据
     void MoveEnd(Vector3 point)
     {
-        MoveBegin(point);
+        target = null;
+        beginP = point;
+        speed = Vector3.zero;
+        DataManager.Instance.getData("TouchStatus").SetNumberValue("pickUp",0);
     }
 
     public void Update()
@@ -128,10 +155,10 @@ public class TouchMoveCamera2D : MonoBehaviour
         {
             return;
         }
-        var x = transform.position.x;
-        var y = transform.position.y;
-        x = x - speed.x;//向量偏移  
-        y = y - speed.y;
+        var x = target.position.x;
+        var y = target.position.y;
+        x = x + speed.x;//向量偏移  
+        y = y + speed.y;
 
         if (Bounds)
         {
@@ -142,8 +169,8 @@ public class TouchMoveCamera2D : MonoBehaviour
             x = Mathf.Clamp(x, minVec3.x + cameraHalfWidth, maxVec3.x - cameraHalfWidth);
             y = Mathf.Clamp(y, minVec3.y + cameraHalfHeight, maxVec3.y - cameraHalfHeight);
         }
-        transform.position = new Vector3(x, y, transform.position.z);
-
+        target.position = new Vector3(x, y, target.position.z);
+        
         if (System.Math.Abs(speed.x) < 0.01f)
         {
             speed.x = 0;
@@ -195,4 +222,12 @@ public class TouchMoveCamera2D : MonoBehaviour
             speed = Vector3.zero;
         }
     }
+
+    ///检测是否点击到了要移动的物体，并返回射线碰撞与是否发生碰撞
+    bool RayDetection(out RaycastHit hit)
+    {
+        Ray ray = eyeCamera.ScreenPointToRay(Input.mousePosition);
+        return Physics.Raycast(ray, out hit, 30, layerMask);
+    }
+    
 }
