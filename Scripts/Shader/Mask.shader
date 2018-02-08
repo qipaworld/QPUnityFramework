@@ -7,7 +7,8 @@ Shader "QipaWorld/Mask"
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Mask ("Base (RGB)", 2D) = "white" {}  
 
-
+        _OffsetAndScale ("Offset and Scale", Color) = (0,0,1,1)
+        
         _Color ("Tint", Color) = (1,1,1,1)
         _StencilComp ("Stencil Comparison", Float) = 8
         _Stencil ("Stencil ID", Float) = 0
@@ -64,7 +65,8 @@ Shader "QipaWorld/Mask"
             };
 
             fixed4 _Color;
-
+            fixed4 _OffsetAndScale;
+            
             struct v2f
             {
                 fixed2 uv : TEXCOORD0;
@@ -87,7 +89,8 @@ Shader "QipaWorld/Mask"
             
             fixed4 frag (v2f i) : COLOR
             {
-                half4 color = tex2D(_MainTex, i.uv) * i.color; 
+
+                half4 color = tex2D(_MainTex, (i.uv + _OffsetAndScale.rg)*_OffsetAndScale.ba) * i.color; 
                 half4 mask = tex2D(_Mask, i.uv); 
                 color.a *= mask.a;
                 return color;
