@@ -25,7 +25,7 @@ public class TouchMove2D : MonoBehaviour {
     int layerMask = 0; //射线碰撞层
     public int rayDraction = 30; //射线长度
     Transform target = null; //移动目标
-
+    TouchStatusCallback touchStatusCallback = null;
     public bool isSlide = false;
     public void Start()
     {
@@ -117,6 +117,10 @@ public class TouchMove2D : MonoBehaviour {
         target = t;
         beginP = point;
         speed = Vector3.zero;
+        touchStatusCallback = t.GetComponent<TouchStatusCallback>();
+        if(touchStatusCallback != null){
+            touchStatusCallback.TouchBegin(point);
+        } 
         DataManager.Instance.getData("TouchStatus").SetNumberValue("pickUp",1);
     }
     ///更新目标位置
@@ -127,6 +131,9 @@ public class TouchMove2D : MonoBehaviour {
         Vector3 fir = eyeCamera.ScreenToWorldPoint(new Vector3(beginP.x, beginP.y, eyeCamera.nearClipPlane));//转换至世界坐标  
         Vector3 sec = eyeCamera.ScreenToWorldPoint(new Vector3(endP.x, endP.y, eyeCamera.nearClipPlane));
         speed = sec - fir;//需要移动的 向量  
+        if(touchStatusCallback != null){
+            touchStatusCallback.TouchMove(point);
+        } 
     }
     ///Move结束，清除数据
     void MoveEnd(Vector3 point)
@@ -135,6 +142,10 @@ public class TouchMove2D : MonoBehaviour {
         beginP = point;
         speed = Vector3.zero;
         DataManager.Instance.getData("TouchStatus").SetNumberValue("pickUp",0);
+        if(touchStatusCallback != null){
+            touchStatusCallback.TouchEnd(point);
+            touchStatusCallback = null;
+        } 
     }
 
     public void Update()

@@ -99,7 +99,7 @@ public class DataBase {
 	}
 
 	public int GetNumberDicCount(){
-		return numberDic.Count;
+        return numberDic.Count;
     }
 
     public int GetVectorDicCount()
@@ -111,7 +111,7 @@ public class DataBase {
         return stringDic.Count;
     }
     public int GetObjectDicCount(){
-		return objDic.Count;
+        return objDic.Count;
     }
 
     public int GetDataDicCount()
@@ -121,7 +121,36 @@ public class DataBase {
 
     public int GetYamlMapDicCount()
     {
-		return yamlMapDic.Count;
+        return yamlMapDic.Count;
+    }
+
+    public void ClearNumberDic()
+    {
+		numberDic.Clear();
+    }
+
+    public void ClearVectorDic()
+    {
+        vectorDic.Clear();
+    }
+
+    public void ClearStringDic()
+    {
+        stringDic.Clear();
+    }
+    public void ClearObjectDic()
+    {
+		objDic.Clear();
+    }
+
+    public void ClearDataDic()
+    {
+        dataDic.Clear();
+    }
+
+    public void ClearYamlMapDic()
+    {
+		yamlMapDic.Clear();
     }
 
     public void RemoveNumberValue(string key){
