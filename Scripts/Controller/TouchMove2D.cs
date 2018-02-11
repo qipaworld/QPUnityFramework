@@ -114,13 +114,16 @@ public class TouchMove2D : MonoBehaviour {
     }
     ///初始化位置，为接下来的move做准备
     void MoveBegin(Vector3 point,Transform t) {
-        target = t;
-        beginP = point;
-        speed = Vector3.zero;
         touchStatusCallback = t.GetComponent<TouchStatusCallback>();
         if(touchStatusCallback != null){
             touchStatusCallback.TouchBegin(point);
+            target = touchStatusCallback.GetMoveTransform();
         } 
+        if(target == null){
+            target = t;
+        }
+        beginP = point;
+        speed = Vector3.zero;
         DataManager.Instance.getData("TouchStatus").SetNumberValue("pickUp",1);
     }
     ///更新目标位置
