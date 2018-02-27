@@ -15,8 +15,15 @@ public class LocalizedText : MonoBehaviour
 	    }
         LocalizationManager.Instance.Bind(ChangeText);
     }
+    public void UpdateText(string key) {
+        this.key = key;
+        if (text != null)
+        {
+            text.text = LocalizationManager.Instance.GetLocalizedValue(this.key);
+        }
+    }
     protected virtual void ChangeText(DataBase data){
-		text.text = LocalizationManager.Instance.GetLocalizedValue(key.ToString());
+		text.text = LocalizationManager.Instance.GetLocalizedValue(key);
     }
     void OnDestroy()
     {

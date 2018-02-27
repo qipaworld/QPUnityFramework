@@ -140,7 +140,7 @@ public class UIController {
             
             for(int i = 0;i<items.GetLength(0);++i){
                 GameObject button = GameObject.Instantiate<GameObject>(uiLoad, itemBase);
-                button.GetComponent<Icon>().Reset(items[i,0],items[i,1]);
+                button.GetComponent<Icon>().Reset(items[i,0],null,items[i,1]);
             }
             if(bg){
                 var rectTransform = bg.GetComponent<RectTransform>();

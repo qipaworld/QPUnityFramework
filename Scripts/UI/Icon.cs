@@ -11,16 +11,26 @@ public class Icon : MonoBehaviour {
 	// string texturePath;
 	// int num;
 	public Image iconImage;
-	public void Reset(string key,string num = null){
-		// this.iconType = iconType;
-		// this.texturePath = iconDataKey;
-		// this.num = num;
-        // Debug.Log(IconManager.Instance.GetIconFilePath(key));
-
+    public Text iconName;
+    public Action<Icon> callback;
+    public string key;
+	public void Reset(string key, Action<Icon> callback = null,string num = null){
+        // this.iconType = iconType;
+        // this.texturePath = iconDataKey;
+        // this.num = num;
+        this.key = key;
+        this.callback = callback;
 		iconImage.sprite = LoadObjManager.Instance.GetLoadObj<Sprite>(IconManager.Instance.GetIconFilePath(key));
-	}
-	// void Start(){
+        iconName.GetComponent<LocalizedText>().UpdateText(IconManager.Instance.GetIconName(key));
 
-	// }
-	
+    }
+    public void OnClickIcon()
+    {
+        if (callback != null) {
+            callback(this);
+        }
+    }
+    public void setIconColor(Color c) {
+        iconImage.color = c;
+    }
 }
