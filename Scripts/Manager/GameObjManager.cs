@@ -8,17 +8,20 @@ public class GameObjManager {
 	public static GameObjManager instance = null;
 	protected Dictionary<string, List<GameObject>> gameObjDatas = new Dictionary<string, List<GameObject>>();
     public Transform target = null;
-	static public GameObjManager Instance
+    public RectTransform uiTarget = null;
+    static public GameObjManager Instance
 	{
 	   get {
 	       return instance;
 	   }
 	   // set {instance = value; }
 	}
-	public static void Init(Transform t){
+	public static void Init(Transform t, RectTransform uT)
+    {
 		instance = new GameObjManager();
         instance.target = t;
-	}
+        instance.uiTarget = uT;
+    }
 	
 	public GameObject GetGameObj(string key,Transform target = null,bool notActive = false){
         List<GameObject> objs = null;
@@ -37,6 +40,10 @@ public class GameObjManager {
             {
                 if (!notActive) {
                     o.SetActive(true);
+                }
+                if (target != null)
+                {
+                    o.transform.SetParent(target);
                 }
                 return o;
             }
@@ -72,7 +79,13 @@ public class GameObjManager {
     public void RecycleObj(GameObject o){
     	if (o.activeSelf)
         {
-	        o.transform.parent = target;
+            if (o.GetComponent<RectTransform>()) {
+                o.transform.SetParent(uiTarget);
+            }
+            else
+            {
+                o.transform.parent = target;
+            }
 	        o.SetActive(false);
 	    }
     }
