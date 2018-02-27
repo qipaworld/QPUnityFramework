@@ -22,6 +22,6 @@ public class LoadingRotate : MonoBehaviour {
 
         //Debug.Log("currnet Value is " + currentvalue);
 
-        rectComponent.transform.rotation = Quaternion.Euler(0f, 0f, -72f * (int)currentvalue);
+        rectComponent.transform.rotation = Quaternion.Euler(0f, 0f, -72f * currentvalue);
     }
 }

@@ -662,7 +662,7 @@ public class WebViewObject : MonoBehaviour
         }
         bool refreshBitmap = (Time.frameCount % bitmapRefreshCycle == 0);
         _CWebViewPlugin_Update(webView,
-            (int)(pos.x - rect.x), (int)(pos.y - rect.y), deltaY,
+            Mathf.FloorToInt(pos.x - rect.x), Mathf.FloorToInt(pos.y - rect.y), deltaY,
             down, press, release, keyPress, keyCode, keyChars,
             refreshBitmap);
         if (refreshBitmap) {
