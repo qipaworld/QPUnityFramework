@@ -92,15 +92,19 @@ public class TouchClickBase : MonoBehaviour
     ///点击结束，做点击处理
     void TouchEnd(Vector2 point)
     {
-        float dis = (beginP.Value - point).magnitude; //手指移动距离
-        if (dis < MaxDraction) { //距离太大不做处理
-            RaycastHit hit;
-            if (RayDetection(out hit, point))
-            {
-                OnClick(hit);
+        if (beginP!=null)
+        {
+            float dis = (beginP.Value - point).magnitude; //手指移动距离
+            if (dis < MaxDraction)
+            { //距离太大不做处理
+                RaycastHit hit;
+                if (RayDetection(out hit, point))
+                {
+                    OnClick(hit);
+                }
             }
+            beginP = null;
         }
-        beginP = null;
     }
     public virtual void OnClick(RaycastHit hit) {
         //Debug.Log("QIPAWORLD:TouchClickBase.OnClick");
