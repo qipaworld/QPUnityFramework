@@ -17,7 +17,7 @@ public class Scale2D {
         Update(camera);
 	}
 
-    static public void Update(Camera camera) {
+    static public void Update(Camera camera = null) {
         if (camera == null) {
             camera = Camera.main;
         }

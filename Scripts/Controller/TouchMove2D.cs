@@ -11,6 +11,7 @@ public class TouchMove2D : MonoBehaviour {
 
 
     public BoxCollider2D Bounds = null; //移动的边界
+    bool isBounds;
     public Vector3 deceleration = new Vector3(1,1,0);//减速度
     public Vector3
         minVec3,
@@ -20,7 +21,7 @@ public class TouchMove2D : MonoBehaviour {
     private Vector3 speed = Vector3.zero;
     public Camera eyeCamera = null; // 视图相机
     public bool isUpdateTouch = true; //是否更新touch 
-
+    Vector3 targetSize;//移动物体大小
     public int layerId = 8; //射线碰撞层编号
     int layerMask = 0; //射线碰撞层
     public int rayDraction = 30; //射线长度
@@ -29,7 +30,7 @@ public class TouchMove2D : MonoBehaviour {
     public bool isSlide = false;
     public void Start()
     {
-
+        isBounds = false;
         if (eyeCamera == null) {
             eyeCamera = Camera.main;
         }
@@ -37,6 +38,7 @@ public class TouchMove2D : MonoBehaviour {
         {
             minVec3 = Bounds.bounds.min;//包围盒  
             maxVec3 = Bounds.bounds.max;
+            isBounds = true;
         }
         else {
             DataBase GameBounds = DataManager.Instance.getData("GameBounds");
@@ -44,6 +46,7 @@ public class TouchMove2D : MonoBehaviour {
             {
                 minVec3 = GameBounds.GetVectorValue("min");//包围盒  
                 maxVec3 = GameBounds.GetVectorValue("max");
+                isBounds = true;
             }
         }
         layerMask = (1 << layerId);
@@ -125,6 +128,14 @@ public class TouchMove2D : MonoBehaviour {
         beginP = point;
         speed = Vector3.zero;
         DataManager.Instance.getData("TouchStatus").SetNumberValue("pickUp",1);
+        Renderer rend = target.GetComponent<Renderer>();
+        if (rend != null)
+        {
+            targetSize = rend.bounds.size;
+        }
+        else {
+            targetSize = Vector3.zero;
+        }
     }
     ///更新目标位置
     void Moveing(Vector3 point)
@@ -174,14 +185,11 @@ public class TouchMove2D : MonoBehaviour {
         x = x + speed.x;//向量偏移  
         y = y + speed.y;
 
-        if (Bounds)
+        if (isBounds)
         {
-            var cameraHalfWidth = eyeCamera.orthographic ? Scale2D.cameraSize.x / 2 : 0;
-            var cameraHalfHeight = eyeCamera.orthographic ? Scale2D.cameraSize.y / 2 : 0;
             //保证不会移出包围盒  
-
-            x = Mathf.Clamp(x, minVec3.x + cameraHalfWidth, maxVec3.x - cameraHalfWidth);
-            y = Mathf.Clamp(y, minVec3.y + cameraHalfHeight, maxVec3.y - cameraHalfHeight);
+            x = Mathf.Clamp(x, minVec3.x+ targetSize.x/2, maxVec3.x - targetSize.x / 2);
+            y = Mathf.Clamp(y, minVec3.y + targetSize.y / 2, maxVec3.y - targetSize.y / 2);
         }
         target.position = new Vector3(x, y, target.position.z);
         
