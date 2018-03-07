@@ -15,6 +15,8 @@ public class TouchMoveCamera2D : MonoBehaviour
     private Vector3 speed = Vector3.zero;
     public Camera eyeCamera = null; // 视图相机
     public bool isUpdateTouch = true; //是否更新touch 
+    bool isTouch = false;
+
     public void Start()
     {
 
@@ -56,6 +58,10 @@ public class TouchMoveCamera2D : MonoBehaviour
         {
             Moveing(Input.mousePosition);
         }
+        else if (Event.current.type == EventType.MouseUp || Event.current.type == EventType.MouseLeaveWindow)
+        {
+            MoveEnd(Input.mousePosition);
+        }
     }
     //移动对象
     void UpdateTargetPositon()
@@ -87,6 +93,10 @@ public class TouchMoveCamera2D : MonoBehaviour
             {
                 Moveing(Input.GetTouch(0).position);
             }
+            else if (Input.GetTouch(0).phase == TouchPhase.Canceled || Input.GetTouch(0).phase == TouchPhase.Ended)
+            {
+                MoveEnd(Input.mousePosition);
+            }
         }
 
     }
@@ -94,6 +104,7 @@ public class TouchMoveCamera2D : MonoBehaviour
     void MoveBegin(Vector3 point) {
         beginP = point;
         speed = Vector3.zero;
+        isTouch = true;
     }
     ///更新目标位置
     void Moveing(Vector3 point)
@@ -103,31 +114,16 @@ public class TouchMoveCamera2D : MonoBehaviour
         Vector3 fir = eyeCamera.ScreenToWorldPoint(new Vector3(beginP.x, beginP.y, eyeCamera.nearClipPlane));//转换至世界坐标  
         Vector3 sec = eyeCamera.ScreenToWorldPoint(new Vector3(endP.x, endP.y, eyeCamera.nearClipPlane));
         speed = sec - fir;//需要移动的 向量  
+        UpdatePosition();
     }
     ///Move结束，清除数据
     void MoveEnd(Vector3 point)
     {
-        MoveBegin(point);
+        //MoveBegin(point);
+        isTouch = false;
     }
-
-    public void Update()
+    void UpdatePosition()
     {
-#if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
-        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
-        {
-            return;
-        }
-        UpdateTargetPositon();
-#else
-        if(EventSystem.current.IsPointerOverGameObject()){
-            return;
-        }
-#endif
-        
-        if (speed == Vector3.zero)
-        {
-            return;
-        }
         var x = transform.position.x;
         var y = transform.position.y;
         x = x - speed.x;//向量偏移  
@@ -143,7 +139,28 @@ public class TouchMoveCamera2D : MonoBehaviour
             y = Mathf.Clamp(y, minVec3.y + cameraHalfHeight, maxVec3.y - cameraHalfHeight);
         }
         transform.position = new Vector3(x, y, transform.position.z);
+        beginP = endP;
 
+    }
+    public void Update()
+    {
+#if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
+        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        {
+            return;
+        }
+        UpdateTargetPositon();
+#else
+        if (EventSystem.current.IsPointerOverGameObject()) {
+            return;
+        }
+#endif
+
+        if (speed == Vector3.zero|| isTouch)
+        {
+            return;
+        }
+        UpdatePosition();
         if (System.Math.Abs(speed.x) < 0.01f)
         {
             speed.x = 0;
@@ -189,7 +206,6 @@ public class TouchMoveCamera2D : MonoBehaviour
                 }
             }
         }
-        beginP = endP;
         if (speed.x == 0 && speed.y == 0)
         {
             speed = Vector3.zero;

@@ -28,6 +28,7 @@ public class TouchMove2D : MonoBehaviour {
     Transform target = null; //移动目标
     TouchStatusCallback touchStatusCallback = null;
     public bool isSlide = false;
+    bool isTouch = false;
     public void Start()
     {
         isBounds = false;
@@ -72,9 +73,7 @@ public class TouchMove2D : MonoBehaviour {
         {
             Moveing(Input.mousePosition);
         }else if(Event.current.type == EventType.MouseUp||Event.current.type == EventType.MouseLeaveWindow){
-            if(!isSlide){
-                MoveEnd(Input.mousePosition);
-            }
+            MoveEnd(Input.mousePosition);
         }
     }
     //移动对象
@@ -108,9 +107,7 @@ public class TouchMove2D : MonoBehaviour {
             {
                 Moveing(Input.GetTouch(0).position);
             }else if(Input.GetTouch(0).phase == TouchPhase.Canceled || Input.GetTouch(0).phase == TouchPhase.Ended){
-                if(!isSlide){
-                    MoveEnd(Input.mousePosition);
-                }
+                MoveEnd(Input.mousePosition);
             }
         }
 
@@ -136,6 +133,7 @@ public class TouchMove2D : MonoBehaviour {
         else {
             targetSize = Vector3.zero;
         }
+        isTouch = true;
     }
     ///更新目标位置
     void Moveing(Vector3 point)
@@ -147,21 +145,40 @@ public class TouchMove2D : MonoBehaviour {
         speed = sec - fir;//需要移动的 向量  
         if(touchStatusCallback != null){
             touchStatusCallback.TouchMove(point);
-        } 
+        }
+        UpdatePosition();
     }
     ///Move结束，清除数据
     void MoveEnd(Vector3 point)
     {
-        target = null;
+        if (!isSlide)
+        {
+            target = null;
+            speed = Vector3.zero;
+        }
         beginP = point;
-        speed = Vector3.zero;
         DataManager.Instance.getData("TouchStatus").SetNumberValue("pickUp",0);
         if(touchStatusCallback != null){
             touchStatusCallback.TouchEnd(point);
             touchStatusCallback = null;
-        } 
+        }
+        isTouch = false;
     }
+    void UpdatePosition() {
+        var x = target.position.x;
+        var y = target.position.y;
+        x = x + speed.x;//向量偏移  
+        y = y + speed.y;
 
+        if (isBounds)
+        {
+            //保证不会移出包围盒  
+            x = Mathf.Clamp(x, minVec3.x + targetSize.x / 2, maxVec3.x - targetSize.x / 2);
+            y = Mathf.Clamp(y, minVec3.y + targetSize.y / 2, maxVec3.y - targetSize.y / 2);
+        }
+        target.position = new Vector3(x, y, target.position.z);
+        beginP = endP;
+    }
     public void Update()
     {
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
@@ -176,23 +193,11 @@ public class TouchMove2D : MonoBehaviour {
         }
 #endif
         
-        if (speed == Vector3.zero)
+        if (speed == Vector3.zero||isTouch)
         {
             return;
         }
-        var x = target.position.x;
-        var y = target.position.y;
-        x = x + speed.x;//向量偏移  
-        y = y + speed.y;
-
-        if (isBounds)
-        {
-            //保证不会移出包围盒  
-            x = Mathf.Clamp(x, minVec3.x+ targetSize.x/2, maxVec3.x - targetSize.x / 2);
-            y = Mathf.Clamp(y, minVec3.y + targetSize.y / 2, maxVec3.y - targetSize.y / 2);
-        }
-        target.position = new Vector3(x, y, target.position.z);
-        
+        UpdatePosition();
         if (System.Math.Abs(speed.x) < 0.01f)
         {
             speed.x = 0;
@@ -238,7 +243,7 @@ public class TouchMove2D : MonoBehaviour {
                 }
             }
         }
-        beginP = endP;
+        
         if (speed.x == 0 && speed.y == 0)
         {
             speed = Vector3.zero;
