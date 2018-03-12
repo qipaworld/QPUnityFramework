@@ -9,7 +9,6 @@ public class GoToScreen : MonoBehaviour {
 
     // Update is called once per frame
     public void Go () {
-    	GameObjManager.Instance.RecycleObjAll();
-        SceneManager.LoadScene(screenName, LoadSceneMode.Single);
+    	Utils.GoToScreen(screenName);
     }
 }
