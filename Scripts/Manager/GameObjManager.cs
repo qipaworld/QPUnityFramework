@@ -77,8 +77,8 @@ public class GameObjManager {
     	}
     }
     public void RecycleObj(GameObject o){
-    	if (o.activeSelf)
-        {
+    	//if (o.transform)
+     //   {
             if (o.GetComponent<RectTransform>()) {
                 o.transform.SetParent(uiTarget);
             }
@@ -87,7 +87,7 @@ public class GameObjManager {
                 o.transform.parent = target;
             }
 	        o.SetActive(false);
-	    }
+	    //}
     }
     public void RecycleObjAllByKey(string key){
     	if (gameObjDatas.ContainsKey(key))
