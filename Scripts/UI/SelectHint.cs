@@ -20,14 +20,16 @@ public class SelectHint : MonoBehaviour {
 		Send(false);	
 	}
 	void Send(bool isYes,bool notPop = false){
-		if(callback!=null){
-			callback(isYes);
-		}
+		
 		isSend = true;
 		if(!notPop){
 			UIController.Instance.Pop(uiName);
 		}
-	}
+        if (callback != null)
+        {
+            callback(isYes);
+        }
+    }
 	void OnDestroy()
     {
         if(!isSend){
