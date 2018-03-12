@@ -16,6 +16,7 @@ public class DataBase {
     protected Dictionary<string, DataBase> dataDic = new Dictionary<string, DataBase>();
     protected Dictionary<string, Object> objDic = new Dictionary<string, Object>();
     protected Dictionary<string, YamlMappingNode> yamlMapDic = new Dictionary<string, YamlMappingNode>();
+    public bool initBind = false;
 	//数据在Manager里的key
 	public string dataName = "";
     //这一帧里变化的所有的key 和变化属性
@@ -49,7 +50,9 @@ public class DataBase {
 			sendChange += change;
 		}
         ++bindNum;
+        initBind = true;
 		change (this);
+		initBind = false;
 	}
     //删除一个监听
 	public void Unbind(ChangeDataDelegate change){
