@@ -20,6 +20,7 @@ public class DataBase {
 	public string dataName = "";
     //这一帧里变化的所有的key 和变化属性
 	Dictionary<string, ChangeType> changeDic = new Dictionary<string, ChangeType>();
+    bool sync = false;
 	public Dictionary<string, ChangeType> ChangeDic{
 		get{return changeDic;}
 	}
@@ -31,6 +32,15 @@ public class DataBase {
         get{return bindNum;}
     }
     
+    public bool Sync
+    {
+        get
+        {
+            
+            return sync;
+        }
+        set { sync = value; }
+    }
     //添加一个监听
     public void Bind(ChangeDataDelegate change){
 		if (sendChange == null) {
@@ -217,6 +227,10 @@ public class DataBase {
 	}
     //把自己添加到manager 的发送列表里
 	protected void ReadySend(){
+        if (sync) {
+            Send();
+            return;
+        }
         if (readySend) {
             return;
         }
