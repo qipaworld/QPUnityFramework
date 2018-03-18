@@ -38,7 +38,11 @@ public class Utils {
     }
     static public T Deserialize<T>(string fileName)
     {
-        FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
+        if (!System.IO.File.Exists(fileName))
+        {
+            return default(T);
+        }
+            FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
         BinaryFormatter bf = new BinaryFormatter();
         T t = (T)(bf.Deserialize(fs));
         fs.Close();
