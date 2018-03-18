@@ -155,7 +155,7 @@ public class LocalizationManager: DataBase
             //stringDic.Add(key,key);
         #endif
         }
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
             return "<文本丢失了！！！！！！！>";
         #else
             return key;
