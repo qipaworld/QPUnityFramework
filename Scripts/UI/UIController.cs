@@ -81,26 +81,38 @@ public class UIController {
 		}
 		return ui;
 	}
-	/// <summary>
+    /// <summary>
     /// 添加一个带确定按钮的提示layer
     /// </summary>
     /// <value>name 名字.</value>
     /// <value>userActionCallBack 用户操作回掉.</value>
     /// <value>key 文本的key.</value>
     /// <value>value 可变化文本内所替换的内容.</value>
+    /// <value>bkey1 第一个按钮的文字的key.</value>
+    /// <value>bkey2 第二个按钮的文字的key.</value>
     /// <value>callback 操作UI时的回掉方法.</value>
-	public GameObject PushSelectHint(string name,Action<bool> userActionCallBack,string key = null,string[] value = null,UIChangeDelegate callback = null){
+    public GameObject PushSelectHint(string name,Action<bool> userActionCallBack,string key = null,string[] value = null, string bkey1 = null, string bkey2 = null, UIChangeDelegate callback = null){
 		GameObject ui = PushRepeatableLayer (name,"selectHintLayer",callback);
 		if (ui!=null){
-            if(key != null){            
-                var text = ui.GetComponentInChildren<Text>();
-				text.text = LocalizationManager.Instance.GetLocalizedValue(key,value);
+            var selectHint = ui.GetComponent<SelectHint>();
+
+            if (key != null){
+                selectHint.hintText.text = LocalizationManager.Instance.GetLocalizedValue(key,value);
                 var bg = ui.transform.Find("Bg");
                 if(bg){
                     var rectTransform = bg.GetComponent<RectTransform>();
-                    rectTransform.sizeDelta = new Vector2( rectTransform.sizeDelta.x, text.preferredHeight + 100);
+                    rectTransform.sizeDelta = new Vector2( rectTransform.sizeDelta.x, selectHint.hintText.preferredHeight + 300);
                 }
             }
+            if (bkey1 == null) {
+                bkey1 = "确定";
+            }
+            if (bkey2 == null)
+            {
+                bkey2 = "取消";
+            }
+            selectHint.button2Text.text = LocalizationManager.Instance.GetLocalizedValue(bkey2);
+            selectHint.button1Text.text = LocalizationManager.Instance.GetLocalizedValue(bkey1);
             ui.GetComponent<SelectHint>().Init(name,userActionCallBack);
 		}
 		return ui;

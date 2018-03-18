@@ -19,7 +19,10 @@ public class ClickPopUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
     //当鼠标抬起时调用  对应接口  IPointerUpHandler
     public void OnPointerUp(PointerEventData eventData)
     {
-        UIController.Instance.Pop(transform.parent.GetComponent<UIData> ().uiName);
+        CloseUI();
     }
-    
+    public void CloseUI()
+    {
+        UIController.Instance.Pop(transform.parent.GetComponent<UIData>().uiName);
+    }
 }

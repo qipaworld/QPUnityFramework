@@ -19,8 +19,19 @@ public class Icon : MonoBehaviour {
         // this.texturePath = iconDataKey;
         // this.num = num;
         this.key = key;
-        this.callback = callback;
 		iconImage.sprite = LoadObjManager.Instance.GetLoadObj<Sprite>(IconManager.Instance.GetIconFilePath(key));
+        this.callback = callback;
+        //float scale = 1;
+        //Vector3 size = iconImage.sprite.bounds.size;
+        //if (size.x > size.y)
+        //{
+        //    scale = 1.0f / size.x;
+        //}
+        //else
+        //{
+        //    scale = 1.0f / size.y;
+        //}
+        //Image
         iconName.GetComponent<LocalizedText>().UpdateText(IconManager.Instance.GetIconName(key));
 
     }

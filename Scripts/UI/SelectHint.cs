@@ -1,14 +1,17 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SelectHint : MonoBehaviour {
 
 	string uiName;
 	Action<bool> callback;
 	bool isSend = false;
-	public void Init(string uiName,Action<bool> callback = null){
+    public Text hintText;
+    public Text button1Text;
+    public Text button2Text;
+    public void Init(string uiName,Action<bool> callback = null){
 		this.uiName = uiName;
 		this.callback = callback;
 	}

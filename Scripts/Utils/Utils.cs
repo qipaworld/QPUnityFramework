@@ -23,22 +23,12 @@ public class Utils {
     	SceneManager.LoadScene(name, LoadSceneMode.Single);
     }
     static public void Serialize(string fileName,System.Object o) {
+        
+        string directoryPath = Path.GetDirectoryName(fileName);
 
-        try
+        if (!System.IO.Directory.Exists(directoryPath))
         {
-            string directoryPath = Path.GetDirectoryName(fileName);
-
-            if (!System.IO.Directory.Exists(directoryPath))
-            {
-                System.IO.Directory.CreateDirectory(directoryPath);
-            }
-            Debug.Log(directoryPath);
-
-        }
-
-        catch (Exception e)
-        {
-            Debug.Log("???");
+            System.IO.Directory.CreateDirectory(directoryPath);
         }
 
         FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
