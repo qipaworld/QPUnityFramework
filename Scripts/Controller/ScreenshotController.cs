@@ -39,31 +39,37 @@ public class ScreenshotController : MonoBehaviour {
     /// <param name="mRect">M rect.截屏的大小</param>
     /// <param name="mFileName">M file name.保存路径</param>
     /// <param name="callback">获得文理的回掉方法</param>
-    public IEnumerator CaptureByRect (Rect mRect, Action<Texture2D> callback = null , string mFileName = null)
+    public void CaptureByRect (Rect mRect, Action<Texture2D> callback = null , string mFileName = null)
     {
+        StartCoroutine(CaptureByRectEx(mRect, callback, mFileName));
+    }
+    public IEnumerator CaptureByRectEx(Rect mRect, Action<Texture2D> callback = null, string mFileName = null)
+    {
+
+
         //等待渲染线程结束
-        yield return new WaitForEndOfFrame ();
+        yield return new WaitForEndOfFrame();
         //初始化Texture2D, 大小可以根据需求更改
-        Texture2D mTexture = new Texture2D ((int)mRect.width, (int)mRect.height,
+        Texture2D mTexture = new Texture2D((int)mRect.width, (int)mRect.height,
                                  TextureFormat.RGB24, false);
         //读取屏幕像素信息并存储为纹理数据
-        mTexture.ReadPixels (mRect, 0, 0);
+        mTexture.ReadPixels(mRect, 0, 0);
         //应用
-        mTexture.Apply ();
+        mTexture.Apply();
 
-        if(mFileName != null){
-
-	        //将图片信息编码为字节信息
-	        byte[] bytes = mTexture.EncodeToPNG ();  
-	        //保存
-	        System.IO.File.WriteAllBytes (mFileName, bytes);
+        if (mFileName != null)
+        {
+            //将图片信息编码为字节信息
+            byte[] bytes = mTexture.EncodeToPNG();
+            //保存
+            System.IO.File.WriteAllBytes(mFileName, bytes);
         }
 
-        if(callback != null){
-        	callback(mTexture);
+        if (callback != null)
+        {
+            callback(mTexture);
         }
     }
-
     /// <summary>
     /// 指定相机截图
     /// </summary>
@@ -72,7 +78,11 @@ public class ScreenshotController : MonoBehaviour {
     /// <param name="mRect">M rect. 截屏的区域</param>
     /// <param name="mFileName">M file name.</param>
     /// <param name="callback">获得文理的回掉方法</param>
-    public IEnumerator  CaptureByCamera (Camera mCamera, Rect mRect, Action<Texture2D> callback = null , string mFileName = null)
+      public void CaptureByCamera(Camera mCamera, Rect mRect, Action<Texture2D> callback = null, string mFileName = null)
+    {
+        StartCoroutine(CaptureByCameraEx(mCamera,mRect, callback, mFileName));
+    }
+    public IEnumerator  CaptureByCameraEx (Camera mCamera, Rect mRect, Action<Texture2D> callback = null , string mFileName = null)
     {
         //等待渲染线程结束
         yield return new WaitForEndOfFrame ();
@@ -80,6 +90,7 @@ public class ScreenshotController : MonoBehaviour {
         RenderTexture mRender = new RenderTexture ((int)mRect.width, (int)mRect.height,16);
         //设置相机的渲染目标
         mCamera.targetTexture = mRender;
+        
         //开始渲染
         mCamera.Render ();
         //激活渲染贴图读取信息
