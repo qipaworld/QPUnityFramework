@@ -13,6 +13,7 @@ public class Icon : MonoBehaviour {
 	public Image iconImage;
     public Text iconName;
     public Action<Icon> callback;
+    public GameObject lockImage = null;
     public string key;
 	public void Reset(string key, Action<Icon> callback = null,string num = null){
         // this.iconType = iconType;
@@ -21,6 +22,7 @@ public class Icon : MonoBehaviour {
         this.key = key;
 		iconImage.sprite = LoadObjManager.Instance.GetLoadObj<Sprite>(IconManager.Instance.GetIconFilePath(key));
         this.callback = callback;
+        HideLock();
         //float scale = 1;
         //Vector3 size = iconImage.sprite.bounds.size;
         //if (size.x > size.y)
@@ -35,6 +37,9 @@ public class Icon : MonoBehaviour {
         iconName.GetComponent<LocalizedText>().UpdateText(IconManager.Instance.GetIconName(key));
 
     }
+    public string GetName() {
+        return iconName.text;
+    }
     public void OnClickIcon()
     {
         if (callback != null) {
@@ -43,5 +48,12 @@ public class Icon : MonoBehaviour {
     }
     public void setIconColor(Color c) {
         iconImage.color = c;
+    }
+    public void ShowLock()
+    {
+        lockImage.SetActive(true);
+    }
+    public void HideLock() {
+        lockImage.SetActive(false);
     }
 }
