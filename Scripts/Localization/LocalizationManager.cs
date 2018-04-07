@@ -25,6 +25,53 @@ public class LocalizationManager: DataBase
             return instance;
         }
     }
+    public string GetShortLanguage()
+    {
+        if (userLanguage == "Chinese"|| userLanguage == "ChineseTraditional")
+        {
+            return "zh";
+        } else if (userLanguage == "Russian")
+        {
+            return "ru";
+        }
+        else if (userLanguage == "Arabic")
+        {
+            return "ar";
+        }
+        else if (userLanguage == "French")
+        {
+            return "fr";
+        }
+        else if (userLanguage == "German")
+        {
+            return "de";
+        }
+        else if (userLanguage == "Indonesia")
+        {
+            return "id";
+        }
+        else if (userLanguage == "Japanese")
+        {
+            return "ja";
+        }
+        else if (userLanguage == "Korean")
+        {
+            return "ko";
+        }
+        else if (userLanguage == "Ukrainian")
+        {
+            return "uk";
+        }
+        else
+        {
+            return "en";
+        }
+            
+    }
+    public string GetUserLanguage()
+    {
+        return userLanguage;
+    }
     public void SetUserLanguage(string type){
         userLanguage = type;
         EncryptionManager.SetString("userLanguage",userLanguage);
