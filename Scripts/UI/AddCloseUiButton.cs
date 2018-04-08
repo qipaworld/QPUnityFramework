@@ -8,7 +8,7 @@ public class AddCloseUiButton : MonoBehaviour {
     void Start()
     {
         GameObject uiLoad = LoadObjManager.Instance.GetLoadObj<GameObject>("UIPrefabs/CloseButton");
-        GameObject ClickPopUI = GameObject.Instantiate<GameObject>(uiLoad, transform);
-        //ClickPopUI.transform.SetSiblingIndex(0);
+        GameObject.Instantiate<GameObject>(uiLoad, transform);
+        
     }
 }
