@@ -41,20 +41,20 @@ public class TouchClickBase : MonoBehaviour
     /// </summary>
     void UpdateTargetPositon()
     {
-        
-        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        Touch touch = Input.GetTouch(0);
+        if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
         {
             return;
         }
         
          
-        if (beginP == null || Input.GetTouch(0).phase == TouchPhase.Began)
+        if (beginP == null || touch.phase == TouchPhase.Began)
         {
-            TouchBegin(Input.GetTouch(0).position);
+            TouchBegin(touch.position);
         }
-        else if (Input.GetTouch(0).phase == TouchPhase.Ended)
+        else if (touch.phase == TouchPhase.Ended)
         {
-            TouchEnd(Input.GetTouch(0).position);
+            TouchEnd(touch.position);
         }
     }
 

@@ -20,7 +20,6 @@ public class TouchMove2D : MonoBehaviour {
     private Vector2 endP = Vector2.zero;//鼠标第二次位置（拖拽位置）  
     private Vector3 speed = Vector3.zero;
     public Camera eyeCamera = null; // 视图相机
-    public bool isUpdateTouch = true; //是否更新touch 
     Vector3 targetSize;//移动物体大小
     public int layerId = 8; //射线碰撞层编号
     int layerMask = 0; //射线碰撞层
@@ -29,6 +28,7 @@ public class TouchMove2D : MonoBehaviour {
     TouchStatusCallback touchStatusCallback = null;
     public bool isSlide = false;
     bool isTouch = false;
+    int fingerId;
     public void Start()
     {
         isBounds = false;
@@ -79,35 +79,42 @@ public class TouchMove2D : MonoBehaviour {
     //移动对象
     void UpdateTargetPositon()
     {
-        if (Input.touchCount == 0)
-        {
-            return;
-        }
-        if(!isUpdateTouch){
-            for (int i = 0; i < Input.touchCount; ++i)
-            {
-                if (Input.GetTouch(i).phase == TouchPhase.Began || Input.GetTouch(i).phase == TouchPhase.Canceled || Input.GetTouch(i).phase == TouchPhase.Ended)
+        if (Input.touchCount > 0){
+        
+            
+            Touch touch = Input.GetTouch(0);
+            bool isGetTouch = false;
+            if(!isTouch){
+                fingerId = touch.fingerId;
+                isGetTouch = true;
+            }else{
+                for (int i = 0; i < Input.touchCount; ++i)
                 {
-                    isUpdateTouch = true;
-                    break;
+                    if (Input.GetTouch(i).fingerId == fingerId)
+                    {
+                        touch = Input.GetTouch(i);
+                        isGetTouch = true;
+                        break;
+                    }
                 }
             }
-        }
-        if (Input.touchCount == 1){
-            if (isUpdateTouch)
+            if(!isGetTouch){
+                MoveEnd(beginP);
+                return;
+            }
+            if (touch.phase == TouchPhase.Began)
             {
                 RaycastHit hit;
                 if (RayDetection(out hit))
                 { 
-                    MoveBegin(Input.GetTouch(0).position,hit.transform);
-                    isUpdateTouch = false;
+                    MoveBegin(touch.position,hit.transform);
                 }
             }
-            else if (Input.GetTouch(0).phase == TouchPhase.Moved && target != null)
+            else if (touch.phase == TouchPhase.Moved && target != null)
             {
-                Moveing(Input.GetTouch(0).position);
-            }else if(Input.GetTouch(0).phase == TouchPhase.Canceled || Input.GetTouch(0).phase == TouchPhase.Ended){
-                MoveEnd(Input.mousePosition);
+                Moveing(touch.position);
+            }else if(touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended){
+                MoveEnd(touch.position);
             }
         }
 
@@ -182,7 +189,7 @@ public class TouchMove2D : MonoBehaviour {
     public void Update()
     {
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
-        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        if (Input.touchCount< 1 || EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
         {
             return;
         }

@@ -14,9 +14,8 @@ public class TouchMoveCamera2D : MonoBehaviour
     private Vector2 endP = Vector2.zero;//鼠标第二次位置（拖拽位置）  
     private Vector3 speed = Vector3.zero;
     public Camera eyeCamera = null; // 视图相机
-    public bool isUpdateTouch = true; //是否更新touch 
     bool isTouch = false;
-
+    int fingerId;
     public void Start()
     {
 
@@ -66,37 +65,49 @@ public class TouchMoveCamera2D : MonoBehaviour
     //移动对象
     void UpdateTargetPositon()
     {
-        if (Input.touchCount == 0)
-        {
+        if (Input.touchCount == 0){
             return;
         }
         if(DataManager.Instance.getData("TouchStatus").GetNumberValue("pickUp")==1){
+            MoveEnd(beginP);
             return;
         }
-        if(!isUpdateTouch){
+        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        {
+            MoveEnd(beginP);
+            return;
+        }
+        Touch touch = Input.GetTouch(0);
+        bool isGetTouch = false;
+        if(!isTouch){
+            fingerId = touch.fingerId;
+            isGetTouch = true;
+        }else{
             for (int i = 0; i < Input.touchCount; ++i)
             {
-                if (Input.GetTouch(i).phase == TouchPhase.Began || Input.GetTouch(i).phase == TouchPhase.Canceled || Input.GetTouch(i).phase == TouchPhase.Ended)
+                if (Input.GetTouch(i).fingerId == fingerId)
                 {
-                    isUpdateTouch = true;
+                    touch = Input.GetTouch(i);
+                    isGetTouch = true;
                     break;
                 }
             }
         }
-        if (Input.touchCount == 1){
-            if (isUpdateTouch)
-            {
-                MoveBegin(Input.GetTouch(0).position);
-                isUpdateTouch = false;
-            }
-            else if (Input.GetTouch(0).phase == TouchPhase.Moved)
-            {
-                Moveing(Input.GetTouch(0).position);
-            }
-            else if (Input.GetTouch(0).phase == TouchPhase.Canceled || Input.GetTouch(0).phase == TouchPhase.Ended)
-            {
-                MoveEnd(Input.mousePosition);
-            }
+        if(!isGetTouch){
+            MoveEnd(beginP);
+            return;
+        }
+        if (touch.phase == TouchPhase.Began)
+        {
+            MoveBegin(touch.position);
+        }
+        else if (touch.phase == TouchPhase.Moved)
+        {
+            Moveing(touch.position);
+        }
+        else if (touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended)
+        {
+            MoveEnd(touch.position);
         }
 
     }
@@ -145,10 +156,6 @@ public class TouchMoveCamera2D : MonoBehaviour
     public void Update()
     {
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
-        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
-        {
-            return;
-        }
         UpdateTargetPositon();
 #else
         if (EventSystem.current.IsPointerOverGameObject()) {
