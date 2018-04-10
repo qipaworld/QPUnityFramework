@@ -17,6 +17,9 @@ public class Utils {
     }
     static public void GoToScreen(string name ){
         
+        if(DataManager.Instance.getData("GameStatus").GetStringValue("GameScreenName") == name){
+            return;
+        }
         DataManager.Instance.getData("GameStatus").SetStringValue("GameScreenName",name) ;
 
         GameObjManager.Instance.RecycleObjAll();
