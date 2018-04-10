@@ -20,9 +20,13 @@ public class AudioManagerBase : MonoBehaviour {
 		{
 			music = dataBase.GetObjectValue("defaultMusic") as AudioSource;
 		}
-		dataBase.Bind(Change);
+        dataBase.Bind(Change);
     }
-	public virtual void Change(DataBase data)
+    private void OnDestroy()
+    {
+        DataManager.Instance.getData("musicData").GetDataValue(musicType.ToString()).Unbind(Change);
+    }
+    public virtual void Change(DataBase data)
     {
 		isPlay = (data.GetNumberValue ("musicStatus") == 1);
 	}

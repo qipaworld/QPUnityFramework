@@ -1,2 +1,2 @@
 ﻿
-public enum MusicEnum{bgm,sound}
+public enum MusicEnum{bgm,sound,start,effect,win}

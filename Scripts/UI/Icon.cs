@@ -15,7 +15,13 @@ public class Icon : MonoBehaviour {
     public Action<Icon> callback;
     public GameObject lockImage = null;
     public string key;
-	public void Reset(string key, Action<Icon> callback = null,string num = null){
+    public  bool isAudio = true;
+    AudioManagerBase audioManager;
+    public void Start()
+    {
+        audioManager = transform.GetComponent<AudioManagerBase>();
+    }
+    public void Reset(string key, Action<Icon> callback = null,string num = null){
         // this.iconType = iconType;
         // this.texturePath = iconDataKey;
         // this.num = num;
@@ -43,6 +49,10 @@ public class Icon : MonoBehaviour {
     public void OnClickIcon()
     {
         if (callback != null) {
+            if (isAudio)
+            {
+                audioManager.play();
+            }
             callback(this);
         }
     }
