@@ -107,7 +107,11 @@ public class WebViewManager
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
         webViewObject.bitmapRefreshCycle = 1;
 #endif
-        webViewObject.SetMargins(0, 0, 0, 100);
+        int iphonex_down = 0;
+        if (SystemInfo.deviceModel == "iPhone10,3" || SystemInfo.deviceModel == "iPhone10,6") {
+            iphonex_down = 98;
+        }
+        webViewObject.SetMargins(0, 0, 0, 100+iphonex_down);
         
     }
     public void OpenWeb(string url)
