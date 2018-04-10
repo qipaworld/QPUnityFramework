@@ -133,7 +133,7 @@ public class TouchMoveCamera2D : MonoBehaviour
         //MoveBegin(point);
         isTouch = false;
     }
-    void UpdatePosition()
+    public void UpdatePosition()
     {
         var x = transform.position.x;
         var y = transform.position.y;
