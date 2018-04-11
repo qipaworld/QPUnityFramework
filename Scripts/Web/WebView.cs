@@ -43,6 +43,6 @@ public class WebView : MonoBehaviour
     }
     public float GetBarHeight()
     {
-        return image.rectTransform.sizeDelta.y;
+        return image.rectTransform.sizeDelta.y*GameObject.Find("Canvas").transform.localScale.y;
     }
 }
