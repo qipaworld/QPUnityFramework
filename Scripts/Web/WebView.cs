@@ -20,9 +20,11 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WebView : MonoBehaviour
 {
+    public Image image;
     public void Close(){
         WebViewManager.Instance.Close();
         UIController.Instance.Pop("WebViewLayer");
@@ -38,5 +40,9 @@ public class WebView : MonoBehaviour
     }
     public void Reload(){
         WebViewManager.Instance.Reload();
+    }
+    public float GetBarHeight()
+    {
+        return image.rectTransform.sizeDelta.y;
     }
 }

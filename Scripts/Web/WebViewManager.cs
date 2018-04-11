@@ -25,6 +25,8 @@ public class WebViewManager
 {
     public static WebViewManager instance = null;
     WebViewObject webViewObject;
+    bool isUpdateSize = false;
+     
     string homeUrl;
     static public WebViewManager Instance
     {
@@ -107,16 +109,22 @@ public class WebViewManager
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
         webViewObject.bitmapRefreshCycle = 1;
 #endif
-        int iphonex_down = 0;
-        if (SystemInfo.deviceModel == "iPhone10,3" || SystemInfo.deviceModel == "iPhone10,6") {
-            iphonex_down = 98;
-        }
-        webViewObject.SetMargins(0, 0, 0, 100+iphonex_down);
+        
         
     }
     public void OpenWeb(string url)
     {
-        UIController.Instance.Push("WebViewLayer");
+       WebView  webviewUI = UIController.Instance.Push("WebViewLayer").GetComponent<WebView>();
+
+        if (!isUpdateSize) {
+            int iphonex_down = 0;
+            if (SystemInfo.deviceModel == "iPhone10,3" || SystemInfo.deviceModel == "iPhone10,6")
+            {
+                iphonex_down = 68;
+            }
+            webViewObject.SetMargins(0, 0, 0, iphonex_down + (int)(webviewUI.GetBarHeight()));
+            isUpdateSize = true;
+        }
         homeUrl = url;
         webViewObject.SetVisibility(true);
         webViewObject.LoadURL(url.Replace(" ", "%20"));
