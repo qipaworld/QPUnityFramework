@@ -24,10 +24,8 @@
 1.webView来源 https://github.com/gree/unity-webview 已经被集成到框架内，无需手动集成
 
 ## 需要插件 ##
-1.unity Ads
-2.unity IAP
-3.DOTween
-4.YamlDoNet for Unity
+1.DOTween
+2.YamlDoNet for Unity
 
 <hr>
 

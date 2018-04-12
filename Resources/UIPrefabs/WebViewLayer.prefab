@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 222250364194809730}
   - component: {fileID: 114615295130996004}
   - component: {fileID: 114800247836820704}
+  - component: {fileID: 114336674849870030}
   m_Layer: 5
   m_Name: close
   m_TagString: Untagged
@@ -40,6 +41,7 @@ GameObject:
   - component: {fileID: 222013081953615906}
   - component: {fileID: 114490649768026276}
   - component: {fileID: 114122080268340902}
+  - component: {fileID: 114658177827887372}
   m_Layer: 5
   m_Name: goForward
   m_TagString: Untagged
@@ -77,6 +79,7 @@ GameObject:
   - component: {fileID: 222775669778161328}
   - component: {fileID: 114447819241218094}
   - component: {fileID: 114107790141131724}
+  - component: {fileID: 114932370256708850}
   m_Layer: 5
   m_Name: goBack
   m_TagString: Untagged
@@ -113,6 +116,7 @@ GameObject:
   - component: {fileID: 222071792857476030}
   - component: {fileID: 114381788505123474}
   - component: {fileID: 114081322931911070}
+  - component: {fileID: 114529456837528276}
   m_Layer: 5
   m_Name: goHome
   m_TagString: Untagged
@@ -131,6 +135,7 @@ GameObject:
   - component: {fileID: 222210599455884936}
   - component: {fileID: 114423702963027334}
   - component: {fileID: 114473870050691822}
+  - component: {fileID: 114414582377101090}
   m_Layer: 5
   m_Name: reload
   m_TagString: Untagged
@@ -359,6 +364,21 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114336674849870030
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1074662757156524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a054e3299063419b8894d4f938c4d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  music: {fileID: 0}
+  musicType: 1
+  isPlay: 1
+  repeat: 0
 --- !u!114 &114381788505123474
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -386,6 +406,21 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114414582377101090
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1947015698622132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a054e3299063419b8894d4f938c4d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  music: {fileID: 0}
+  musicType: 1
+  isPlay: 1
+  repeat: 0
 --- !u!114 &114423702963027334
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -519,6 +554,21 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114529456837528276
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1865047068430990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a054e3299063419b8894d4f938c4d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  music: {fileID: 0}
+  musicType: 1
+  isPlay: 1
+  repeat: 0
 --- !u!114 &114615295130996004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -546,6 +596,21 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114658177827887372
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1152408002964724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a054e3299063419b8894d4f938c4d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  music: {fileID: 0}
+  musicType: 1
+  isPlay: 1
+  repeat: 0
 --- !u!114 &114800247836820704
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -598,6 +663,21 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114932370256708850
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1614474193499948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a054e3299063419b8894d4f938c4d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  music: {fileID: 0}
+  musicType: 1
+  isPlay: 1
+  repeat: 0
 --- !u!114 &114952738951430494
 MonoBehaviour:
   m_ObjectHideFlags: 1
