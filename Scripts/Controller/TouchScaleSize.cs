@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TouchScaleSize : MonoBehaviour
 {
@@ -12,10 +13,17 @@ public class TouchScaleSize : MonoBehaviour
     public Vector3 minScale = Vector3.zero;
     void Update()
     {
-
+        
         if (Input.touchCount < 2)
         {
             return;
+        }
+        for (int i = 0; i < Input.touchCount; ++i)
+        {
+            if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(i).fingerId))
+            {
+                return;
+            }
         }
         //多点触摸, 放大缩小         
         Touch newTouch1 = Input.GetTouch(0);

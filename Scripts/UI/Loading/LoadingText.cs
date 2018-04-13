@@ -26,7 +26,7 @@ public class LoadingText : MonoBehaviour {
         if (imageComp.fillAmount != 1f)
         {
             imageComp.fillAmount = imageComp.fillAmount + Time.deltaTime * speed;
-            a = (int)(imageComp.fillAmount * 100);
+            a = Mathf.FloorToInt(imageComp.fillAmount * 100);
             if (a > 0 && a <= 33)
             {
                 textNormal.text = "Loading...";

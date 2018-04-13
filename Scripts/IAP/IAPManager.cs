@@ -17,6 +17,7 @@ public class IAPManager : IStoreListener
     private bool isFailed = false;
     ConfigurationBuilder builder = null;
     private bool notInitSotre = false;
+    private string productIdEx = "";
     static public IAPManager Instance
     {
         get
@@ -98,7 +99,7 @@ public class IAPManager : IStoreListener
             return;
         }
 		UIController.Instance.PushLoading("restoreStart","购买正在恢复中");
-
+        productIdEx = "_huifu";
         isRestore = true;
 		extensions.GetExtension<IAppleExtensions>().RestoreTransactions(result => {
             isRestore = false;
@@ -109,6 +110,8 @@ public class IAPManager : IStoreListener
             {
                 key = "恢复成功";
             }
+            productIdEx = "";
+
 			UIController.Instance.PushHint("restore",key);
 		});
 	}
@@ -159,9 +162,9 @@ public class IAPManager : IStoreListener
             // For informational purposes, we list the receipt(s)
             // foreach (IPurchaseReceipt productReceipt in result)
             // {
-                // Debug.Log(productReceipt.productID);
-                // Debug.Log(productReceipt.purchaseDate);
-                // Debug.Log(productReceipt.transactionID);
+            //     Debug.Log(productReceipt.productID);
+            //     Debug.Log(productReceipt.purchaseDate);
+            //     Debug.Log(productReceipt.transactionID);
             // }
         }
         catch (IAPSecurityException)
@@ -170,7 +173,12 @@ public class IAPManager : IStoreListener
             validPurchase = false;
         }
 #endif
-
+        
+        if(productIdEx != "_huifu" && productIdEx != id)
+        {
+            UIController.Instance.PushHint("IAPSecurityException", "购买验证失败");
+            validPurchase = false;
+        }
         if (validPurchase)
         {
             SendCallBack(true, id);
@@ -222,7 +230,7 @@ public class IAPManager : IStoreListener
             return;
         }
 		UIController.Instance.PushLoading("purchaseStart","购买正在进行中");
-
+        productIdEx = productId;
         finishCallback = callback;
         controller.InitiatePurchase(productId);
     }
@@ -235,17 +243,20 @@ public class IAPManager : IStoreListener
     {
 		SendCallBack(false,i.definition.id);
     }
-    public void SendCallBack(bool success, string id = null)
+    public void SendCallBack(bool success, string id)
     {
-//        string key = "购买失败";
-//        if (success)
-//        {
-//            key = "购买成功";
-//        }
-//		GameObject hintLayer = UIController.Instance.Push("hintLayer");
+        //        string key = "购买失败";
+        //        if (success)
+        //        {
+        //            key = "购买成功";
+        //        }
+        //		GameObject hintLayer = UIController.Instance.Push("hintLayer");
 
-//        hintLayer.GetComponentInChildren<Text>().text = LocalizationManager.Instance.GetLocalizedValue(key);
-		UIController.Instance.Pop("purchaseStart");
+        //        hintLayer.GetComponentInChildren<Text>().text = LocalizationManager.Instance.GetLocalizedValue(key);
+        if(productIdEx != "_huifu"){
+            productIdEx = "";
+        }
+        UIController.Instance.Pop("purchaseStart");
 
 		if (finishCallback == null) {
 			defaultFinishCallback (success, id);

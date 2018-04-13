@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,12 +7,12 @@ using UnityEngine.UI;
 public class UIController {
 
 	public static UIController instance = null;
-	public Transform target;
 
     DataBase uiDatas;
-	DataBase uiLoadDatas;
 	DataBase uiLoadingLayerDatas;
 	int loadingLayerNum = 0;
+    
+    GameObject hintLayerLast;
     static public UIController Instance
     {
         get {
@@ -28,10 +29,7 @@ public class UIController {
         {
             instance = new UIController();
             instance.uiDatas = DataManager.Instance.addData("UIDatas");
-			instance.uiLoadDatas = DataManager.Instance.addData("UILoadDatas");
 			instance.uiLoadingLayerDatas = DataManager.Instance.addData("uiLoadingLayerDatas");
-			instance.target = GameObject.Find ("Canvas").transform;
-
         }
     }
 	public GameObject Push(string name,UIChangeDelegate callback = null){
@@ -39,24 +37,30 @@ public class UIController {
 	}
 	private GameObject PushRepeatableLayer(string name,string fileName,UIChangeDelegate callback = null){
 		
-		if (uiDatas.GetGameObjectValue(name)!=null){
+		if (uiDatas.GetObjectValue(name)!=null){
 			Debug.LogWarning("QIPAWORLD:重复添加UI--"+name);
         	return null;
         }
 
-		GameObject uiLoad = uiLoadDatas.GetGameObjectValue(fileName);
-		if (uiLoad==null){
-			uiLoad = Resources.Load("UIPrefabs/"+fileName) as GameObject;
-			uiLoadDatas.SetGameObjectValue(name,uiLoad);
-		}
-		GameObject ui = GameObject.Instantiate(uiLoad,target) as GameObject;
+		GameObject uiLoad = LoadObjManager.Instance.GetLoadObj<GameObject>("UIPrefabs/"+fileName);
+		
+		GameObject ui = GameObject.Instantiate<GameObject>(uiLoad, GameObject.Find("Canvas").transform);
 		UIData uiData = ui.AddComponent<UIData>();
 		uiData.uiName = name;
 		uiData.changeCallback = callback;
-		uiDatas.SetGameObjectValue(name,ui);
+		uiDatas.SetObjectValue(name,ui);
 		return ui;
 	}
-	public GameObject PushHint(string name,string key = null,string[] value = null,bool log = false,UIChangeDelegate callback = null){
+	/// <summary>
+    /// 添加一个提示layer
+    /// </summary>
+    /// <value>name 名字.</value>
+    /// <value>key 文本的key.</value>
+    /// <value>value 可变化文本内所替换的内容.</value>
+    /// <value>log 是否是调试信息.</value>
+    /// <value>callback 操作UI时的回掉方法.</value>
+    /// <value>outTime 自动关闭UI的时间，不传为手动关闭.</value>
+	public GameObject PushHint(string name,string key = null,string[] value = null,bool log = false,UIChangeDelegate callback = null,float outTime = 0f){
 		GameObject ui = PushRepeatableLayer (name,"hintLayer",callback);
 		if (ui!=null){
 			if(log){
@@ -71,9 +75,101 @@ public class UIController {
                     rectTransform.sizeDelta = new Vector2( rectTransform.sizeDelta.x, text.preferredHeight + 100);
                 }
             }
+            if(outTime != 0){
+            	Timer.Instance.DelayInvoke(outTime,()=>{Pop(name);});
+            }
 		}
 		return ui;
 	}
+    /// <summary>
+    /// 添加一个带确定按钮的提示layer
+    /// </summary>
+    /// <value>name 名字.</value>
+    /// <value>userActionCallBack 用户操作回掉.</value>
+    /// <value>key 文本的key.</value>
+    /// <value>value 可变化文本内所替换的内容.</value>
+    /// <value>bkey1 第一个按钮的文字的key.</value>
+    /// <value>bkey2 第二个按钮的文字的key.</value>
+    /// <value>callback 操作UI时的回掉方法.</value>
+    public GameObject PushSelectHint(string name,Action<SelectStatus> userActionCallBack,string key = null,string[] value = null, string bkey1 = null, string bkey2 = null, UIChangeDelegate callback = null){
+		GameObject ui = PushRepeatableLayer (name,"selectHintLayer",callback);
+		if (ui!=null){
+            var selectHint = ui.GetComponent<SelectHint>();
+
+            if (key != null){
+                selectHint.hintText.text = LocalizationManager.Instance.GetLocalizedValue(key,value);
+                var bg = ui.transform.Find("Bg");
+                if(bg){
+                    var rectTransform = bg.GetComponent<RectTransform>();
+                    rectTransform.sizeDelta = new Vector2( rectTransform.sizeDelta.x, selectHint.hintText.preferredHeight + 300);
+                }
+            }
+            if (bkey1 == null) {
+                bkey1 = "确定";
+            }
+            if (bkey2 == null)
+            {
+                bkey2 = "取消";
+            }
+            selectHint.button2Text.text = LocalizationManager.Instance.GetLocalizedValue(bkey2);
+            selectHint.button1Text.text = LocalizationManager.Instance.GetLocalizedValue(bkey1);
+            ui.GetComponent<SelectHint>().Init(name,userActionCallBack);
+		}
+		return ui;
+	}
+    /// <summary>
+    /// 添加一个带确定按钮的提示layer
+    /// </summary>
+    /// <value>name 名字.</value>
+    /// <value>items 传道具的type 和数量.</value>
+    /// <value>key 文本的key.</value>
+    /// <value>value 可变化文本内所替换的内容.</value>
+    /// <value>callback 操作UI时的回掉方法.</value>
+    public GameObject PushItemHint(string name,string[,] items,string key = null,string[] value = null,UIChangeDelegate callback = null){
+        GameObject ui = PushRepeatableLayer (name,"hintItemLayer",callback);
+        if (ui!=null){
+            float textHeight = 0;
+            if(key != null){            
+                var text = ui.GetComponentInChildren<Text>();
+                var textOriginalHeight = text.preferredHeight;
+                text.text = LocalizationManager.Instance.GetLocalizedValue(key,value);
+                textHeight = text.preferredHeight - textOriginalHeight;
+            }
+            var bg = ui.transform.Find("Bg");
+
+            var itemBase = bg.transform.Find("ItemBase").transform;
+            GameObject uiLoad = LoadObjManager.Instance.GetLoadObj<GameObject>("UIPrefabs/Icon");
+            
+            var uiLoadRectTransform = uiLoad.GetComponent<RectTransform>();
+            var itemBaseRectTransform = itemBase.GetComponent<RectTransform>();
+            int itemNum = items.GetLength(0);
+            GridLayoutGroup itemBaseGridLayoutGroup = itemBase.GetComponent<GridLayoutGroup>();
+
+            float itemBaseNowHieght = (float)(Math.Ceiling(itemNum / Math.Floor(itemBaseRectTransform.sizeDelta.x / (uiLoadRectTransform.sizeDelta.x+itemBaseGridLayoutGroup.spacing.x)))*(uiLoadRectTransform.sizeDelta.y+itemBaseGridLayoutGroup.spacing.y)+10);
+            float itemBaseHieght = itemBaseNowHieght - itemBaseRectTransform.sizeDelta.y;
+            itemBaseRectTransform.sizeDelta = new Vector2(itemBaseRectTransform.sizeDelta.x,itemBaseNowHieght);
+            itemBaseGridLayoutGroup.cellSize = uiLoadRectTransform.sizeDelta;
+            
+            for(int i = 0;i<items.GetLength(0);++i){
+                GameObject button = GameObject.Instantiate<GameObject>(uiLoad, itemBase);
+                button.GetComponent<Icon>().Reset(items[i,0],null,items[i,1]);
+            }
+            if(bg){
+                var rectTransform = bg.GetComponent<RectTransform>();
+                rectTransform.sizeDelta = new Vector2( rectTransform.sizeDelta.x, rectTransform.sizeDelta.y+textHeight+itemBaseHieght);
+            }
+        }
+        return ui;
+    }
+	public GameObject PushListHint(string name,string key = null,string[] value = null,bool log = false,UIChangeDelegate callback = null){
+		GameObject ui = this.PushHint(name,key,value,log,callback);
+		if (ui!=null){
+			HintListCell hintListCell = ui.AddComponent<HintListCell>();
+			hintListCell.Init(name, new Vector2(Screen.width/2,0),new Vector2(Screen.width/2,Screen.height/2),hintLayerLast);
+			hintLayerLast = ui;
+		}
+        return ui;
+    }
 	public GameObject PushLoading(string name,string key = null,string[] value = null,UIChangeDelegate callback = null){
 		GameObject ui = PushRepeatableLayer (name,"Loading",callback);
 		if (ui!=null){
@@ -86,9 +182,9 @@ public class UIController {
 		return ui;
 	}
     public void Pop(string name)	{
-		GameObject ui = uiDatas.GetGameObjectValue(name);
+		GameObject ui = uiDatas.GetObjectValue(name) as GameObject;
         if(ui!=null){
-            uiDatas.RemoveGameObjectValue (name);
+            uiDatas.RemoveObjectValue (name);
 			if(uiLoadingLayerDatas.GetStringValue(name)!=null){
 				loadingLayerNum--;
 				uiLoadingLayerDatas.RemoveStringValue(name);
@@ -100,13 +196,13 @@ public class UIController {
 
     }
 	public GameObject getLayer(string name){
-		return uiDatas.GetGameObjectValue(name);
+		return uiDatas.GetObjectValue(name) as GameObject;
 	}
 	public int getLoadingLayerNum(){
 		return loadingLayerNum;
 	}
 	public int getLayerNum(){
-		return uiDatas.GetGameObjectDicCount();
+		return uiDatas.GetObjectDicCount();
 	}
     //越小越靠前
     public void SetSequence(int index)   {
@@ -114,7 +210,7 @@ public class UIController {
     }
 
     public void ToTop(string name)   {
-        GameObject ui = uiDatas.GetGameObjectValue(name);
+        GameObject ui = uiDatas.GetObjectValue(name) as GameObject;
         if (ui!=null){
 			ui.transform.position = new Vector3 (ui.transform.position.x, ui.transform.position.y, -1);
         }else{

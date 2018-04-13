@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TouchCameraSize : MonoBehaviour {
 
     private Touch oldTouch1;  //上次触摸点1(手指1)       
     private Touch oldTouch2;  //上次触摸点2(手指2)       
-    public float zoomFactor = 1000; //缩放因子
+    public float zoomFactor = 1; //缩放因子
     public float maxScale = 2;
     public float minScale = 0.5f;
     public Camera eyeCamera = null; // 视图相机
@@ -27,16 +28,36 @@ public class TouchCameraSize : MonoBehaviour {
             minVec3 = Bounds.bounds.min;//包围盒  
             maxVec3 = Bounds.bounds.max;
         }
+        else {
+            DataBase GameBounds = DataManager.Instance.getData("GameBounds");
+            if (GameBounds != null)
+            {
+                minVec3 = GameBounds.GetVectorValue("min");//包围盒  
+                maxVec3 = GameBounds.GetVectorValue("max");
+            }
+        }
 
     }
 
-    void Update()
+    protected void Update()
+    {
+        UpdateCameraSize();
+    }
+    protected virtual void UpdateCameraSize()
     {
         
         if (Input.touchCount != 2)
         {
             return;
         }
+        for (int i = 0; i < Input.touchCount; ++i)
+        {
+            if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(i).fingerId))
+            {
+                return;
+            }
+        }
+         
         //多点触摸, 放大缩小         
         Touch newTouch1 = Input.GetTouch(0);
         Touch newTouch2 = Input.GetTouch(1);

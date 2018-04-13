@@ -23,23 +23,17 @@ public class StatusButton : MonoBehaviour {
         }
         DataBase data = DataManager.Instance.getData(dataKeys);
         data.Bind(setSatus);
-        LocalizationManager.Instance.Bind(ChangeText);
     }
-    void ChangeText(DataBase data){
-        if (text && Texts.Length > status)
-        {
-            text.text = LocalizationManager.Instance.GetLocalizedValue(Texts[status]);
-        }
-    }
+   
 	public void setSatus(DataBase data){
-        status = data.GetIntValue(dataValueKey);
+        status = System.Convert.ToInt32( data.GetNumberValue(dataValueKey));
         if (image && Sprites.Length > status)
         {
             image.sprite = Sprites[status];
         }
         if (text && Texts.Length > status)
         {
-            text.text = LocalizationManager.Instance.GetLocalizedValue(Texts[status]);
+            text.GetComponent<LocalizedText>().UpdateText(Texts[status]);
         }
     }
 }

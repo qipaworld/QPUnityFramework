@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ARotetion : MonoBehaviour {
+public class ARotation : MonoBehaviour {
 	public float speedX = 0;
 	public float speedY = 0;
 	public float speedZ = 0;

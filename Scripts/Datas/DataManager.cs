@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
-public class DataManager : MonoBehaviour
+public class DataManager
 {
     Dictionary<string, DataBase> dataDic = new Dictionary<string, DataBase>();
     List<DataBase> readySendList = new List<DataBase>();
@@ -14,11 +14,17 @@ public class DataManager : MonoBehaviour
         get {
             if (instance == null)
             {
-                instance = new DataManager();
+                Init ();
             }
             return instance;
         }
         set {instance = value; }
+    }
+    static public void Init () {
+        if (instance == null)
+        {
+            instance = new DataManager();
+        }
     }
     //添加一个数据
 	public DataBase addData(string key,DataBase data = null){
@@ -63,17 +69,15 @@ public class DataManager : MonoBehaviour
             return;
         }
         readySend = true;
-        StartCoroutine(Send());// 延迟一帧发送
+        Timer.Instance.DelayInvoke(0,()=>{Send();});// 延迟一帧发送
     }
     //通知监听数据的对象数据发生变化
-    protected IEnumerator Send()
+    protected void Send()
     {
-        yield return null;
         foreach (DataBase data in readySendList) {
             data.Send();
         }
         readySend = false;
         readySendList.Clear();
-        yield break;
     }
 }

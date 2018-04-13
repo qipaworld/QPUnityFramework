@@ -21,8 +21,7 @@ public class UADManager
     static public void Init()
     {
 		instance = new UADManager();
-		DataManager.Instance.addData("RemoveAD");
-		DataManager.Instance.getData("RemoveAD").SetIntValue("popAdStatus", EncryptionManager.GetInt("RemoveAD", 0));
+		DataManager.Instance.addData("RemoveAD").SetNumberValue("popAdStatus", EncryptionManager.GetInt("RemoveAD", 0));
         instance.Start();
     }
 	static public UADManager Instance
@@ -93,7 +92,7 @@ public class UADManager
                     }
                 };
 
-                UIController.Instance.PushHint("ShowAdExcuse","致歉",null,false,uiChange);
+                UIController.Instance.PushHint("ShowAdExcuse","致歉",null,false,uiChange,5.5f);
             }
             else
             {
@@ -140,7 +139,7 @@ public class UADManager
 		}
 	}
 	public void RemoveAds(){
-		DataManager.Instance.getData ("RemoveAD").SetIntValue ("popAdStatus", 1);
+		DataManager.Instance.getData ("RemoveAD").SetNumberValue ("popAdStatus", 1);
 		EncryptionManager.SetInt ("RemoveAD", 1);
 		EncryptionManager.Save ();
 	}
