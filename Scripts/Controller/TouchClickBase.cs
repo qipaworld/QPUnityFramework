@@ -14,9 +14,13 @@ public class TouchClickBase : MonoBehaviour
     int layerMask = 0; //射线碰撞层
     public int rayDraction = 30; //射线长度
     public Camera eyeCamera = null; // 视图相机
-    public int MaxDraction = 30;
-    Vector2? beginP = null;
+    public int MaxDraction = 55;
+    Vector2 beginP;
+    Vector2 endP;
+    bool isTouch = false;
+    int fingerId;
     public bool isAudio = false;
+    float onlickTime;
     AudioManagerBase audioManager;
     void Start()
     {
@@ -31,30 +35,91 @@ public class TouchClickBase : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (Input.touchCount == 1)
+        //if (Input.touchCount == 1)
+        //{
+        if (onlickTime > 0)
         {
-            UpdateTargetPositon();
+            onlickTime -= Time.deltaTime;
         }
+        UpdateTargetPositon();
+        //}
     }
     /// <summary>
     /// 监听点击事件
     /// </summary>
     void UpdateTargetPositon()
     {
-        Touch touch = Input.GetTouch(0);
-        if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+
+        if (Input.touchCount > 0)
         {
-            return;
-        }
-        
-         
-        if (beginP == null || touch.phase == TouchPhase.Began)
-        {
-            TouchBegin(touch.position);
-        }
-        else if (touch.phase == TouchPhase.Ended)
-        {
-            TouchEnd(touch.position);
+            Touch touch = Input.GetTouch(0);
+            bool isGetTouch = false;
+            if (!isTouch)
+            {
+                for (int i = 0; i < Input.touchCount; ++i)
+                {
+                    if (Input.GetTouch(i).phase == TouchPhase.Began)
+                    {
+                        touch = Input.GetTouch(i);
+                        fingerId = touch.fingerId;
+                        break;
+                    }
+                }
+                isGetTouch = true;
+
+            }
+            else
+            {
+                for (int i = 0; i < Input.touchCount; ++i)
+                {
+                    if (Input.GetTouch(i).fingerId == fingerId)
+                    {
+                        touch = Input.GetTouch(i);
+                        isGetTouch = true;
+
+                        break;
+                    }
+                }
+            }
+            if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            {
+                //if (isTouch)
+                //{
+                //    //TouchEnd(endP);
+                //}
+
+                isTouch = false;
+                return;
+            }
+            if (!isGetTouch)
+            {
+                if (isTouch)
+                {
+
+                    TouchEnd(endP);
+                }
+
+                return;
+            }
+            if (!isTouch||touch.phase == TouchPhase.Began)
+            {
+
+                TouchBegin(touch.position);
+            }
+            if (isTouch) {
+
+                if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+                {
+
+                    TouchEnd(touch.position);
+                }
+                else if (touch.phase == TouchPhase.Moved)
+                {
+
+                    endP = touch.position;
+                }
+            }
+           
         }
     }
 
@@ -87,24 +152,33 @@ public class TouchClickBase : MonoBehaviour
     void TouchBegin(Vector2 point)
     {
         beginP = point;
+        endP = point;
+        isTouch = true;
     }
 
     ///点击结束，做点击处理
     void TouchEnd(Vector2 point)
     {
-        if (beginP!=null)
+
+        if (isTouch)
         {
-            float dis = (beginP.Value - point).magnitude; //手指移动距离
+
+            float dis = (beginP - point).magnitude; //手指移动距离
             if (dis < MaxDraction)
             { //距离太大不做处理
-                RaycastHit hit;
-                if (RayDetection(out hit, point))
+                if (onlickTime <= 0)
                 {
-                    OnClick(hit);
+                    RaycastHit hit;
+                    if (RayDetection(out hit, point))
+                    {
+                        OnClick(hit);
+                    }
+                    onlickTime = 0.2f;
                 }
+                
             }
-            beginP = null;
         }
+        isTouch = false;
     }
     public virtual void OnClick(RaycastHit hit) {
         //Debug.Log("QIPAWORLD:TouchClickBase.OnClick");
