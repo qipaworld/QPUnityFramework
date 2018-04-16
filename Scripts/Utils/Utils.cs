@@ -23,7 +23,7 @@ public class Utils {
         DataManager.Instance.getData("GameStatus").SetStringValue("GameScreenName",name) ;
 
         GameObjManager.Instance.RecycleObjAll();
-    	SceneManager.LoadScene(name, LoadSceneMode.Single);
+    	SceneManager.LoadScene("LoadingScreen", LoadSceneMode.Single);
     }
     static public void Serialize(string fileName,System.Object o) {
         
