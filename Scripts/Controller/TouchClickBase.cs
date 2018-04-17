@@ -83,10 +83,10 @@ public class TouchClickBase : MonoBehaviour
             }
             if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
             {
-                //if (isTouch)
-                //{
-                //    //TouchEnd(endP);
-                //}
+                // if (isTouch)
+                // {
+                //    TouchEnd(endP);
+                // }
 
                 isTouch = false;
                 return;
@@ -101,23 +101,20 @@ public class TouchClickBase : MonoBehaviour
 
                 return;
             }
-            if (!isTouch||touch.phase == TouchPhase.Began)
+            if ((!isTouch||touch.phase == TouchPhase.Began)&&touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled)
             {
 
                 TouchBegin(touch.position);
             }
-            if (isTouch) {
+            else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+            {
 
-                if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
-                {
+                TouchEnd(touch.position);
+            }
+            else if (touch.phase == TouchPhase.Moved)
+            {
 
-                    TouchEnd(touch.position);
-                }
-                else if (touch.phase == TouchPhase.Moved)
-                {
-
-                    endP = touch.position;
-                }
+                endP = touch.position;
             }
            
         }
@@ -151,6 +148,7 @@ public class TouchClickBase : MonoBehaviour
     ///初始化点击位置
     void TouchBegin(Vector2 point)
     {
+
         beginP = point;
         endP = point;
         isTouch = true;
@@ -166,6 +164,7 @@ public class TouchClickBase : MonoBehaviour
             float dis = (beginP - point).magnitude; //手指移动距离
             if (dis < MaxDraction)
             { //距离太大不做处理
+                
                 if (onlickTime <= 0)
                 {
                     RaycastHit hit;
