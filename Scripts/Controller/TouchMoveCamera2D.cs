@@ -80,6 +80,14 @@ public class TouchMoveCamera2D : MonoBehaviour
         Touch touch = Input.GetTouch(0);
         bool isGetTouch = false;
         if(!isTouch){
+            for (int i = 0; i < Input.touchCount; ++i)
+            {
+                if (Input.GetTouch(i).phase == TouchPhase.Began)
+                {
+                    touch = Input.GetTouch(i);
+                    break;
+                }
+            }
             fingerId = touch.fingerId;
             isGetTouch = true;
         }else{

@@ -51,4 +51,28 @@ public class Utils {
         fs.Close();
         return t;
     }
+    static public bool GetBeginTouch(out Touch t){
+        t = Input.GetTouch(0);
+        for (int i = 0; i < Input.touchCount; ++i)
+        {
+            if (Input.GetTouch(i).phase == TouchPhase.Began)
+            {
+                t = Input.GetTouch(i);
+                return true;
+            }
+        }
+        return false;
+    }
+    static public bool GetTouchByFingerId(int fingerId,out Touch t){
+        t = Input.GetTouch(0);
+        for (int i = 0; i < Input.touchCount; ++i)
+        {
+            if (Input.GetTouch(i).fingerId == fingerId)
+            {
+                t = Input.GetTouch(i);
+                return true;
+            }
+        }
+        return false;
+    }
 }

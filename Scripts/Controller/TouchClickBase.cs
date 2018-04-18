@@ -56,30 +56,13 @@ public class TouchClickBase : MonoBehaviour
             bool isGetTouch = false;
             if (!isTouch)
             {
-                for (int i = 0; i < Input.touchCount; ++i)
-                {
-                    if (Input.GetTouch(i).phase == TouchPhase.Began)
-                    {
-                        touch = Input.GetTouch(i);
-                        fingerId = touch.fingerId;
-                        break;
-                    }
-                }
+                Utils.GetBeginTouch(out touch);
+                fingerId = touch.fingerId;
                 isGetTouch = true;
-
             }
             else
             {
-                for (int i = 0; i < Input.touchCount; ++i)
-                {
-                    if (Input.GetTouch(i).fingerId == fingerId)
-                    {
-                        touch = Input.GetTouch(i);
-                        isGetTouch = true;
-
-                        break;
-                    }
-                }
+                isGetTouch = Utils.GetTouchByFingerId(fingerId,out touch);
             }
             if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
             {
