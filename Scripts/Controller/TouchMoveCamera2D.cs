@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class TouchMoveCamera2D : MonoBehaviour
+public class TouchMoveCamera2D : TouchBase
 {
     public BoxCollider2D Bounds = null; //移动的边界
     public Vector3 deceleration = new Vector3(1,1,0);//减速度
     public Vector3
         minVec3,
         maxVec3;
-    private Vector2 beginP = Vector2.zero;//鼠标第一次落下点  
-    private Vector2 endP = Vector2.zero;//鼠标第二次位置（拖拽位置）  
+    
     private Vector3 speed = Vector3.zero;
     public Camera eyeCamera = null; // 视图相机
-    bool isTouch = false;
-    int fingerId;
+
     public void Start()
     {
 
@@ -38,96 +36,27 @@ public class TouchMoveCamera2D : MonoBehaviour
 
     }
 
-    public void OnGUI()
-    {
-#if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
-        return;
-#endif
-        if(DataManager.Instance.getData("TouchStatus").GetNumberValue("pickUp")==1){
-            return;
-        }
-        if(EventSystem.current.IsPointerOverGameObject()){
-            return;
-        }
-        if (Event.current.type == EventType.MouseDown)
-        {
-            MoveBegin(Input.mousePosition);
-        }
-        else if (Event.current.type == EventType.MouseDrag)
-        {
-            Moveing(Input.mousePosition);
-        }
-        else if (Event.current.type == EventType.MouseUp || Event.current.type == EventType.MouseLeaveWindow)
-        {
-            MoveEnd(Input.mousePosition);
-        }
-    }
-    //移动对象
-    void UpdateTargetPositon()
-    {
-        if (Input.touchCount == 0){
-            return;
-        }
-        if(DataManager.Instance.getData("TouchStatus").GetNumberValue("pickUp")==1){
-            MoveEnd(beginP);
-            return;
-        }
-        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
-        {
-            MoveEnd(beginP);
-            return;
-        }
-        Touch touch = Input.GetTouch(0);
-        bool isGetTouch = false;
-        if(!isTouch){
-            for (int i = 0; i < Input.touchCount; ++i)
-            {
-                if (Input.GetTouch(i).phase == TouchPhase.Began)
-                {
-                    touch = Input.GetTouch(i);
-                    break;
-                }
-            }
-            fingerId = touch.fingerId;
-            isGetTouch = true;
-        }else{
-            for (int i = 0; i < Input.touchCount; ++i)
-            {
-                if (Input.GetTouch(i).fingerId == fingerId)
-                {
-                    touch = Input.GetTouch(i);
-                    isGetTouch = true;
-                    break;
-                }
-            }
-        }
-        if(!isGetTouch){
-            MoveEnd(beginP);
-            return;
-        }
-        if (touch.phase == TouchPhase.Began)
-        {
-            MoveBegin(touch.position);
-        }
-        else if (touch.phase == TouchPhase.Moved)
-        {
-            Moveing(touch.position);
-        }
-        else if (touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended)
-        {
-            MoveEnd(touch.position);
-        }
 
-    }
+
     ///初始化位置，为接下来的move做准备
-    void MoveBegin(Vector3 point) {
+    public override void TouchBegin(Vector3 point) {
+        if (DataManager.Instance.getData("TouchStatus").GetNumberValue("pickUp") == 1)
+        {
+            TouchEnd(beginP);
+            return;
+        }
         beginP = point;
         speed = Vector3.zero;
         isTouch = true;
     }
     ///更新目标位置
-    void Moveing(Vector3 point)
+    public override void TouchMove(Vector3 point)
     {
+        if (DataManager.Instance.getData("TouchStatus").GetNumberValue("pickUp") == 1)
+        {
+            TouchEnd(beginP);
+            return;
+        }
         //记录鼠标拖动的位置 　　  
         endP = point;
         Vector3 fir = eyeCamera.ScreenToWorldPoint(new Vector3(beginP.x, beginP.y, eyeCamera.nearClipPlane));//转换至世界坐标  
@@ -136,11 +65,13 @@ public class TouchMoveCamera2D : MonoBehaviour
         UpdatePosition();
     }
     ///Move结束，清除数据
-    void MoveEnd(Vector3 point)
+    public override void TouchEnd(Vector3 point)
     {
         //MoveBegin(point);
         isTouch = false;
     }
+    public override void TouchCanceled(Vector3 point) { isTouch = false; }
+
     public void UpdatePosition()
     {
         var x = transform.position.x;

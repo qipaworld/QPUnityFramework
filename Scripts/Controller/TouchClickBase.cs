@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 /// 可以自己写一个类继承该组件重写OnClick方法
 /// </summary>
 [RequireComponent(typeof(AudioManagerBase))]
-public class TouchClickBase : MonoBehaviour
+public class TouchClickBase :  TouchBase
 {
 
     public int layerId = 9; //射线碰撞层编号
@@ -15,10 +15,7 @@ public class TouchClickBase : MonoBehaviour
     public int rayDraction = 30; //射线长度
     public Camera eyeCamera = null; // 视图相机
     public int MaxDraction = 55;
-    Vector2 beginP;
-    Vector2 endP;
-    bool isTouch = false;
-    int fingerId;
+    
     public bool isAudio = false;
     float onlickTime;
     AudioManagerBase audioManager;
@@ -44,83 +41,6 @@ public class TouchClickBase : MonoBehaviour
         UpdateTargetPositon();
         //}
     }
-    /// <summary>
-    /// 监听点击事件
-    /// </summary>
-    void UpdateTargetPositon()
-    {
-
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            bool isGetTouch = false;
-            if (!isTouch)
-            {
-                Utils.GetBeginTouch(out touch);
-                fingerId = touch.fingerId;
-                isGetTouch = true;
-            }
-            else
-            {
-                isGetTouch = Utils.GetTouchByFingerId(fingerId,out touch);
-            }
-            if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
-            {
-                // if (isTouch)
-                // {
-                //    TouchEnd(endP);
-                // }
-
-                isTouch = false;
-                return;
-            }
-            if (!isGetTouch)
-            {
-                if (isTouch)
-                {
-
-                    TouchEnd(endP);
-                }
-
-                return;
-            }
-            if ((!isTouch||touch.phase == TouchPhase.Began)&&touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled)
-            {
-
-                TouchBegin(touch.position);
-            }
-            else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
-            {
-
-                TouchEnd(touch.position);
-            }
-            else if (touch.phase == TouchPhase.Moved)
-            {
-
-                endP = touch.position;
-            }
-           
-        }
-    }
-
-    public void OnGUI()
-    {
-#if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
-            return;
-#endif
-        if(EventSystem.current.IsPointerOverGameObject()){
-            return;
-        }
-        if (Event.current.type == EventType.MouseDown)
-        {
-            TouchBegin(Input.mousePosition);
-        }
-      
-        else if (Event.current.type == EventType.MouseUp)
-        {
-            TouchEnd(Input.mousePosition);
-        }
-    }
 
     ///检测是否点击到了要移动的物体，并返回射线碰撞与是否发生碰撞
     bool RayDetection(out RaycastHit hit, Vector2 point)
@@ -129,21 +49,22 @@ public class TouchClickBase : MonoBehaviour
         return Physics.Raycast(ray, out hit, 30, layerMask);
     }
     ///初始化点击位置
-    void TouchBegin(Vector2 point)
+    public override void TouchBegin(Vector3 point)
     {
-
+        if (DataManager.Instance.getData("TouchStatus").GetNumberValue("pickUp") == 1)
+        {
+            return;
+        }
         beginP = point;
         endP = point;
         isTouch = true;
     }
 
     ///点击结束，做点击处理
-    void TouchEnd(Vector2 point)
+    public override void TouchEnd(Vector3 point)
     {
-
         if (isTouch)
         {
-
             float dis = (beginP - point).magnitude; //手指移动距离
             if (dis < MaxDraction)
             { //距离太大不做处理
@@ -157,11 +78,13 @@ public class TouchClickBase : MonoBehaviour
                     }
                     onlickTime = 0.2f;
                 }
-                
             }
         }
         isTouch = false;
     }
+    public override void TouchCanceled(Vector3 point) { isTouch = false; }
+    public override void TouchMove(Vector3 point) { endP = point; }
+
     public virtual void OnClick(RaycastHit hit) {
         //Debug.Log("QIPAWORLD:TouchClickBase.OnClick");
         if (isAudio)
