@@ -173,12 +173,20 @@ public class IAPManager : IStoreListener
             validPurchase = false;
         }
 #endif
-        
-        if(productIdEx != "_huifu" && productIdEx != id)
-        {
-            UIController.Instance.PushHint("IAPSecurityException", "购买验证失败");
-            validPurchase = false;
-        }
+//#if UNITY_IOS
+//        if (productIdEx != "_huifu" && productIdEx != id)
+//        {
+//            UIController.Instance.PushHint("IAPSecurityException", "购买验证失败");
+//            validPurchase = false;
+//        }
+//#elif UNITY_ANDROID
+//        if (productIdEx != "" && productIdEx != id)
+//        {
+//            UIController.Instance.PushHint("IAPSecurityException", "购买验证失败");
+//            validPurchase = false;
+//        }
+//#endif
+
         if (validPurchase)
         {
             SendCallBack(true, id);
