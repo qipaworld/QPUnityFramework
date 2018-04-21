@@ -20,7 +20,11 @@ public class AudioManagerBase : MonoBehaviour {
 		{
 			music = dataBase.GetObjectValue("defaultMusic") as AudioSource;
 		}
-        dataBase.Bind(Change);
+		if(musicType.ToString()=="bgm"){
+	        dataBase.Bind(Change);
+		}else{
+			DataManager.Instance.getData("musicData").GetDataValue("sound").Bind(Change);
+		}
     }
     private void OnDestroy()
     {
