@@ -231,10 +231,10 @@ public class IAPManager : IStoreListener
         }
         return false;
     }
-    public void OnPurchaseClicked(string productId,IAPFinish callback)
+    public void OnPurchaseClicked(string productId,IAPFinish callback,bool isForce = false)
     {
 
-        if(IsBusy()){
+        if(!isForce&&IsBusy()){
             return;
         }
 		UIController.Instance.PushLoading("purchaseStart","购买正在进行中");

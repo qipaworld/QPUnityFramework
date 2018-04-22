@@ -40,7 +40,7 @@
 致歉: "Very sorry, here will pop up an advertisement\nthe author needs money to complete the dream\nI am so sorry"
 未开启关卡: "The level is being made..."
 需要购买完整游戏: "Need to buy all levels <color=#bd0000ff>{0}</color>, or watch ads play games"
-需要购买完整游戏后才能完成全部关卡: "You need to buy all the levels before you can pay to complete all of the levels <color=#bd0000ff>{0}. You will have to pay twice to complete all levels </color>."
+需要购买完整游戏后才能完成全部关卡: "Since only the first 24 levels are free. you will need to purchase all the levels before you can pay to complete all of the levels. <color=#bd0000ff>{0}. You will have to pay twice to complete all levels </color>."
 需要完成关卡: "You need to complete the levels in order, or pay to complete all levels <color=#bd0000ff>{0}</color>"
 目录: "table of Contents"
 反馈: "Feedback"
