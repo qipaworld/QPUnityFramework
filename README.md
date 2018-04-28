@@ -40,7 +40,7 @@
 
 **Jigsaw puzzle - Evolution**
 
-Android: https://play.google.com/store/apps/details?id=com.qipaworld.puzzle
+Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.puzzle
 
 ios: http://itunes.apple.com/cn/app/id1360613396
 
