@@ -38,6 +38,12 @@
 
 ## 基于这套框架的app ##
 
+**Jigsaw puzzle - Evolution**
+
+Android: https://play.google.com/store/apps/details?id=com.qipaworld.puzzle
+
+ios: http://itunes.apple.com/cn/app/id1360613396
+
 **Living Time**
 
 Android: https://play.google.com/store/apps/details?id=com.qipaworld.mytime
