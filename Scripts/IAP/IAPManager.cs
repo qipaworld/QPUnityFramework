@@ -173,12 +173,20 @@ public class IAPManager : IStoreListener
             validPurchase = false;
         }
 #endif
-        
-        if(productIdEx != "_huifu" && productIdEx != id)
-        {
-            UIController.Instance.PushHint("IAPSecurityException", "购买验证失败");
-            validPurchase = false;
-        }
+//#if UNITY_IOS
+//        if (productIdEx != "_huifu" && productIdEx != id)
+//        {
+//            UIController.Instance.PushHint("IAPSecurityException", "购买验证失败");
+//            validPurchase = false;
+//        }
+//#elif UNITY_ANDROID
+//        if (productIdEx != "" && productIdEx != id)
+//        {
+//            UIController.Instance.PushHint("IAPSecurityException", "购买验证失败");
+//            validPurchase = false;
+//        }
+//#endif
+
         if (validPurchase)
         {
             SendCallBack(true, id);
@@ -223,10 +231,10 @@ public class IAPManager : IStoreListener
         }
         return false;
     }
-    public void OnPurchaseClicked(string productId,IAPFinish callback)
+    public void OnPurchaseClicked(string productId,IAPFinish callback,bool isForce = false)
     {
 
-        if(IsBusy()){
+        if(!isForce&&IsBusy()){
             return;
         }
 		UIController.Instance.PushLoading("purchaseStart","购买正在进行中");

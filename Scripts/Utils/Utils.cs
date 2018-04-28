@@ -23,7 +23,7 @@ public class Utils {
         DataManager.Instance.getData("GameStatus").SetStringValue("GameScreenName",name) ;
 
         GameObjManager.Instance.RecycleObjAll();
-    	SceneManager.LoadScene(name, LoadSceneMode.Single);
+    	SceneManager.LoadScene("LoadingScreen", LoadSceneMode.Single);
     }
     static public void Serialize(string fileName,System.Object o) {
         
@@ -50,5 +50,29 @@ public class Utils {
         T t = (T)(bf.Deserialize(fs));
         fs.Close();
         return t;
+    }
+    static public bool GetBeginTouch(out Touch t){
+        t = Input.GetTouch(0);
+        for (int i = 0; i < Input.touchCount; ++i)
+        {
+            if (Input.GetTouch(i).phase == TouchPhase.Began)
+            {
+                t = Input.GetTouch(i);
+                return true;
+            }
+        }
+        return false;
+    }
+    static public bool GetTouchByFingerId(int fingerId,out Touch t){
+        t = Input.GetTouch(0);
+        for (int i = 0; i < Input.touchCount; ++i)
+        {
+            if (Input.GetTouch(i).fingerId == fingerId)
+            {
+                t = Input.GetTouch(i);
+                return true;
+            }
+        }
+        return false;
     }
 }

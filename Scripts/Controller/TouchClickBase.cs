@@ -7,16 +7,17 @@ using UnityEngine.EventSystems;
 /// 可以自己写一个类继承该组件重写OnClick方法
 /// </summary>
 [RequireComponent(typeof(AudioManagerBase))]
-public class TouchClickBase : MonoBehaviour
+public class TouchClickBase :  TouchBase
 {
 
     public int layerId = 9; //射线碰撞层编号
     int layerMask = 0; //射线碰撞层
     public int rayDraction = 30; //射线长度
     public Camera eyeCamera = null; // 视图相机
-    public int MaxDraction = 30;
-    Vector2? beginP = null;
+    public int MaxDraction = 55;
+    
     public bool isAudio = false;
+    float onlickTime;
     AudioManagerBase audioManager;
     void Start()
     {
@@ -31,50 +32,14 @@ public class TouchClickBase : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (Input.touchCount == 1)
+        //if (Input.touchCount == 1)
+        //{
+        if (onlickTime > 0)
         {
-            UpdateTargetPositon();
+            onlickTime -= Time.deltaTime;
         }
-    }
-    /// <summary>
-    /// 监听点击事件
-    /// </summary>
-    void UpdateTargetPositon()
-    {
-        Touch touch = Input.GetTouch(0);
-        if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
-        {
-            return;
-        }
-        
-         
-        if (beginP == null || touch.phase == TouchPhase.Began)
-        {
-            TouchBegin(touch.position);
-        }
-        else if (touch.phase == TouchPhase.Ended)
-        {
-            TouchEnd(touch.position);
-        }
-    }
-
-    public void OnGUI()
-    {
-#if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
-            return;
-#endif
-        if(EventSystem.current.IsPointerOverGameObject()){
-            return;
-        }
-        if (Event.current.type == EventType.MouseDown)
-        {
-            TouchBegin(Input.mousePosition);
-        }
-      
-        else if (Event.current.type == EventType.MouseUp)
-        {
-            TouchEnd(Input.mousePosition);
-        }
+        UpdateTargetPositon();
+        //}
     }
 
     ///检测是否点击到了要移动的物体，并返回射线碰撞与是否发生碰撞
@@ -84,28 +49,42 @@ public class TouchClickBase : MonoBehaviour
         return Physics.Raycast(ray, out hit, 30, layerMask);
     }
     ///初始化点击位置
-    void TouchBegin(Vector2 point)
+    public override void TouchBegin(Vector3 point)
     {
+        if (DataManager.Instance.getData("TouchStatus").GetNumberValue("pickUp") == 1)
+        {
+            return;
+        }
         beginP = point;
+        endP = point;
+        isTouch = true;
     }
 
     ///点击结束，做点击处理
-    void TouchEnd(Vector2 point)
+    public override void TouchEnd(Vector3 point)
     {
-        if (beginP!=null)
+        if (isTouch)
         {
-            float dis = (beginP.Value - point).magnitude; //手指移动距离
+            float dis = (beginP - point).magnitude; //手指移动距离
             if (dis < MaxDraction)
             { //距离太大不做处理
-                RaycastHit hit;
-                if (RayDetection(out hit, point))
+                
+                if (onlickTime <= 0)
                 {
-                    OnClick(hit);
+                    RaycastHit hit;
+                    if (RayDetection(out hit, point))
+                    {
+                        OnClick(hit);
+                    }
+                    onlickTime = 0.2f;
                 }
             }
-            beginP = null;
         }
+        isTouch = false;
     }
+    public override void TouchCanceled(Vector3 point) { isTouch = false; }
+    public override void TouchMove(Vector3 point) { endP = point; }
+
     public virtual void OnClick(RaycastHit hit) {
         //Debug.Log("QIPAWORLD:TouchClickBase.OnClick");
         if (isAudio)

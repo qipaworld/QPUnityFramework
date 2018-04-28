@@ -6,18 +6,15 @@ using UnityEngine.EventSystems;
 /// 添加这个组件后，该物体就可以被拖动
 /// 也可以把他加到一个背景上，手动指定被拖动的物体
 /// </summary>
-public class TouchMove2D : MonoBehaviour {
-
-
-
+public class TouchMove2D : TouchBase
+{
     public BoxCollider2D Bounds = null; //移动的边界
     bool isBounds;
     public Vector3 deceleration = new Vector3(1,1,0);//减速度
     public Vector3
         minVec3,
         maxVec3;
-    private Vector2 beginP = Vector2.zero;//鼠标第一次落下点  
-    private Vector2 endP = Vector2.zero;//鼠标第二次位置（拖拽位置）  
+    
     private Vector3 speed = Vector3.zero;
     public Camera eyeCamera = null; // 视图相机
     Vector3 targetSize;//移动物体大小
@@ -27,8 +24,7 @@ public class TouchMove2D : MonoBehaviour {
     Transform target = null; //移动目标
     TouchStatusCallback touchStatusCallback = null;
     public bool isSlide = false;
-    bool isTouch = false;
-    int fingerId;
+    
     public void Start()
     {
         isBounds = false;
@@ -52,99 +48,45 @@ public class TouchMove2D : MonoBehaviour {
         }
         layerMask = (1 << layerId);
     }
-
-    public void OnGUI()
-    {
-#if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
-        return;
-#endif
-        if(EventSystem.current.IsPointerOverGameObject()){
-            return;
-        }
-        if (Event.current.type == EventType.MouseDown)
-        {
-            RaycastHit hit;
-            if (RayDetection(out hit))
-            { 
-                MoveBegin(Input.mousePosition,hit.transform);
-            }
-        }
-        else if (Event.current.type == EventType.MouseDrag && target != null)
-        {
-            Moveing(Input.mousePosition);
-        }else if(Event.current.type == EventType.MouseUp||Event.current.type == EventType.MouseLeaveWindow){
-            MoveEnd(Input.mousePosition);
-        }
-    }
-    //移动对象
-    void UpdateTargetPositon()
-    {
-        if (Input.touchCount > 0){
-        
-            
-            Touch touch = Input.GetTouch(0);
-            bool isGetTouch = false;
-            if(!isTouch){
-                fingerId = touch.fingerId;
-                isGetTouch = true;
-            }else{
-                for (int i = 0; i < Input.touchCount; ++i)
-                {
-                    if (Input.GetTouch(i).fingerId == fingerId)
-                    {
-                        touch = Input.GetTouch(i);
-                        isGetTouch = true;
-                        break;
-                    }
-                }
-            }
-            if(!isGetTouch){
-                MoveEnd(beginP);
-                return;
-            }
-            if (touch.phase == TouchPhase.Began)
-            {
-                RaycastHit hit;
-                if (RayDetection(out hit))
-                { 
-                    MoveBegin(touch.position,hit.transform);
-                }
-            }
-            else if (touch.phase == TouchPhase.Moved && target != null)
-            {
-                Moveing(touch.position);
-            }else if(touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended){
-                MoveEnd(touch.position);
-            }
-        }
-
-    }
+    
     ///初始化位置，为接下来的move做准备
-    void MoveBegin(Vector3 point,Transform t) {
-        touchStatusCallback = t.GetComponent<TouchStatusCallback>();
-        if(touchStatusCallback != null){
-            touchStatusCallback.TouchBegin(point);
-            target = touchStatusCallback.GetMoveTransform();
-        } 
-        if(target == null){
-            target = t;
-        }
-        beginP = point;
-        speed = Vector3.zero;
-        DataManager.Instance.getData("TouchStatus").SetNumberValue("pickUp",1);
-        Renderer rend = target.GetComponent<Renderer>();
-        if (rend != null)
+    public override void TouchBegin(Vector3 point) {
+        RaycastHit hit;
+        if (target == null&&RayDetection(out hit))
         {
-            targetSize = rend.bounds.size;
+            target = hit.transform;
+
+            touchStatusCallback = target.GetComponent<TouchStatusCallback>();
+            if (touchStatusCallback != null)
+            {
+                touchStatusCallback.TouchBegin(point);
+                target = touchStatusCallback.GetMoveTransform();
+            }
+            
+            beginP = point;
+            endP = point;
+            speed = Vector3.zero;
+            DataManager.Instance.getData("TouchStatus").SetNumberValue("pickUp", 1);
+            Renderer rend = target.GetComponent<Renderer>();
+            if (rend != null)
+            {
+                targetSize = rend.bounds.size;
+            }
+            else
+            {
+                targetSize = Vector3.zero;
+            }
+            isTouch = true;
         }
-        else {
-            targetSize = Vector3.zero;
-        }
-        isTouch = true;
+
+        
     }
     ///更新目标位置
-    void Moveing(Vector3 point)
+    public override void TouchMove(Vector3 point)
     {
+        if (target == null) {
+            return;
+        }
         //记录鼠标拖动的位置 　　  
         endP = point;
         Vector3 fir = eyeCamera.ScreenToWorldPoint(new Vector3(beginP.x, beginP.y, eyeCamera.nearClipPlane));//转换至世界坐标  
@@ -156,7 +98,7 @@ public class TouchMove2D : MonoBehaviour {
         UpdatePosition();
     }
     ///Move结束，清除数据
-    void MoveEnd(Vector3 point)
+    public override void TouchEnd(Vector3 point)
     {
         if (!isSlide)
         {
@@ -171,6 +113,8 @@ public class TouchMove2D : MonoBehaviour {
         }
         isTouch = false;
     }
+    public override void TouchCanceled(Vector3 point) { TouchEnd(point); }
+
     void UpdatePosition() {
         var x = target.position.x;
         var y = target.position.y;
@@ -189,10 +133,6 @@ public class TouchMove2D : MonoBehaviour {
     public void Update()
     {
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
-        if (Input.touchCount< 1 || EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
-        {
-            return;
-        }
         UpdateTargetPositon();
 #else
         if(EventSystem.current.IsPointerOverGameObject()){

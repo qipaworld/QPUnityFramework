@@ -43,7 +43,7 @@ public class ScoreTheGameManager {
 	{
 		string url = "";
 #if UNITY_IOS && !UNITY_EDITOR
-        url = "http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id="+iosAppId+"&pageNumber=0&sortOrdering=2&type=Purple+Software&mt=8";
+        url = "http://itunes.apple.com/cn/app/id"+iosAppId;
 #elif UNITY_ANDROID && !UNITY_EDITOR
         url = "https://play.google.com/store/apps/details?id="+Application.identifier;
 #endif
