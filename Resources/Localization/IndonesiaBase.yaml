@@ -34,7 +34,7 @@
 购买验证失败: "Verifikasi pembelian gagal"
 购买正在恢复中: "Pembelian internal dilanjutkan"
 遇到了一个未知错误商品没有初始化: "Saya mengalami kesalahan yang tidak diketahui dan produk tidak menginisialisasi"
-您似乎禁止了购买: "Sepertinya Anda melarang pembelian"
+您似乎禁止了购买: "Anda tampaknya telah melarang pembelian"
 开发人员配置错误没有商品: "Kesalahan konfigurasi pengembang, tidak ada produk"
 广告还没有准备好: "Maaf, iklan belum siap, coba nanti"
 致歉: "Sangat menyesal, di sini akan muncul sebuah iklan\npenulis butuh uang untuk menyelesaikan mimpinya\nSangat menyesal"
@@ -75,6 +75,10 @@
 全部: "Semua"
 定位: "Lokasi"
 请稍候: "Tolong tunggu sebentar"
-
+系统购买功能不可用: "IAP Unity dapat dinonaktifkan dalam pengaturan keamanan, atau perpustakaan pembelian sistem mungkin sudah ketinggalan zaman."
+您取消了购买: "Anda membatalkan pembelian."
+付款出现问题: "Ada masalah dengan pembayaran."
+退出appStore后完成购买: "Anda keluar dari app store atau mengalihkan akun app store"
+未知错误购买失败: "Kesalahan yang tidak diketahui"
 
 

@@ -249,6 +249,37 @@ public class IAPManager : IStoreListener
     /// </summary>
     public void OnPurchaseFailed(Product i, PurchaseFailureReason p)
     {
+        string key = "购买失败";
+        switch (p)
+        {
+            case PurchaseFailureReason.PurchasingUnavailable:
+                key = "系统购买功能不可用";
+                break;
+            case PurchaseFailureReason.ExistingPurchasePending:
+                key = "购买正在进行中";
+                break;
+            case PurchaseFailureReason.ProductUnavailable:
+                key = "开发人员配置错误没有商品";
+                break;
+            case PurchaseFailureReason.SignatureInvalid:
+                key = "购买验证失败";
+                break;
+            case PurchaseFailureReason.UserCancelled:
+                key = "您取消了购买";
+                break;
+            case PurchaseFailureReason.PaymentDeclined:
+                key = "付款出现问题";
+                break;
+            case PurchaseFailureReason.DuplicateTransaction:
+                key = "退出appStore后完成购买";
+                break;
+            case PurchaseFailureReason .Unknown:
+                key = "未知错误购买失败";
+                break;
+        }
+        string [] value = {"购买失败",", ",key};
+        UIController.Instance.PushHint(p.ToString(),null,value);
+
 		SendCallBack(false,i.definition.id);
     }
     public void SendCallBack(bool success, string id)

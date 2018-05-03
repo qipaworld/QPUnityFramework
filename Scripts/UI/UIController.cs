@@ -74,6 +74,18 @@ public class UIController {
                     var rectTransform = bg.GetComponent<RectTransform>();
                     rectTransform.sizeDelta = new Vector2( rectTransform.sizeDelta.x, text.preferredHeight + 100);
                 }
+            }else if(value != null){
+                var text = ui.GetComponentInChildren<Text>();
+                string sText = "";
+                foreach(string v in value){
+                    sText = sText + LocalizationManager.Instance.GetLocalizedValue(v);
+                }
+                text.text = sText;
+                var bg = ui.transform.Find("Bg");
+                if(bg){
+                    var rectTransform = bg.GetComponent<RectTransform>();
+                    rectTransform.sizeDelta = new Vector2( rectTransform.sizeDelta.x, text.preferredHeight + 100);
+                }
             }
             if(outTime != 0){
             	Timer.Instance.DelayInvoke(outTime,()=>{Pop(name);});

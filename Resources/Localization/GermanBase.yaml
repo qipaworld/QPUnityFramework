@@ -34,7 +34,7 @@
 购买验证失败: "Kaufbestätigung fehlgeschlagen"
 购买正在恢复中: "Der interne Kauf wird fortgesetzt"
 遇到了一个未知错误商品没有初始化: "Ich habe einen unbekannten Fehler festgestellt und das Produkt wurde nicht initialisiert"
-您似乎禁止了购买: "Es scheint, dass Sie den Kauf verbieten"
+您似乎禁止了购买: "Sie den Kauf verboten zu haben"
 开发人员配置错误没有商品: "Entwickler Konfigurationsfehler, es gibt kein Produkt"
 广告还没有准备好: "Entschuldigung, die Anzeige ist nicht bereit. Bitte versuchen Sie es später erneut"
 致歉: "Tut mir leid, hier wird eine Anzeige erscheinen\nder Autor braucht Geld, um den Traum zu vervollständigen\nSehr leid"
@@ -75,6 +75,10 @@
 全部: "Alles"
 定位: "Standort"
 请稍候: "Bitte warte"
-
+系统购买功能不可用: "Der Unity-IAP kann in den Sicherheitseinstellungen deaktiviert sein, oder die Systemeinkaufsbibliothek ist möglicherweise veraltet."
+您取消了购买: "Sie haben den Kauf storniert."
+付款出现问题: "Es gab ein Problem mit der Zahlung."
+退出appStore后完成购买: "Sie haben den App Store verlassen oder das App Store-Konto gewechselt"
+未知错误购买失败: "Unbekannter Fehler"
 
 
