@@ -6,6 +6,7 @@ public class FullScreenSprite : MonoBehaviour {
 
     public  SpriteRenderer spriteRenderer;
     public DataBase DataScale2D = null;
+    public bool Tile = false;
     Vector2 spriteSize;
     void Start () {
         DataScale2D = DataManager.Instance.getData("Scale2D");
@@ -14,7 +15,11 @@ public class FullScreenSprite : MonoBehaviour {
     }
 
     void UpdateSize(DataBase data){
-
+        if (Tile)
+        {
+            spriteRenderer.size = Scale2D.cameraSize;
+            return;
+        }
         float scale = 1;
         if (Camera.main.aspect >= spriteSize.x/ spriteSize.y)
         { 
@@ -30,7 +35,7 @@ public class FullScreenSprite : MonoBehaviour {
 
     void OnDestroy()
     {
-        LocalizationManager.Instance.Unbind(UpdateSize);
+        DataScale2D.Unbind(UpdateSize);
     }
 
 }
