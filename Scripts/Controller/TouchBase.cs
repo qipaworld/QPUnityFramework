@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+using QipaWorld;
 public  class TouchBase: MonoBehaviour
 {
     public Vector3 beginP;
