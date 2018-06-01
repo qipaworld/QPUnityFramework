@@ -9,6 +9,7 @@ namespace QipaWorld
     public class Utils
     {
         static string strKeys = "~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:ZXCVBNM<>?`1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./";
+        static string formatStr = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         static public string GetRandomString(int length)
         {
             string randomStr = "";
@@ -83,6 +84,38 @@ namespace QipaWorld
                 }
             }
             return false;
+        }
+        public static string GetTimeStamp()
+        {
+            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return Convert.ToInt64(ts.TotalSeconds).ToString();
+        }
+        public static double GetTimeStampDouble()
+        {
+            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return ts.TotalSeconds;
+        }
+        static public string NumFormat(double num,string  str = "f1")
+        {
+            int index = 0;
+            while (true)
+            {
+                if (num < 1000)
+                {
+                    if(index>= formatStr.Length)
+                    {
+                        int tindex = index % formatStr.Length + 1;
+                        return num.ToString(str) + formatStr[tindex] + formatStr[tindex];
+                    }
+                    return num.ToString(str) + formatStr[index];
+                }
+                num /= 1000;
+                index++;
+                if(index > formatStr.Length * 2-2)
+                {
+                    return "MAX";
+                }
+            }
         }
     }
 }

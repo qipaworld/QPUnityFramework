@@ -29,6 +29,15 @@ public class Icon : MonoBehaviour {
 		iconImage.sprite = LoadObjManager.Instance.GetLoadObj<Sprite>(IconManager.Instance.GetIconFilePath(key));
         this.callback = callback;
         HideLock();
+        string iconNameStr = IconManager.Instance.GetIconName(key);
+        if (iconNameStr == " ")
+        {
+            HideName();
+        }
+        else
+        {
+            ShowName();
+        }
         //float scale = 1;
         //Vector3 size = iconImage.sprite.bounds.size;
         //if (size.x > size.y)
@@ -40,7 +49,7 @@ public class Icon : MonoBehaviour {
         //    scale = 1.0f / size.y;
         //}
         //Image
-        iconName.GetComponent<LocalizedText>().UpdateText(IconManager.Instance.GetIconName(key));
+        iconName.GetComponent<LocalizedText>().UpdateText(iconNameStr);
 
     }
     public string GetName() {
@@ -58,6 +67,15 @@ public class Icon : MonoBehaviour {
     }
     public void setIconColor(Color c) {
         iconImage.color = c;
+    }
+    
+    public void ShowName()
+    {
+        iconName.gameObject.SetActive(true);
+    }
+    public void HideName()
+    {
+        iconName.gameObject.SetActive(false);
     }
     public void ShowLock()
     {

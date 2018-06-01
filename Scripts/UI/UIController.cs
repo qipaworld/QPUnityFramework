@@ -137,16 +137,23 @@ public class UIController {
     /// <value>key 文本的key.</value>
     /// <value>value 可变化文本内所替换的内容.</value>
     /// <value>callback 操作UI时的回掉方法.</value>
-    public GameObject PushItemHint(string name,string[,] items,string key = null,string[] value = null,UIChangeDelegate callback = null){
+    public GameObject PushItemHint(string name,string[,] items,string key = null,string[] value = null,UIChangeDelegate callback = null,bool isLog = false){
         GameObject ui = PushRepeatableLayer (name,"hintItemLayer",callback);
         if (ui!=null){
             float textHeight = 0;
             if(key != null){            
                 var text = ui.GetComponentInChildren<Text>();
                 var textOriginalHeight = text.preferredHeight;
-                text.text = LocalizationManager.Instance.GetLocalizedValue(key,value);
+                if (isLog) {
+                    text.text = key;
+                }
+                else
+                {
+                    text.text = LocalizationManager.Instance.GetLocalizedValue(key, value);
+                }
                 textHeight = text.preferredHeight - textOriginalHeight;
             }
+           
             var bg = ui.transform.Find("Bg");
 
             var itemBase = bg.transform.Find("ItemBase").transform;
