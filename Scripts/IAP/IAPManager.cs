@@ -198,6 +198,9 @@ public class IAPManager : IStoreListener
 
         return PurchaseProcessingResult.Complete;
     }
+    public bool IsBusyEx(){
+        return finishCallback!=null || isRestore;
+    }
     public bool IsBusy(){
        
         if (controller == null || extensions == null){
