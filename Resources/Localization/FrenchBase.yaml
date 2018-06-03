@@ -8,6 +8,7 @@
 音乐开: "Musique: Ouvert"
 支持他: "Soutenez-le"
 去掉广告: "Supprimer les annonces <color=#bd0000ff>{0}</color>"
+去掉广告2: "Supprimer les annonces {0}"
 你还活着！: "Vous êtes toujours en vie!"
 你能超越一切！: "Vous pouvez surpasser tout!"
 你很优秀！: "Tu es très bon!"
@@ -34,7 +35,7 @@
 购买验证失败: "La vérification d'achat a échoué"
 购买正在恢复中: "L'achat interne reprend"
 遇到了一个未知错误商品没有初始化: "J'ai rencontré une erreur inconnue et le produit n'a pas initialisé"
-您似乎禁止了购买: "Il semble que vous interdisiez l'achat"
+您似乎禁止了购买: "Vous semblez avoir interdit l'achat"
 开发人员配置错误没有商品: "Erreur de configuration du développeur, il n'y a pas de produit"
 广告还没有准备好: "Désolé, l'annonce n'est pas prête. Veuillez réessayer plus tard"
 致歉: "Très désolé, ici apparaîtra une publicité\nl'auteur a besoin d'argent pour compléter le rêve\nTrès désolé"
@@ -75,5 +76,9 @@
 全部: "Tous"
 定位: "Emplacement"
 请稍候: "Merci de patienter"
-
+系统购买功能不可用: "L'unité de réglage de sécurité IAP peut être désactivé, ou un système d'entrepôt peuvent être dépassées."
+您取消了购买: "Vous avez annulé l'acheter."
+付款出现问题: "Des problèmes de paiement."
+退出appStore后完成购买: "Vous quittez l'app de magasin ou de commutation de l'app de magasin de compte"
+未知错误购买失败: "Erreur inconnue"
 

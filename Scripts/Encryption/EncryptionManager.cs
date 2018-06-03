@@ -3,6 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
+using QipaWorld;
 public class EncryptionManager
 {
     private static string sKEY = "ZTdkIJHKWRBKWTM3MWM0NWFhNTEzAzU1"; // 你的加密KEY
