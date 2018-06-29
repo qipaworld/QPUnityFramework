@@ -8,12 +8,12 @@ public class GoToScreen : MonoBehaviour {
 
     public string screenName;
     public string popName = "";
-
+    public bool force = false;
     // Update is called once per frame
     public void Go () {
     	if(popName != ""){
 	        UIController.Instance.Pop(popName);
     	}
-    	Utils.GoToScreen(screenName);
+    	Utils.GoToScreen(screenName,force);
     }
 }

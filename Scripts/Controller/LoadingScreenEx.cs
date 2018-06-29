@@ -5,10 +5,11 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 
-public class LoadingScreen : MonoBehaviour {
+public class LoadingScreenEx : MonoBehaviour {
 
     
-    public Image loading;
+    public Slider slider;
+    public Text text;
     //public 
     void Start()
     {
@@ -25,7 +26,7 @@ public class LoadingScreen : MonoBehaviour {
         {
             asyncOperation = SceneManager.LoadSceneAsync("StartScene");
             try{Firebase.Analytics.FirebaseAnalytics.LogEvent("init_game");} catch(Exception e) { }
-            
+
         }
         else {
             asyncOperation = SceneManager.LoadSceneAsync(DataManager.Instance.getData("GameStatus").GetStringValue("GameScreenName"));
@@ -50,7 +51,7 @@ public class LoadingScreen : MonoBehaviour {
         //     //{
         //     //    progress += 0.001f;
         //     //}
-        //     loading.fillAmount = asyncOperation.progress;
+        //     slider.value = asyncOperation.progress;
         //     yield return new WaitForEndOfFrame();
         // }
 
@@ -61,7 +62,8 @@ public class LoadingScreen : MonoBehaviour {
            while (progress < asyncOperation.progress)
            {
                progress += 0.05f;
-               loading.fillAmount = progress;
+               text.text = "Loading " + (progress*100).ToString("f0") + "%";
+               // slider.value = progress;
                yield return new WaitForEndOfFrame();
            }
         }
@@ -70,7 +72,9 @@ public class LoadingScreen : MonoBehaviour {
         while (!asyncOperation.isDone)
         {
            // progress += 0.01f;
-           loading.fillAmount = asyncOperation.progress;
+           // slider.value = asyncOperation.progress;
+               text.text = "Loading " + (asyncOperation.progress*100).ToString("f0") + "%";
+           
            yield return new WaitForEndOfFrame();
         }
     }

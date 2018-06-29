@@ -28,7 +28,12 @@ public class AudioManagerBase : MonoBehaviour {
     }
     private void OnDestroy()
     {
-        DataManager.Instance.getData("musicData").GetDataValue(musicType.ToString()).Unbind(Change);
+    	if(musicType.ToString()=="bgm"){
+	        DataManager.Instance.getData("musicData").GetDataValue(musicType.ToString()).Unbind(Change);
+		}else{
+			DataManager.Instance.getData("musicData").GetDataValue("sound").Unbind(Change);
+		}
+        
     }
     public virtual void Change(DataBase data)
     {

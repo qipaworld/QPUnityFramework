@@ -24,7 +24,10 @@ public class StatusButton : MonoBehaviour {
         DataBase data = DataManager.Instance.getData(dataKeys);
         data.Bind(setSatus);
     }
-   
+    void OnDestroy()
+    {
+        DataManager.Instance.getData(dataKeys).Unbind(setSatus);
+    }
 	public void setSatus(DataBase data){
         status = System.Convert.ToInt32( data.GetNumberValue(dataValueKey));
         if (image && Sprites.Length > status)

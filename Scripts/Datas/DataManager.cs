@@ -5,7 +5,8 @@ public class DataManager
 {
     Dictionary<string, DataBase> dataDic = new Dictionary<string, DataBase>();
     List<DataBase> readySendList = new List<DataBase>();
-
+    List<DataBase> tempReadySendList = new List<DataBase>(); //在发送中的时候插入会存起来，下一帧处理；
+    bool isSend = false;
 	public static DataManager instance = null;
     static bool readySend = false;
     //获得Manager 实例
@@ -63,6 +64,10 @@ public class DataManager
     //把变化的数据添加到准备推送的列表里
     public void ReadySendData( DataBase data)
     {
+        if(isSend){
+            tempReadySendList.Add(data);
+            return;
+        }
         readySendList.Add(data);
         if (readySend)
         {
@@ -74,10 +79,17 @@ public class DataManager
     //通知监听数据的对象数据发生变化
     protected void Send()
     {
+        isSend = true;
         foreach (DataBase data in readySendList) {
             data.Send();
         }
         readySend = false;
         readySendList.Clear();
+        isSend = false;
+        foreach (DataBase data in tempReadySendList) {
+            ReadySendData(data);
+        }
+        tempReadySendList.Clear();
+        
     }
 }

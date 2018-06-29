@@ -20,16 +20,17 @@ namespace QipaWorld
             }
             return randomStr;
         }
-        static public void GoToScreen(string name)
+        static public void GoToScreen(string name,bool force = false)
         {
 
-            if (DataManager.Instance.getData("GameStatus").GetStringValue("GameScreenName") == name)
+            if (!force&&DataManager.Instance.getData("GameStatus").GetStringValue("GameScreenName") == name)
             {
                 return;
             }
             DataManager.Instance.getData("GameStatus").SetStringValue("GameScreenName", name);
 
             GameObjManager.Instance.RecycleObjAll();
+            // GameObject.Find("Canvas").SetActive(false);
             SceneManager.LoadScene("LoadingScreen", LoadSceneMode.Single);
         }
         static public void Serialize(string fileName, System.Object o)
