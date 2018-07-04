@@ -38,11 +38,23 @@
 
 ## 基于这套框架的app ##
 
+**Qipa World**
+
+Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.qipaworld
+
+ios: http://itunes.apple.com/cn/app/id1289628445
+
 **Jigsaw puzzle - Evolution**
 
 Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.puzzle
 
 ios: http://itunes.apple.com/cn/app/id1360613396
+
+**Mushroom Farm**
+
+Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.farm
+
+ios: http://itunes.apple.com/cn/app/id1390316452
 
 **Living Time**
 

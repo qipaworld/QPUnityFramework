@@ -45,7 +45,7 @@ public class APositionEx : MonoBehaviour {
             //z = (lastZ - z) * dZ;
             dZ = -dZ;
         }
-        transform.Translate(x,y,x);
+        transform.Translate(x,y,z);
         lastX += x;
         lastY += y;
         lastZ += z;

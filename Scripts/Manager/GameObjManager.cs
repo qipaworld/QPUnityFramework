@@ -22,8 +22,14 @@ public class GameObjManager {
         instance.target = t;
         instance.uiTarget = uT;
     }
-	
-	public GameObject GetGameObj(string key,Transform target = null,bool notActive = false){
+    public GameObject GetGameObj(string key, Vector3 position, Quaternion rotation,Transform target = null, bool notActive = false)
+    {
+        GameObject obj = GetGameObj(key, target, notActive);
+        obj.transform.position = position;
+        obj.transform.rotation = rotation;
+        return obj;
+    }
+        public GameObject GetGameObj(string key,Transform target = null,bool notActive = false){
         List<GameObject> objs = null;
         if (gameObjDatas.ContainsKey(key))
         {
@@ -50,7 +56,8 @@ public class GameObjManager {
         }
         GameObject objLoad = LoadObjManager.Instance.GetLoadObj<GameObject>(key);
      
-        GameObject obj = GameObject.Instantiate<GameObject>(objLoad, target);
+        GameObject obj = GameObject.Instantiate<GameObject>(objLoad,target);
+        
         objs.Add(obj);
         return obj;
     }

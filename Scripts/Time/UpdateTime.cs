@@ -22,6 +22,10 @@ public class UpdateTime : MonoBehaviour {
 		}
         LocalizationManager.Instance.Bind(ChangeText);
     }
+    void OnDestroy()
+    {
+        LocalizationManager.Instance.Unbind(ChangeText);
+    }
 	void ChangeText(DataBase data){
 		language = LocalizationManager.Instance.GetLocalizedValue(timeManager.timeTextKeyArr[intputTypeEx]) + ": ";
     }
