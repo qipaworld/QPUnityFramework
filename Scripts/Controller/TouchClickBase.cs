@@ -46,7 +46,7 @@ public class TouchClickBase :  TouchBase
     bool RayDetection(out RaycastHit hit, Vector2 point)
     {
         Ray ray = eyeCamera.ScreenPointToRay(point);
-        return Physics.Raycast(ray, out hit, 30, layerMask);
+        return Physics.Raycast(ray, out hit, rayDraction, layerMask);
     }
     ///初始化点击位置
     public override void TouchBegin(Vector3 point)
