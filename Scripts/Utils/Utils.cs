@@ -136,5 +136,15 @@ namespace QipaWorld
             EncryptionManager.Save();
                 
         }
+        static public string GetDeviceStr()
+        {
+        #if UNITY_IOS
+                    return "ios";
+        #elif UNITY_ANDROID
+                   return "android";
+        #else
+                    return "";
+        #endif
+        }
     }
 }
