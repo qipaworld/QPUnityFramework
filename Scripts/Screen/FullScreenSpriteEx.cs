@@ -9,7 +9,7 @@ public class FullScreenSpriteEx : MonoBehaviour {
     public Image image = null;
     public SpriteRenderer spriteRenderer = null;
     Vector2 spriteSize;
-    void Start () {
+    void Awake () {
     	if(image!=null){
     		spriteSize = image.sprite.bounds.size;
     	}else{
