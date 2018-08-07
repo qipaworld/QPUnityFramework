@@ -118,5 +118,33 @@ namespace QipaWorld
                 }
             }
         }
+        static public bool IsNewDay(string key,bool isSave = true){
+            string strKey = "IsNewDay" + key;
+            string timeKey = DateTime.Now.ToShortDateString().ToString();
+            if (EncryptionManager.GetString(strKey, "")!=timeKey){
+                if(isSave){
+                    SaveNewDay(key);
+                }
+                return true;
+            }
+            return false;
+        }
+        static public void SaveNewDay(string key){
+            string strKey = "IsNewDay" + key;
+            string timeKey = DateTime.Now.ToShortDateString().ToString();
+            EncryptionManager.SetString(strKey, timeKey);
+            EncryptionManager.Save();
+                
+        }
+        static public string GetDeviceStr()
+        {
+        #if UNITY_IOS
+                    return "ios";
+        #elif UNITY_ANDROID
+                   return "android";
+        #else
+                    return "";
+        #endif
+        }
     }
 }

@@ -6,8 +6,15 @@ public class FollowingPlayer : MonoBehaviour
 	public Transform target;
 	public float speed = 0.1f;
     public float z = -10f;
-    
-	public void Update()
+    public void Start()
+    {
+        if (target)
+        {
+            //Vector3 v = Vector3.Lerp(transform.position, target.position, speed);
+            transform.position = new Vector3(target.position.x, target.position.y, z);
+        }
+    }
+    public void Update()
 	{
 		if (target) 
 		{

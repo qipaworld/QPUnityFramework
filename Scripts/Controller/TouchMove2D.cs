@@ -201,7 +201,7 @@ public class TouchMove2D : TouchBase
     bool RayDetection(out RaycastHit hit)
     {
         Ray ray = eyeCamera.ScreenPointToRay(Input.mousePosition);
-        return Physics.Raycast(ray, out hit, 30, layerMask);
+        return Physics.Raycast(ray, out hit, rayDraction, layerMask);
     }
     
 }

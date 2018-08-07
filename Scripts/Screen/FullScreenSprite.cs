@@ -8,7 +8,7 @@ public class FullScreenSprite : MonoBehaviour {
     public DataBase DataScale2D = null;
     public bool Tile = false;
     Vector2 spriteSize;
-    void Start () {
+    void Awake () {
         DataScale2D = DataManager.Instance.getData("Scale2D");
         spriteSize = spriteRenderer.sprite.bounds.size;
         DataScale2D.Bind(UpdateSize);

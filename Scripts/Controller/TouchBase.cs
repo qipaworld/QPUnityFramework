@@ -5,9 +5,13 @@ using UnityEngine.EventSystems;
 using QipaWorld;
 public  class TouchBase: MonoBehaviour
 {
+    [HideInInspector]
     public Vector3 beginP;
+    [HideInInspector]
     public Vector3 endP;
+    [HideInInspector]
     public bool isTouch = false;
+    [HideInInspector]
     public int fingerId;
     /// <summary>
     /// 监听点击事件
