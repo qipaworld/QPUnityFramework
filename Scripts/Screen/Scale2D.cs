@@ -11,16 +11,21 @@ public class Scale2D {
 	static public float resAspect = 1f;
     static public Vector2 cameraSize;
     static public DataBase DataScale2D = null;
-
+    static Camera mCamera = null;
     static public void Init(Camera camera = null) {
         DataScale2D = DataManager.Instance.getData("Scale2D");
         Update(camera);
 	}
 
-    static public void Update(Camera camera = null) {
+    static public void Update(Camera camera = null,bool isFace = false) {
+        if(!isFace&&mCamera!=null&& mCamera == camera)
+        {
+            return;
+        }
         if (camera == null) {
             camera = Camera.main;
         }
+        mCamera = camera;
         float cameraHeight = camera.orthographicSize * 2;
         cameraSize = new Vector2(camera.aspect * cameraHeight, cameraHeight);
 
@@ -45,7 +50,7 @@ public class Scale2D {
             camera = Camera.main;
         }
         camera.orthographicSize = value;
-        Update(camera);
+        Update(camera,true);
         DataScale2D.Send();
     }
 	

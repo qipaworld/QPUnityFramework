@@ -1,24 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-/// <summary>
-/// 添加这个组件后，就可以点击到对应layerId 的物体了。
-/// 可以自己写一个类继承该组件重写OnClick方法
-/// </summary>
-[RequireComponent(typeof(AudioManagerBase))]
-public class TouchClickBase :  TouchBase
+
+public class TouchAttackBase : TouchBase
 {
 
-    //public int layerId = 9; //射线碰撞层编号
     public LayerMask layerMask = 0; //射线碰撞层
-    
+
     public int rayDraction = 30; //射线长度
     public Camera eyeCamera = null; // 视图相机
-    public int MaxDraction = 55;
-    
+    public Vector3 lastPoint;
     public bool isAudio = false;
-    float onlickTime;
+    public bool isAttack = false;
+    public bool isDouble = false; // 是否可以持续攻击
     AudioManagerBase audioManager;
     void Start()
     {
@@ -26,21 +20,13 @@ public class TouchClickBase :  TouchBase
         {
             eyeCamera = Camera.main;
         }
-        //layerMask = (1 << layerId);
         audioManager = transform.GetComponent<AudioManagerBase>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        //if (Input.touchCount == 1)
-        //{
-        if (onlickTime > 0)
-        {
-            onlickTime -= Time.deltaTime;
-        }
         UpdateTargetPositon();
-        //}
     }
 
     ///检测是否点击到了要移动的物体，并返回射线碰撞与是否发生碰撞
@@ -48,6 +34,17 @@ public class TouchClickBase :  TouchBase
     {
         Ray ray = eyeCamera.ScreenPointToRay(point);
         return Physics.Raycast(ray, out hit, rayDraction, layerMask);
+    }
+    public void Attack(Vector3 point)
+    {
+        if (isDouble||!isAttack)
+        {
+            RaycastHit hit;
+            if (RayDetection(out hit, point))
+            {
+                OnClick(hit, point - lastPoint);
+            }
+        }
     }
     ///初始化点击位置
     public override void TouchBegin(Vector3 point)
@@ -58,7 +55,9 @@ public class TouchClickBase :  TouchBase
         }
         beginP = point;
         endP = point;
+        lastPoint = point;
         isTouch = true;
+        Attack(point);
     }
 
     ///点击结束，做点击处理
@@ -66,28 +65,30 @@ public class TouchClickBase :  TouchBase
     {
         if (isTouch)
         {
-            float dis = (beginP - point).magnitude; //手指移动距离
-            if (dis < MaxDraction)
-            { //距离太大不做处理
-                
-                if (onlickTime <= 0)
-                {
-                    RaycastHit hit;
-                    if (RayDetection(out hit, point))
-                    {
-                        OnClick(hit);
-                    }
-                    onlickTime = 0.2f;
-                }
-            }
+            Attack(point);
         }
         isTouch = false;
-    }
-    public override void TouchCanceled(Vector3 point) { isTouch = false; }
-    public override void TouchMove(Vector3 point) { endP = point; }
+        isAttack = false;
 
-    public virtual void OnClick(RaycastHit hit) {
+    }
+    public override void TouchCanceled(Vector3 point) {
+        if (isTouch)
+        {
+            Attack(point);
+        }
+        isTouch = false;
+        isAttack = false;
+    }
+    public override void TouchMove(Vector3 point) {
+        Attack(point);
+        lastPoint = endP;
+        endP = point;
+    }
+
+    public virtual void OnClick(RaycastHit hit,Vector3 dis)
+    {
         //Debug.Log("QIPAWORLD:TouchClickBase.OnClick");
+        isAttack = true;
         if (isAudio)
         {
             audioManager.play();
