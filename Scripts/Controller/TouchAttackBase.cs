@@ -13,6 +13,7 @@ public class TouchAttackBase : TouchBase
     public bool isAudio = false;
     public bool isAttack = false;
     public bool isDouble = false; // 是否可以持续攻击
+    public bool isStartAtk = true;
     AudioManagerBase audioManager;
     void Start()
     {
@@ -43,6 +44,7 @@ public class TouchAttackBase : TouchBase
             if (RayDetection(out hit, point))
             {
                 OnClick(hit, point - lastPoint);
+                isStartAtk = false;
             }
         }
     }
@@ -69,6 +71,7 @@ public class TouchAttackBase : TouchBase
         }
         isTouch = false;
         isAttack = false;
+        isStartAtk = true;
 
     }
     public override void TouchCanceled(Vector3 point) {
@@ -78,6 +81,8 @@ public class TouchAttackBase : TouchBase
         }
         isTouch = false;
         isAttack = false;
+        isStartAtk = true;
+
     }
     public override void TouchMove(Vector3 point) {
         Attack(point);

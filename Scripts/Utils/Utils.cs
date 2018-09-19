@@ -136,6 +136,30 @@ namespace QipaWorld
             EncryptionManager.Save();
                 
         }
+        static public void SpectrumDataFormat(float[] samplesFormat, float[] samples, AudioSource audio = null, int channel = 0, FFTWindow window = FFTWindow.Rectangular)
+        {
+            if(audio != null)
+            {
+                audio.GetSpectrumData(samples, channel, window);
+            }
+            else
+            {
+                AudioListener.GetSpectrumData(samples, channel, window);
+            }
+            
+            int disNum = samples.Length / samplesFormat.Length;
+            int audioNum = 0;
+            for (int i = 1; i <= samplesFormat.Length; i++)
+            {
+                int maxNum = i * disNum;
+                float tempNum = 0;
+                for (; audioNum < maxNum; audioNum++)
+                {
+                    tempNum += samples[audioNum];
+                }
+                samplesFormat[i - 1] = tempNum / disNum;
+            }
+        }
         static public string GetDeviceStr()
         {
         #if UNITY_IOS
