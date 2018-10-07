@@ -11,6 +11,7 @@ public class TouchScaleSize : MonoBehaviour
     public float zoomFactor = 100; //缩放因子
     public Vector3 maxScale = new Vector3(2, 2, 2);
     public Vector3 minScale = Vector3.zero;
+    public bool isUI = false;
     void Update()
     {
         
@@ -20,7 +21,7 @@ public class TouchScaleSize : MonoBehaviour
         }
         for (int i = 0; i < Input.touchCount; ++i)
         {
-            if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(i).fingerId))
+            if (!isUI&&EventSystem.current.IsPointerOverGameObject(Input.GetTouch(i).fingerId))
             {
                 return;
             }

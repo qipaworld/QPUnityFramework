@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 /// <summary>
 /// 添加这个组件后，该物体就可以被拖动
 /// 也可以把他加到一个背景上，手动指定被拖动的物体
@@ -14,7 +15,7 @@ public class TouchMove2D : TouchBase
     public Vector3
         minVec3,
         maxVec3;
-    
+    public bool isReverse = false;//移动目标是否比边界大；
     private Vector3 speed = Vector3.zero;
     public Camera eyeCamera = null; // 视图相机
     Vector3 targetSize;//移动物体大小
@@ -22,9 +23,11 @@ public class TouchMove2D : TouchBase
     int layerMask = 0; //射线碰撞层
     public int rayDraction = 30; //射线长度
     Transform target = null; //移动目标
+    public Transform eternalTarget = null; //永远的目标。设置后将不在自动切换目标
     TouchStatusCallback touchStatusCallback = null;
     public bool isSlide = false;
-    
+    Vector2 tempMin;//临时的最小边界。根据目标大小而变化
+    Vector2 tempMax;
     public void Start()
     {
         isBounds = false;
@@ -52,10 +55,13 @@ public class TouchMove2D : TouchBase
     ///初始化位置，为接下来的move做准备
     public override void TouchBegin(Vector3 point) {
         RaycastHit hit;
-        if (target == null&&RayDetection(out hit))
-        {
+        if(eternalTarget != null){
+            target = eternalTarget;
+        }else if(target == null && RayDetection(out hit)){
             target = hit.transform;
-
+        }
+        if (target!=null)
+        {
             touchStatusCallback = target.GetComponent<TouchStatusCallback>();
             if (touchStatusCallback != null)
             {
@@ -74,9 +80,31 @@ public class TouchMove2D : TouchBase
             }
             else
             {
-                targetSize = Vector3.zero;
+                Image image = target.GetComponent<Image>();
+                if (image != null){
+                    targetSize = image.GetComponent<RectTransform>().sizeDelta;
+                }
+                else{
+                    targetSize = Vector3.zero;
+                }
             }
             isTouch = true;
+            if(isBounds){
+                if (isReverse)
+                {
+                    //保证不会移出包围盒  
+                    tempMin = new Vector2(minVec3.x - (targetSize.x - Bounds.bounds.size.x), minVec3.y - (targetSize.y - Bounds.bounds.size.y));
+                    tempMax = new Vector2(maxVec3.x + (targetSize.x - Bounds.bounds.size.x), maxVec3.y + (targetSize.y - Bounds.bounds.size.y));
+                }
+                else
+                {
+                    //保证不会移出包围盒  
+                    tempMin = new Vector2(minVec3.x + targetSize.x / 2, minVec3.y + targetSize.y / 2);
+                    tempMax = new Vector2(maxVec3.x - targetSize.x / 2, maxVec3.y - targetSize.y / 2);
+
+                }
+            }
+             
         }
 
         
@@ -89,8 +117,14 @@ public class TouchMove2D : TouchBase
         }
         //记录鼠标拖动的位置 　　  
         endP = point;
-        Vector3 fir = eyeCamera.ScreenToWorldPoint(new Vector3(beginP.x, beginP.y, eyeCamera.nearClipPlane));//转换至世界坐标  
-        Vector3 sec = eyeCamera.ScreenToWorldPoint(new Vector3(endP.x, endP.y, eyeCamera.nearClipPlane));
+
+        Vector3 fir = beginP;
+        Vector3 sec = endP;
+        if (!isUI)
+        {
+            fir = eyeCamera.ScreenToWorldPoint(new Vector3(beginP.x, beginP.y, eyeCamera.nearClipPlane));//转换至世界坐标  
+            sec = eyeCamera.ScreenToWorldPoint(new Vector3(endP.x, endP.y, eyeCamera.nearClipPlane));
+        }
         speed = sec - fir;//需要移动的 向量  
         if(touchStatusCallback != null){
             touchStatusCallback.TouchMove(point);
@@ -120,12 +154,13 @@ public class TouchMove2D : TouchBase
         var y = target.position.y;
         x = x + speed.x;//向量偏移  
         y = y + speed.y;
-
+        Debug.Log(speed);
         if (isBounds)
         {
-            //保证不会移出包围盒  
-            x = Mathf.Clamp(x, minVec3.x + targetSize.x / 2, maxVec3.x - targetSize.x / 2);
-            y = Mathf.Clamp(y, minVec3.y + targetSize.y / 2, maxVec3.y - targetSize.y / 2);
+
+            x = Mathf.Clamp(x, tempMin.x, tempMax.x);
+            y = Mathf.Clamp(y, tempMin.y, tempMax.y);
+
         }
         target.position = new Vector3(x, y, target.position.z);
         beginP = endP;
@@ -135,7 +170,7 @@ public class TouchMove2D : TouchBase
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
         UpdateTargetPositon();
 #else
-        if(EventSystem.current.IsPointerOverGameObject()){
+        if(!isUI&&EventSystem.current.IsPointerOverGameObject()){
             return;
         }
 #endif

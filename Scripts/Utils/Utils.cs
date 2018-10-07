@@ -33,15 +33,15 @@ namespace QipaWorld
             // GameObject.Find("Canvas").SetActive(false);
             SceneManager.LoadScene("LoadingScreen", LoadSceneMode.Single);
         }
+        static public void CheckDirectory(string path){
+            if (!System.IO.Directory.Exists(path))
+            {
+                System.IO.Directory.CreateDirectory(path);
+            }
+        }
         static public void Serialize(string fileName, System.Object o)
         {
-
-            string directoryPath = Path.GetDirectoryName(fileName);
-
-            if (!System.IO.Directory.Exists(directoryPath))
-            {
-                System.IO.Directory.CreateDirectory(directoryPath);
-            }
+            CheckDirectory(Path.GetDirectoryName(fileName));
 
             FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
             BinaryFormatter bf = new BinaryFormatter();
@@ -136,6 +136,7 @@ namespace QipaWorld
             EncryptionManager.Save();
                 
         }
+        //格式化音乐
         static public void SpectrumDataFormat(float[] samplesFormat, float[] samples, AudioSource audio = null, int channel = 0, FFTWindow window = FFTWindow.Rectangular)
         {
             if(audio != null)
