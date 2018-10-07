@@ -154,7 +154,7 @@ public class TouchMove2D : TouchBase
         var y = target.position.y;
         x = x + speed.x;//向量偏移  
         y = y + speed.y;
-        Debug.Log(speed);
+        //Debug.Log(speed);
         if (isBounds)
         {
 
