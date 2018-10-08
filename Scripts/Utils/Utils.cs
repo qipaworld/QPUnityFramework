@@ -161,6 +161,10 @@ namespace QipaWorld
                 samplesFormat[i - 1] = tempNum / disNum;
             }
         }
+        static public void RemoveCloneStr(GameObject obj)
+        {
+            obj.name = obj.name.Replace("(Clone)", "");
+        }
         static public string GetDeviceStr()
         {
         #if UNITY_IOS

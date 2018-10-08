@@ -25,7 +25,6 @@ public class LoadingScreenEx : MonoBehaviour {
         if (DataManager.instance == null)
         {
             asyncOperation = SceneManager.LoadSceneAsync("StartScene");
-            try{Firebase.Analytics.FirebaseAnalytics.LogEvent("init_game");} catch(Exception e) { }
 
         }
         else {

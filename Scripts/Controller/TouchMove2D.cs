@@ -14,7 +14,8 @@ public class TouchMove2D : TouchBase
     public Vector3 deceleration = new Vector3(1,1,0);//减速度
     public Vector3
         minVec3,
-        maxVec3;
+        maxVec3,
+        sizeVec3;
     public bool isReverse = false;//移动目标是否比边界大；
     private Vector3 speed = Vector3.zero;
     public Camera eyeCamera = null; // 视图相机
@@ -28,6 +29,7 @@ public class TouchMove2D : TouchBase
     public bool isSlide = false;
     Vector2 tempMin;//临时的最小边界。根据目标大小而变化
     Vector2 tempMax;
+    public RectTransform uiRect = null;
     public void Start()
     {
         isBounds = false;
@@ -38,6 +40,8 @@ public class TouchMove2D : TouchBase
         {
             minVec3 = Bounds.bounds.min;//包围盒  
             maxVec3 = Bounds.bounds.max;
+            sizeVec3 = Bounds.bounds.size;
+            
             isBounds = true;
         }
         else {
@@ -82,9 +86,11 @@ public class TouchMove2D : TouchBase
             {
                 Image image = target.GetComponent<Image>();
                 if (image != null){
-                    targetSize = image.GetComponent<RectTransform>().sizeDelta;
+                    targetSize = image.GetComponent<RectTransform>().sizeDelta* image.transform.localScale.y * uiRect.lossyScale.y;
+
                 }
-                else{
+                else
+                {
                     targetSize = Vector3.zero;
                 }
             }
@@ -93,8 +99,8 @@ public class TouchMove2D : TouchBase
                 if (isReverse)
                 {
                     //保证不会移出包围盒  
-                    tempMin = new Vector2(minVec3.x - (targetSize.x - Bounds.bounds.size.x), minVec3.y - (targetSize.y - Bounds.bounds.size.y));
-                    tempMax = new Vector2(maxVec3.x + (targetSize.x - Bounds.bounds.size.x), maxVec3.y + (targetSize.y - Bounds.bounds.size.y));
+                    tempMin = new Vector2(minVec3.x - (targetSize.x - sizeVec3.x) + targetSize.x / 2, minVec3.y - (targetSize.y - sizeVec3.y) + targetSize.y / 2);
+                    tempMax = new Vector2(maxVec3.x + (targetSize.x - sizeVec3.x) - targetSize.x / 2, maxVec3.y + (targetSize.y - sizeVec3.y) - targetSize.y / 2);
                 }
                 else
                 {

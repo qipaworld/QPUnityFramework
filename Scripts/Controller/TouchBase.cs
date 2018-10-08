@@ -14,6 +14,7 @@ public  class TouchBase: MonoBehaviour
     [HideInInspector]
     public int fingerId;
     public bool isUI = false;
+    
     /// <summary>
     /// 监听点击事件
     /// </summary>

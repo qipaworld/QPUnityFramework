@@ -14,6 +14,7 @@ public class TouchAttackBase : TouchBase
     public bool isAttack = false;
     public bool isDouble = false; // 是否可以持续攻击
     public bool isStartAtk = true;
+    //public bool isEndAtk = false;
     AudioManagerBase audioManager;
     void Start()
     {
@@ -45,6 +46,9 @@ public class TouchAttackBase : TouchBase
             {
                 OnClick(hit, point - lastPoint);
                 isStartAtk = false;
+            }else if (isAttack)
+            {
+                EndAtk(point - lastPoint);
             }
         }
     }
@@ -65,24 +69,22 @@ public class TouchAttackBase : TouchBase
     ///点击结束，做点击处理
     public override void TouchEnd(Vector3 point)
     {
-        if (isTouch)
-        {
-            Attack(point);
-        }
-        isTouch = false;
-        isAttack = false;
-        isStartAtk = true;
-
+        EndAtk(point);
     }
     public override void TouchCanceled(Vector3 point) {
+        EndAtk(point);
+    }
+    public virtual void EndAtk(Vector3 point)
+    {
         if (isTouch)
         {
-            Attack(point);
+            //isEndAtk = true;
+            //Attack(point);
+            //isEndAtk = false;
         }
         isTouch = false;
         isAttack = false;
         isStartAtk = true;
-
     }
     public override void TouchMove(Vector3 point) {
         Attack(point);
