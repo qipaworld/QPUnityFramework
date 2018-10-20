@@ -98,4 +98,6 @@
 需要完成关卡2: "Müssen das Level abschließen {0}"
 有新版本发布: "Neue Version veröffentlicht"
 下载: "Herunterladen"
-
+设置: "Einstellung"
+提示开启相册权限: "Aktivieren Sie in Ihren Telefoneinstellungen den Zugriff auf Galerie- / Fotoberechtigungen"
+未知错误谷歌服务框架过低: "Unbekannter Fehler, möglicherweise ist die Google Service Framework-Version zu niedrig"

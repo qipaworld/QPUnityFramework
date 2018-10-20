@@ -98,3 +98,6 @@
 需要完成关卡2: "Need to complete the level {0}"
 有新版本发布: "New version released"
 下载: "Download"
+设置: "Setting"
+提示开启相册权限: "Please turn on access to Gallery/Photo Permissions in your phone settings"
+未知错误谷歌服务框架过低: "Unknown error, maybe the Google service framework version is too low"
