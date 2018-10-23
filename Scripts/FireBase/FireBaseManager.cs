@@ -4,9 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-//using Firebase.Invites;
 using System;
-using Firebase.Database;
 using YamlDotNet.Serialization;
 using System.IO;
 
@@ -54,7 +52,7 @@ public class FireBaseManager  {
                 {
                     instance.isReady = true;
                     // instance.InitInvite();
-                    instance.InitDatabase();
+                    //instance.InitDatabase();
                 }
                 else
                 {
@@ -169,58 +167,58 @@ public class FireBaseManager  {
     //}
 
     //------------------数据库
-    void InitDatabase()
-    {
-         try
-         {
-             FirebaseApp.DefaultInstance.SetEditorDatabaseUrl(gameBaseData.GetStringValue("firebaseUrl"));
-         }
-         catch (Exception e) { }
-        BindDatabase(QipaWorld.Utils.GetDeviceStr() + "GameVersion", BindGameVersion);
-    }
-    public void BindDatabase(string key,EventHandler<ValueChangedEventArgs> callback)
-    {
-        if (!CheckReady())
-        {
-            return;
-        }
-        try
-        {
-            FirebaseDatabase.DefaultInstance.GetReference(key).ValueChanged += callback;
-        }
-        catch (Exception e) { }
-    }
-    public void UnbindDatabase(string key, EventHandler<ValueChangedEventArgs> callback)
-    {
-        if (!CheckReady())
-        {
-            return;
-        }
-        try
-        {
-            FirebaseDatabase.DefaultInstance.GetReference(key).ValueChanged -= callback;
-        }
-        catch (Exception e) { }
-    }
-    void BindGameVersion(object sender, ValueChangedEventArgs args)
-    {
+    //void InitDatabase()
+    //{
+    //     try
+    //     {
+    //         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl(gameBaseData.GetStringValue("firebaseUrl"));
+    //     }
+    //     catch (Exception e) { }
+    //    BindDatabase(QipaWorld.Utils.GetDeviceStr() + "GameVersion", BindGameVersion);
+    //}
+    //public void BindDatabase(string key,EventHandler<ValueChangedEventArgs> callback)
+    //{
+    //    if (!CheckReady())
+    //    {
+    //        return;
+    //    }
+    //    try
+    //    {
+    //        FirebaseDatabase.DefaultInstance.GetReference(key).ValueChanged += callback;
+    //    }
+    //    catch (Exception e) { }
+    //}
+    //public void UnbindDatabase(string key, EventHandler<ValueChangedEventArgs> callback)
+    //{
+    //    if (!CheckReady())
+    //    {
+    //        return;
+    //    }
+    //    try
+    //    {
+    //        FirebaseDatabase.DefaultInstance.GetReference(key).ValueChanged -= callback;
+    //    }
+    //    catch (Exception e) { }
+    //}
+    //void BindGameVersion(object sender, ValueChangedEventArgs args)
+    //{
 
-        if (args.DatabaseError != null)
-        {
-            // Debug.LogError(args.DatabaseError.Message);
-            return;
-        }
-        if (gameVersionStr != args.Snapshot.Value.ToString())
-        {
-            gameVersionStr = args.Snapshot.Value.ToString();
-            if (Convert.ToInt32(args.Snapshot.Value) > Convert.ToInt32(gameBaseData.GetStringValue("gameVersion")))
-            {
-                gameBaseData.SetNumberValue("isUpdateGame", 1);
-            }
-        }
+    //    if (args.DatabaseError != null)
+    //    {
+    //        // Debug.LogError(args.DatabaseError.Message);
+    //        return;
+    //    }
+    //    if (gameVersionStr != args.Snapshot.Value.ToString())
+    //    {
+    //        gameVersionStr = args.Snapshot.Value.ToString();
+    //        if (Convert.ToInt32(args.Snapshot.Value) > Convert.ToInt32(gameBaseData.GetStringValue("gameVersion")))
+    //        {
+    //            gameBaseData.SetNumberValue("isUpdateGame", 1);
+    //        }
+    //    }
 
-        // Do something with the data in args.Snapshot
-    }
+    //    // Do something with the data in args.Snapshot
+    //}
     //------------------------数据纪录
     public void Analytics(string key)
     {
