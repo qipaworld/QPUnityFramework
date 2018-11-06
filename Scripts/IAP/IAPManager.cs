@@ -18,6 +18,7 @@ public class IAPManager : IStoreListener
     ConfigurationBuilder builder = null;
     private bool notInitSotre = false;
     private string productIdEx = "";
+    bool isReady = false;
     static public IAPManager Instance
     {
         get
@@ -44,10 +45,13 @@ public class IAPManager : IStoreListener
     ProductType[] productType = { ProductType.Consumable, ProductType.NonConsumable, ProductType.Subscription };
     public IAPManager()
     {
-        initStore();   
+        if (QipaWorld.Utils.IsPhone())
+        {
+            initStore();
+        }
     }
     void initStore(){
-    
+        isReady = true;
         if (initNum>=initNumMax || notInitSotre){
             isFailed = true;
             return;
@@ -202,8 +206,12 @@ public class IAPManager : IStoreListener
         return finishCallback!=null || isRestore;
     }
     public bool IsBusy(){
-       
-        if (controller == null || extensions == null){
+        if (!isReady)
+        {
+            UIController.Instance.PushHint("notReady", "该平台不支持内购");
+            return true;
+        }
+        else if (controller == null || extensions == null){
             if(isInitializeFailed){
                 if(iapError == InitializationFailureReason.AppNotKnown){
                     UIController.Instance.PushHint("iapError","遇到了一个未知错误商品没有初始化");

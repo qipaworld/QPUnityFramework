@@ -13,7 +13,8 @@ public class Icon : MonoBehaviour {
 	public Image iconImage;
     public Text iconName;
     public Action<Icon> callback;
-    public GameObject lockImage = null;
+    public Image lockImage = null;
+    public Image boarderImage = null;
     public string key;
     public  bool isAudio = true;
     AudioManagerBase audioManager;
@@ -37,6 +38,16 @@ public class Icon : MonoBehaviour {
         else
         {
             ShowName();
+        }
+        string iconBoarder = IconManager.Instance.GetIconBoarder(key);
+        if (iconBoarder == " ")
+        {
+            HideBoarder();
+        }
+        else
+        {
+            ShowBoarder();
+            boarderImage.sprite = LoadObjManager.Instance.GetLoadObj<Sprite>(iconBoarder);
         }
         //float scale = 1;
         //Vector3 size = iconImage.sprite.bounds.size;
@@ -79,9 +90,17 @@ public class Icon : MonoBehaviour {
     }
     public void ShowLock()
     {
-        lockImage.SetActive(true);
+        lockImage.gameObject. SetActive(true);
     }
     public void HideLock() {
-        lockImage.SetActive(false);
+        lockImage.gameObject.SetActive(false);
+    }
+    public void ShowBoarder()
+    {
+        boarderImage.gameObject.SetActive(true);
+    }
+    public void HideBoarder()
+    {
+        boarderImage.gameObject.SetActive(false);
     }
 }

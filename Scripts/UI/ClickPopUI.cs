@@ -23,6 +23,10 @@ public class ClickPopUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
     }
     public void CloseUI()
     {
-        UIController.Instance.Pop(transform.parent.GetComponent<UIData>().uiName);
+        UIData uiData = transform.parent.GetComponent<UIData>();
+        if (uiData.GetOnClickPop())
+        {
+            UIController.Instance.Pop(transform.parent.GetComponent<UIData>().uiName);
+        }
     }
 }

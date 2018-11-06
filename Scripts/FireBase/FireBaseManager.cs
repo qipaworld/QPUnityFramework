@@ -10,8 +10,8 @@ using System.IO;
 
 public class FireBaseManager  {
     public static FireBaseManager instance = null;
-    public DataBase gameBaseData; //版本号之类的
-    string gameVersionStr = "";
+    //public DataBase gameBaseData; //版本号之类的
+    //string gameVersionStr = "";
     bool isReady = false;
     // Use this for initialization
     static public FireBaseManager Instance
@@ -27,19 +27,19 @@ public class FireBaseManager  {
     }
     static public void Init () {
         instance = new FireBaseManager();
-        instance.gameBaseData = DataManager.Instance.addData("GameBaseData");
-        instance.gameBaseData.SetNumberValue("isUpdateGame", 0);
+        //instance.gameBaseData = DataManager.Instance.addData("GameBaseData");
+        //instance.gameBaseData.SetNumberValue("isUpdateGame", 0);
 
-        UnityEngine.Object obj = Resources.Load("VersionData");
-        if (obj)
-        {
-            string dataAsYaml = obj.ToString();
-            Deserializer deserializer = new Deserializer();
-            Dictionary<string, string> dic = deserializer.Deserialize<Dictionary<string, string>>(new StringReader(dataAsYaml));
-            instance.gameBaseData.SetStringValue("gameVersion", dic[QipaWorld.Utils.GetDeviceStr() + "GameVersion"]);
-            instance.gameBaseData.SetStringValue("iosId", dic["iosId"]);
-            instance.gameBaseData.SetStringValue("firebaseUrl", dic["firebaseUrl"]);
-        }
+        //UnityEngine.Object obj = Resources.Load("VersionData");
+        //if (obj)
+        //{
+        //    string dataAsYaml = obj.ToString();
+        //    Deserializer deserializer = new Deserializer();
+        //    Dictionary<string, string> dic = deserializer.Deserialize<Dictionary<string, string>>(new StringReader(dataAsYaml));
+        //    instance.gameBaseData.SetStringValue("gameVersion", dic[QipaWorld.Utils.GetDeviceStr() + "GameVersion"]);
+        //    instance.gameBaseData.SetStringValue("iosId", dic["iosId"]);
+        //    instance.gameBaseData.SetStringValue("firebaseUrl", dic["firebaseUrl"]);
+        //}
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
 
         try

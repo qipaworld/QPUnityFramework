@@ -25,7 +25,12 @@ public class RemoveAD : MonoBehaviour {
 		{
 			gameObject.SetActive(true);
 		}
-	}
-    
-    
+        if (!QipaWorld.Utils.AdButtonIsShow())
+        {
+            gameObject.SetActive(false);
+        }
+
+    }
+
+
 }

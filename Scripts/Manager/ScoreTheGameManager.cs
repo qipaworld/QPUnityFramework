@@ -39,13 +39,15 @@ public class ScoreTheGameManager {
 #endif
 	}
 	
-	public void GoToStoreScore(string iosAppId)
+	public void GoToStoreScore()
 	{
 		string url = "";
-#if UNITY_IOS && !UNITY_EDITOR
-        url = "http://itunes.apple.com/cn/app/id"+iosAppId;
-#elif UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_IOS
+        url = "http://itunes.apple.com/cn/app/id"+GameBaseDataManager.Instance.GetIosId();
+#elif UNITY_ANDROID
         url = "https://play.google.com/store/apps/details?id="+Application.identifier;
+#elif UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_STANDALONE_LINUX
+        url = "https://store.steampowered.com/app/" + GameBaseDataManager.Instance.GetSteamId();
 #endif
         Application.OpenURL(url);
 	}

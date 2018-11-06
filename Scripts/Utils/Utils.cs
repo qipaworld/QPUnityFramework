@@ -118,6 +118,31 @@ namespace QipaWorld
                 }
             }
         }
+        static public bool IsNewGame()
+        {
+            string strKey = "newGame";
+            if (EncryptionManager.GetString(strKey, "0") !="1" )
+            {
+                EncryptionManager.SetString(strKey, "1");
+                EncryptionManager.Save();
+                return true;
+            }
+            return false;
+        }
+        static public bool IsSaveKey(string key,string value, bool isSave = true)
+        {
+            
+            if (EncryptionManager.GetString(key, "") != value)
+            {
+                if (isSave)
+                {
+                    EncryptionManager.SetString(key, value);
+                    EncryptionManager.Save();
+                }
+                return false;
+            }
+            return true;
+        }
         static public bool IsNewDay(string key,bool isSave = true){
             string strKey = "IsNewDay" + key;
             string timeKey = DateTime.Now.ToShortDateString().ToString();
@@ -167,13 +192,32 @@ namespace QipaWorld
         }
         static public string GetDeviceStr()
         {
-        #if UNITY_IOS
+#if UNITY_IOS
                     return "ios";
-        #elif UNITY_ANDROID
+#elif UNITY_ANDROID
                    return "android";
-        #else
-                    return "";
-        #endif
+#elif UNITY_STANDALONE_WIN
+            return "win";
+#elif UNITY_STANDALONE_OSX
+                   return "mac";
+#elif UNITY_STANDALONE_LINUX
+                   return "linux";
+#else
+            return "";
+#endif
         }
+        static public bool AdButtonIsShow()
+        {
+            return IsPhone();
+        }
+        static public bool IsPhone()
+        {
+#if UNITY_IOS || UNITY_ANDROID
+            return true;
+#endif
+            return false;
+        }
+        
     }
+    
 }

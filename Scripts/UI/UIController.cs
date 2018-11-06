@@ -42,7 +42,7 @@ public class UIController {
         	return null;
         }
 
-		GameObject uiLoad = LoadObjManager.Instance.GetLoadObj<GameObject>("UIPrefabs/"+fileName);
+        GameObject uiLoad = LoadObjManager.Instance.GetLoadObj<GameObject>("UIPrefabs/"+fileName);
 		
 		GameObject ui = GameObject.Instantiate<GameObject>(uiLoad, GameObject.Find("Canvas").transform);
 		UIData uiData = ui.AddComponent<UIData>();
@@ -103,11 +103,11 @@ public class UIController {
     /// <value>bkey1 第一个按钮的文字的key.</value>
     /// <value>bkey2 第二个按钮的文字的key.</value>
     /// <value>callback 操作UI时的回掉方法.</value>
-    public GameObject PushSelectHint(string name,Action<SelectStatus> userActionCallBack,string key = null,string[] value = null, string bkey1 = null, string bkey2 = null, UIChangeDelegate callback = null){
+    public GameObject PushSelectHint(string name,Action<SelectStatus> userActionCallBack,string key = null,string[] value = null, string bkey1 = null, string bkey2 = null, UIChangeDelegate callback = null,bool onClickPop = true){
 		GameObject ui = PushRepeatableLayer (name,"selectHintLayer",callback);
 		if (ui!=null){
             var selectHint = ui.GetComponent<SelectHint>();
-
+            ui.GetComponent<UIData>().SetOnClickPop(onClickPop);
             if (key != null){
                 selectHint.hintText.text = LocalizationManager.Instance.GetLocalizedValue(key,value);
                 var bg = ui.transform.Find("Bg");

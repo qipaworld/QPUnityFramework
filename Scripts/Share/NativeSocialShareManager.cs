@@ -36,6 +36,7 @@ public class NativeSocialShareManager : MonoBehaviour  {
 #elif UNITY_ANDROID && !UNITY_EDITOR
         ShareAndroid(text, "", "", screenShotPath, "image/png", true, "");
 #else
+        ScoreTheGameManager.Instance.GoToStoreScore();
         NativeShareSuccess("");
 #endif
 
