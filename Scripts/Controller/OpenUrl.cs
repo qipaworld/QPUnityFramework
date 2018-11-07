@@ -9,7 +9,7 @@ public class OpenUrl : MonoBehaviour {
     public bool webView = false;
     public void open()
     {
-    	if(webView){
+    	if(webView&&QipaWorld.Utils.IsPhone()){
 	        WebViewManager.Instance.OpenWeb(url);
         }else{
 	        Application.OpenURL(url);
