@@ -30,7 +30,7 @@ public class GameBaseDataManager {
     {
         instance = new GameBaseDataManager();
         instance.gameBaseData = DataManager.Instance.addData("GameBaseData");
-        instance.gameBaseData.SetNumberValue("GameError", 0);
+        //instance.gameBaseData.SetNumberValue("GameError", 0);
         UnityEngine.Object obj = Resources.Load("VersionData");
         if (obj)
         {

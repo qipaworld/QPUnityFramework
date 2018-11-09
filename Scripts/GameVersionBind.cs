@@ -6,29 +6,26 @@ public class GameVersionBind : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        GameBaseDataManager.Instance.GetBaseData().Bind(ChangeStatus);
-        
+        //GameBaseDataManager.Instance.GetBaseData().Bind(ChangeStatus);
+        GameBaseStatus.Instance.BindGameUpdate(ChangeStatus);
 	}
     private void OnDestroy()
     {
-        GameBaseDataManager.Instance.GetBaseData().Unbind(ChangeStatus);
+        GameBaseStatus.Instance.UnbindGameUpdate(ChangeStatus);
+        //GameBaseDataManager.Instance.GetBaseData().Unbind(ChangeStatus);
     }
     // Update is called once per frame
     void ChangeStatus (DataBase data) {
-        if (data.GetNumberValue("isUpdateGame") == 1)
+        if (GameBaseStatus.Instance.IsReadyUpdate())
         {
             PopUpdateHit();
-        }
-        if(data.GetNumberValue("GameError") == 1)
-        {
-            UIController.Instance.PushSelectHint("gameError", GameError, "游戏已损坏");
         }
     }
     void PopUpdateHit()
     {
           UIController.Instance.PushSelectHint("updateGame", UpdateGame, "有新版本发布", null, "下载", "取消");
-          GameBaseDataManager.Instance.gameBaseData.SetNumberValue("isUpdateGame", 0);
-
+          //GameBaseDataManager.Instance.gameBaseData.SetNumberValue("isUpdateGame", 0);
+          GameBaseStatus.Instance.SetReadyUpdate(false);
     }
     void UpdateGame(SelectStatus b)
     {
@@ -42,8 +39,5 @@ public class GameVersionBind : MonoBehaviour {
         //}
     }
     
-    void GameError(SelectStatus b)
-    {
-        Application.Quit();
-    }
+
 }
