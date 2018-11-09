@@ -28,7 +28,8 @@ public class LoadingScreen : MonoBehaviour {
             
         }
         else {
-            asyncOperation = SceneManager.LoadSceneAsync(DataManager.Instance.getData("GameStatus").GetStringValue("GameScreenName"));
+            
+            asyncOperation = SceneManager.LoadSceneAsync(GameBaseStatus.Instance.GetRunScreenName());
         }
         // u3d 5.3之后使用using UnityEngine.SceneManagement;加载场景
         // 不允许加载完毕自动切换场景，因为有时候加载太快了就看不到加载进度条UI效果了

@@ -23,11 +23,12 @@ namespace QipaWorld
         static public void GoToScreen(string name,bool force = false)
         {
 
-            if (!force&&DataManager.Instance.getData("GameStatus").GetStringValue("GameScreenName") == name)
+            if (!force&& GameBaseStatus.Instance.GetRunScreenName() == name)
             {
                 return;
             }
-            DataManager.Instance.getData("GameStatus").SetStringValue("GameScreenName", name);
+            GameBaseStatus.Instance.SetRunScreenName(name);
+            //DataManager.Instance.getData("GameStatus").SetStringValue("GameScreenName", name);
 
             GameObjManager.Instance.RecycleObjAll();
             // GameObject.Find("Canvas").SetActive(false);
