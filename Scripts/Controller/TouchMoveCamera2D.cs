@@ -97,7 +97,7 @@ public class TouchMoveCamera2D : TouchBase
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
         UpdateTargetPositon();
 #else
-        if (EventSystem.current.IsPointerOverGameObject()) {
+        if (!isUI&&EventSystem.current.IsPointerOverGameObject()) {
             return;
         }
 #endif

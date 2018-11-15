@@ -13,6 +13,8 @@ public  class TouchBase: MonoBehaviour
     public bool isTouch = false;
     [HideInInspector]
     public int fingerId;
+    public bool isUI = false;
+    
     /// <summary>
     /// 监听点击事件
     /// </summary>
@@ -32,7 +34,7 @@ public  class TouchBase: MonoBehaviour
             {
                 isGetTouch = Utils.GetTouchByFingerId(fingerId, out touch);
             }
-            if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            if (!isUI&&EventSystem.current.IsPointerOverGameObject(touch.fingerId))
             {
                 if (isTouch)
                 {
@@ -71,7 +73,7 @@ public  class TouchBase: MonoBehaviour
         //{
         //    return;
         //}
-        if (EventSystem.current.IsPointerOverGameObject())
+        if (!isUI&&EventSystem.current.IsPointerOverGameObject())
         {
             return;
         }

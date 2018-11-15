@@ -26,6 +26,10 @@
 ## 需要插件 ##
 1.DOTween
 2.YamlDoNet for Unity
+3.Native Gallery for Android 
+4.Steamworks.net
+5.firebase
+6.admob
 
 <hr>
 
@@ -43,6 +47,8 @@
 Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.qipaworld
 
 ios: http://itunes.apple.com/cn/app/id1289628445
+
+steam: https://store.steampowered.com/app/975710/Qipa_WorldHello_Big_Adventure
 
 **Jigsaw puzzle - Evolution**
 

@@ -10,8 +10,9 @@ using UnityEngine.EventSystems;
 public class TouchClickBase :  TouchBase
 {
 
-    public int layerId = 9; //射线碰撞层编号
-    int layerMask = 0; //射线碰撞层
+    //public int layerId = 9; //射线碰撞层编号
+    public LayerMask layerMask = 0; //射线碰撞层
+    
     public int rayDraction = 30; //射线长度
     public Camera eyeCamera = null; // 视图相机
     public int MaxDraction = 55;
@@ -25,7 +26,7 @@ public class TouchClickBase :  TouchBase
         {
             eyeCamera = Camera.main;
         }
-        layerMask = (1 << layerId);
+        //layerMask = (1 << layerId);
         audioManager = transform.GetComponent<AudioManagerBase>();
     }
 

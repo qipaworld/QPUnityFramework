@@ -23,25 +23,26 @@ namespace QipaWorld
         static public void GoToScreen(string name,bool force = false)
         {
 
-            if (!force&&DataManager.Instance.getData("GameStatus").GetStringValue("GameScreenName") == name)
+            if (!force&& GameBaseStatus.Instance.GetRunScreenName() == name)
             {
                 return;
             }
-            DataManager.Instance.getData("GameStatus").SetStringValue("GameScreenName", name);
+            GameBaseStatus.Instance.SetRunScreenName(name);
+            //DataManager.Instance.getData("GameStatus").SetStringValue("GameScreenName", name);
 
             GameObjManager.Instance.RecycleObjAll();
             // GameObject.Find("Canvas").SetActive(false);
             SceneManager.LoadScene("LoadingScreen", LoadSceneMode.Single);
         }
+        static public void CheckDirectory(string path){
+            if (!System.IO.Directory.Exists(path))
+            {
+                System.IO.Directory.CreateDirectory(path);
+            }
+        }
         static public void Serialize(string fileName, System.Object o)
         {
-
-            string directoryPath = Path.GetDirectoryName(fileName);
-
-            if (!System.IO.Directory.Exists(directoryPath))
-            {
-                System.IO.Directory.CreateDirectory(directoryPath);
-            }
+            CheckDirectory(Path.GetDirectoryName(fileName));
 
             FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
             BinaryFormatter bf = new BinaryFormatter();
@@ -118,6 +119,31 @@ namespace QipaWorld
                 }
             }
         }
+        static public bool IsNewGame()
+        {
+            string strKey = "newGame";
+            if (EncryptionManager.GetString(strKey, "0") !="1" )
+            {
+                EncryptionManager.SetString(strKey, "1");
+                EncryptionManager.Save();
+                return true;
+            }
+            return false;
+        }
+        static public bool IsSaveKey(string key,string value, bool isSave = true)
+        {
+            
+            if (EncryptionManager.GetString(key, "") != value)
+            {
+                if (isSave)
+                {
+                    EncryptionManager.SetString(key, value);
+                    EncryptionManager.Save();
+                }
+                return false;
+            }
+            return true;
+        }
         static public bool IsNewDay(string key,bool isSave = true){
             string strKey = "IsNewDay" + key;
             string timeKey = DateTime.Now.ToShortDateString().ToString();
@@ -136,15 +162,63 @@ namespace QipaWorld
             EncryptionManager.Save();
                 
         }
+        //格式化音乐
+        static public void SpectrumDataFormat(float[] samplesFormat, float[] samples, AudioSource audio = null, int channel = 0, FFTWindow window = FFTWindow.Rectangular)
+        {
+            if(audio != null)
+            {
+                audio.GetSpectrumData(samples, channel, window);
+            }
+            else
+            {
+                AudioListener.GetSpectrumData(samples, channel, window);
+            }
+            
+            int disNum = samples.Length / samplesFormat.Length;
+            int audioNum = 0;
+            for (int i = 1; i <= samplesFormat.Length; i++)
+            {
+                int maxNum = i * disNum;
+                float tempNum = 0;
+                for (; audioNum < maxNum; audioNum++)
+                {
+                    tempNum += samples[audioNum];
+                }
+                samplesFormat[i - 1] = tempNum / disNum;
+            }
+        }
+        static public void RemoveCloneStr(GameObject obj)
+        {
+            obj.name = obj.name.Replace("(Clone)", "");
+        }
         static public string GetDeviceStr()
         {
-        #if UNITY_IOS
+#if UNITY_IOS
                     return "ios";
-        #elif UNITY_ANDROID
+#elif UNITY_ANDROID
                    return "android";
-        #else
-                    return "";
-        #endif
+#elif UNITY_STANDALONE_WIN
+            return "win";
+#elif UNITY_STANDALONE_OSX
+                   return "mac";
+#elif UNITY_STANDALONE_LINUX
+                   return "linux";
+#else
+            return "";
+#endif
         }
+        static public bool AdButtonIsShow()
+        {
+            return IsPhone();
+        }
+        static public bool IsPhone()
+        {
+#if UNITY_IOS || UNITY_ANDROID
+            return true;
+#endif
+            return false;
+        }
+        
     }
+    
 }

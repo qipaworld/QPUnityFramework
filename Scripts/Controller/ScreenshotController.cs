@@ -39,11 +39,11 @@ public class ScreenshotController : MonoBehaviour {
     /// <param name="mRect">M rect.截屏的大小</param>
     /// <param name="mFileName">M file name.保存路径</param>
     /// <param name="callback">获得文理的回掉方法</param>
-    public void CaptureByRect (Rect mRect, Action<Texture2D> callback = null , string mFileName = null)
+    public void CaptureByRect (Rect mRect, Action<Texture2D> callback = null , string mFileName = null,Vector2? size = null)
     {
-        StartCoroutine(CaptureByRectEx(mRect, callback, mFileName));
+        StartCoroutine(CaptureByRectEx(mRect, callback, mFileName, size));
     }
-    public IEnumerator CaptureByRectEx(Rect mRect, Action<Texture2D> callback = null, string mFileName = null)
+    public IEnumerator CaptureByRectEx(Rect mRect, Action<Texture2D> callback = null, string mFileName = null, Vector2? size = null)
     {
 
 
@@ -56,9 +56,12 @@ public class ScreenshotController : MonoBehaviour {
         mTexture.ReadPixels(mRect, 0, 0);
         //应用
         mTexture.Apply();
-
+        //TextureScale.Bilinear();
         if (mFileName != null)
         {
+            if (size!=null){
+                TextureScale.Bilinear(mTexture,(int)size.Value.x,(int)size.Value.y);
+            }
             //将图片信息编码为字节信息
             byte[] bytes = mTexture.EncodeToPNG();
             //保存

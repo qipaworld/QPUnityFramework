@@ -46,8 +46,10 @@ public class IconManager
     		itemData.SetDataValue(key,data);
     		string[] dataStr = itemData.GetStringValue(key).Split(',');
     		data.SetStringValue("name",dataStr[0]);
-    		data.SetStringValue("texture",dataStr[1]);
-    	}
+    		data.SetStringValue("texture",dataStr[1]); 
+    		data.SetStringValue("boarder", dataStr[2]); 
+
+        }
     	return data;
     }
     public string GetIconFilePath(string key){
@@ -55,5 +57,9 @@ public class IconManager
     }
     public string GetIconName(string key){
     	return GetIconData(key).GetStringValue("name");
+    }
+    public string GetIconBoarder(string key)
+    {
+        return GetIconData(key).GetStringValue("boarder");
     }
 }

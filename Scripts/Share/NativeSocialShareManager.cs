@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 #endif  
 public delegate void ShareCallBackDelegate(bool success ,string platform);  
   
-public class NativeSocialShareManager  {  
+public class NativeSocialShareManager : MonoBehaviour  {  
     #if UNITY_IOS && !UNITY_EDITOR  
     [DllImport ("__Internal")]  
 	private static extern void IOS_NativeShare(string text, string encodedMedia);  
@@ -16,9 +16,9 @@ public class NativeSocialShareManager  {
     private static NativeSocialShareManager instance = null;  
     public static NativeSocialShareManager Instance {  
         get {
-            if (instance == null) {
-                instance = new NativeSocialShareManager();
-            }
+            // if (instance == null) {
+            //     instance = new NativeSocialShareManager();
+            // }
             return instance;  
         }  
 		set{ 
@@ -36,6 +36,7 @@ public class NativeSocialShareManager  {
 #elif UNITY_ANDROID && !UNITY_EDITOR
         ShareAndroid(text, "", "", screenShotPath, "image/png", true, "");
 #else
+        ScoreTheGameManager.Instance.GoToStoreScore();
         NativeShareSuccess("");
 #endif
 
