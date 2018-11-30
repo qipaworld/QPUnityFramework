@@ -9,4 +9,13 @@ public class LocalizedTextEx : LocalizedText {
     protected override void ChangeText(DataBase data){
 		text.text = LocalizationManager.Instance.GetLocalizedValue(key,value);
     }
+    public void UpdateText(string key, string[] value)
+    {
+        this.key = key;
+        this.value = value;
+        if (text != null)
+        {
+            text.text = LocalizationManager.Instance.GetLocalizedValue(this.key,value);
+        }
+    }
 }

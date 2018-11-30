@@ -75,11 +75,11 @@ public class FireBaseManager  {
         {
             if (isLog)
             {
-                GameObject hintLayer = UIController.Instance.PushHint("shareHint");
-                if (hintLayer)
-                {
-                    hintLayer.GetComponentInChildren<Text>().text = LocalizationManager.Instance.GetLocalizedValue("未知错误谷歌服务框架过低");
-                }
+                GameObject hintLayer = UIController.Instance.PushHint("shareHint","未知错误谷歌服务框架过低");
+                // if (hintLayer)
+                // {
+                //     hintLayer.GetComponentInChildren<Text>().text = LocalizationManager.Instance.GetLocalizedValue("未知错误谷歌服务框架过低");
+                // }
             }
             
             return false;

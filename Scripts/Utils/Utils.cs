@@ -20,6 +20,22 @@ namespace QipaWorld
             }
             return randomStr;
         }
+        static public string GetLocalizationConnectKey(int num)
+        {
+            string key = "{0}{";
+            for (int i = 1; i <= num; i++)
+            {
+                if (i == num)
+                {
+                    key = key + i + "}";
+                }
+                else
+                {
+                    key = key + i + "}{";
+                }
+            }
+            return key;
+        }
         static public void GoToScreen(string name,bool force = false)
         {
 
