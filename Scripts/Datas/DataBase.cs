@@ -21,6 +21,9 @@ public class DataBase {
 	public string dataName = "";
     //这一帧里变化的所有的key 和变化属性
 	Dictionary<string, ChangeType> changeDic = new Dictionary<string, ChangeType>();
+	Dictionary<string, ChangeType> tempChangeDic = new Dictionary<string, ChangeType>();//在发送中的时候插入会存起来，下一帧处理；
+    bool isSend = false;
+
     bool sync = false;
 	public Dictionary<string, ChangeType> ChangeDic{
 		get{return changeDic;}
@@ -243,17 +246,44 @@ public class DataBase {
     //通知监听者数据发生了变化
     public void Send()
     {
+        isSend = true;
         if (sendChange != null)
         {
             sendChange(this);
         }
+
         readySend = false;
 		changeDic.Clear ();
+        isSend = false;
+
+        if (tempChangeDic.Count > 0)
+        {
+            foreach (var kv in tempChangeDic)
+            {
+                AddToChangeDic(kv.Key, kv.Value);
+            }
+            tempChangeDic.Clear();
+            ReadySend();
+        }
+        
+
     }
     //把变化的属性和key添加到变化列表里
-	public void AddToChangeDic(string key,ChangeType type){
-		if (!changeDic.ContainsKey (key)) {
-			changeDic.Add (key, type);	
-		}
+    public void AddToChangeDic(string key,ChangeType type){
+        if (!isSend)
+        {
+            if (!changeDic.ContainsKey(key))
+            {
+                changeDic.Add(key, type);
+            }
+        }
+        else
+        {
+            if (!tempChangeDic.ContainsKey(key))
+            {
+                tempChangeDic.Add(key, type);
+            }
+        }
+		
 	}
 }
