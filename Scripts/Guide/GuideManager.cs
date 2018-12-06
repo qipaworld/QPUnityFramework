@@ -30,8 +30,8 @@ public class GuideManager {
         }
         instance.SetGuideNum(num);
     }
-
-     public string GetGuideNum()
+    
+    public string GetGuideNum()
      {
         return data.GetStringValue("guideNum");
      }

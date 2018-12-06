@@ -8,6 +8,7 @@ public class UIData : MonoBehaviour {
 	public UIChangeType uiChangeType;
 	public string uiName;
     bool onClickPop = true;
+    bool isFreePop = true;
     public DataBase uiData = new DataBase();
 	public UIChangeDelegate changeCallback = null;
 	void sendChange(){
@@ -49,5 +50,13 @@ public class UIData : MonoBehaviour {
     public bool GetOnClickPop()
     {
         return onClickPop;
+    }
+    public void SetFreePop(bool isFreePop)
+    {
+        this.isFreePop = isFreePop;
+    }
+    public bool GetFreePop()
+    {
+        return isFreePop;
     }
 }
