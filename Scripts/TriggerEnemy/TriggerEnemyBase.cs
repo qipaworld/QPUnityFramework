@@ -17,6 +17,28 @@ public class TriggerEnemyBase : MonoBehaviour {
             }
         }
     }
+    
+    protected virtual void OnTriggerStay2D(Collider2D collider)
+    {
+        foreach (string t in targetTags)
+        {
+            if (t == collider.tag)
+            {
+                Trigger(collider);
+            }
+        }
+    }
+    
+    protected virtual void OnTriggerExit2D(Collider2D collider)
+    {
+        //foreach (string t in targetTags)
+        //{
+        //    if (t == collider.tag)
+        //    {
+        //        Trigger(collider);
+        //    }
+        //}
+    }
     // Use this for initialization
     public virtual void Trigger (Collider2D collider) {
 		
