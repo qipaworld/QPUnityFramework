@@ -59,4 +59,8 @@ public class AudioManagerBase : MonoBehaviour {
     virtual public void setVolume(float musicVolume){
 		music.volume = musicVolume;
 	}
+    public bool IsLoop()
+    {
+        return music.loop;
+    }
 }
