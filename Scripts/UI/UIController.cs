@@ -64,7 +64,7 @@ public class UIController {
     /// <value>log 是否是调试信息.</value>
     /// <value>callback 操作UI时的回掉方法.</value>
     /// <value>outTime 自动关闭UI的时间，不传为手动关闭.</value>
-	public GameObject PushHint(string name,string key = null,string[] value = null,bool log = false,UIChangeDelegate callback = null,float outTime = 0f){
+	public GameObject PushHint(string name,string key = null,string[] value = null,bool log = false,UIChangeDelegate callback = null,float outTime = 0f,bool quickPop = false){
 		GameObject ui = PushRepeatableLayer (name,"hintLayer",callback);
 		if (ui!=null){
 			if(log){
@@ -94,7 +94,14 @@ public class UIController {
             if(outTime != 0){
             	Timer.Instance.DelayInvoke(outTime,()=>{Pop(name);});
             }
-		}
+        }
+        else
+        {
+            if (quickPop)
+            {
+                Pop(name);
+            }
+        }
 		return ui;
 	}
     /// <summary>
