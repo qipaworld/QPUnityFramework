@@ -19,7 +19,7 @@ public class IAPManager : IStoreListener
     private bool notInitSotre = false;
     private string productIdEx = "";
     bool isReady = false;
-    bool isTapTap = false;
+    public bool isTapTap = false;
     static public IAPManager Instance
     {
         get
