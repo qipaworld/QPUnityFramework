@@ -52,6 +52,12 @@ public class IAPManager : IStoreListener
         }
     }
     void initStore(){
+#if !(UNITY_IOS || UNITY_ANDROID)
+               return;
+#endif
+#if QIPAWORLD_NOTIAP
+            return;
+#endif
         isReady = true;
         if (initNum>=initNumMax || notInitSotre){
             isFailed = true;
