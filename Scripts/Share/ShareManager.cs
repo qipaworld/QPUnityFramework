@@ -38,7 +38,11 @@ public class ShareManager {
 	{
 		NativeSocialShareManager.Instance.NativeShare (text, texture, shaeCallback ?? FinishedSharing, screenShotPath);
 	}
-	void FinishedSharing (bool success,string str)
+    public void ShareText(string text, ShareCallBackDelegate shaeCallback = null)
+    {
+        NativeSocialShareManager.Instance.NativeShareText(text, shaeCallback ?? FinishedSharing);
+    }
+    void FinishedSharing (bool success,string str)
 	{
 		Debug.Log(str);
 		Debug.Log(success);

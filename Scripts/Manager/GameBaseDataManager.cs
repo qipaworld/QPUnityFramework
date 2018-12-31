@@ -64,4 +64,16 @@ public class GameBaseDataManager {
     {
         return gameBaseData;
     }
+    public string GetBaseStoreUrl()
+    {
+        string url = "";
+#if UNITY_IOS
+        url = "http://itunes.apple.com/cn/app/id"+GameBaseDataManager.Instance.GetIosId();
+#elif UNITY_ANDROID
+        url = "https://play.google.com/store/apps/details?id=" + Application.identifier;
+#elif UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_STANDALONE_LINUX
+        url = "https://store.steampowered.com/app/" + GameBaseDataManager.Instance.GetSteamId();
+#endif
+        return url;
+    }
 }

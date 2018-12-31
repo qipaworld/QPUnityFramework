@@ -109,4 +109,9 @@ extern "C" {
         
         [NativeSocialShare nativeShare:status media:media];
     }
+    void IOS_NativeShareUrl(char* url) {
+        NSString *status = [IosTool charToNSString:url];
+        
+        [NativeSocialShare nativeShareUrl:status];
+    }
 }
