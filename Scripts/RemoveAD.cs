@@ -29,7 +29,10 @@ public class RemoveAD : MonoBehaviour {
         {
             gameObject.SetActive(false);
         }
-
+        if (IAPManager.Instance.isTapTap)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
 
