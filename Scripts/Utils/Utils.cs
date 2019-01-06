@@ -36,19 +36,22 @@ namespace QipaWorld
             }
             return key;
         }
-        static public void GoToScreen(string name,bool force = false)
+        static public void GoToScene(string name,bool force = false)
         {
-
-            if (!force&& GameBaseStatus.Instance.GetRunScreenName() == name)
+            if(name == "StartScene")
+            {
+                name = GameBaseStatus.Instance.GetStartSceneName();
+            }
+            if (!force&& GameBaseStatus.Instance.GetRunSceneName() == name)
             {
                 return;
             }
-            GameBaseStatus.Instance.SetRunScreenName(name);
-            //DataManager.Instance.getData("GameStatus").SetStringValue("GameScreenName", name);
+            GameBaseStatus.Instance.SetRunSceneName(name);
+            //DataManager.Instance.getData("GameStatus").SetStringValue("GameSceneName", name);
 
             GameObjManager.Instance.RecycleObjAll();
             // GameObject.Find("Canvas").SetActive(false);
-            SceneManager.LoadScene("LoadingScreen", LoadSceneMode.Single);
+            SceneManager.LoadScene("LoadingScene", LoadSceneMode.Single);
         }
         static public void CheckDirectory(string path){
             if (!System.IO.Directory.Exists(path))

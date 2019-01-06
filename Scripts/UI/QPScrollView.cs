@@ -26,7 +26,7 @@ public class QPScrollView : MonoBehaviour {
     public GameObject Push(string name)
     {
         GameObject obj = GameObjManager.Instance.GetGameObj(name, content);
-        float width = viewport.sizeDelta.x - cellWidth + (gridLayout.spacing.x + cellWidth) * content.childCount + gridLayout.padding.left + gridLayout.padding.right;
+        float width =   (gridLayout.spacing.x + cellWidth) * content.childCount + gridLayout.padding.left + gridLayout.padding.right;
         content.sizeDelta = new Vector2(width, content.sizeDelta.y);
         obj.AddComponent<QPScrollViewCell>().Init(viewport, cellMaxScale,cellWidth+ gridLayout.spacing.x);
         cellList.Add(obj);

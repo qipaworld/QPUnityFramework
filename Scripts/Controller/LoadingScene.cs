@@ -5,11 +5,10 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 
-public class LoadingScreenEx : MonoBehaviour {
+public class LoadingScene : MonoBehaviour {
 
     
-    public Slider slider;
-    public Text text;
+    public Image loading;
     //public 
     void Start()
     {
@@ -24,11 +23,13 @@ public class LoadingScreenEx : MonoBehaviour {
 
         if (DataManager.instance == null)
         {
-            asyncOperation = SceneManager.LoadSceneAsync("StartScene");
-
+            asyncOperation = SceneManager.LoadSceneAsync(GameBaseStatus.Instance.GetStartSceneName());
+            
+            
         }
         else {
-            asyncOperation = SceneManager.LoadSceneAsync(GameBaseStatus.Instance.GetRunScreenName());
+            
+            asyncOperation = SceneManager.LoadSceneAsync(GameBaseStatus.Instance.GetRunSceneName());
         }
         // u3d 5.3之后使用using UnityEngine.SceneManagement;加载场景
         // 不允许加载完毕自动切换场景，因为有时候加载太快了就看不到加载进度条UI效果了
@@ -50,7 +51,7 @@ public class LoadingScreenEx : MonoBehaviour {
         //     //{
         //     //    progress += 0.001f;
         //     //}
-        //     slider.value = asyncOperation.progress;
+        //     loading.fillAmount = asyncOperation.progress;
         //     yield return new WaitForEndOfFrame();
         // }
 
@@ -61,8 +62,7 @@ public class LoadingScreenEx : MonoBehaviour {
            while (progress < asyncOperation.progress)
            {
                progress += 0.05f;
-               text.text = "Loading " + (progress*100).ToString("f0") + "%";
-               // slider.value = progress;
+               loading.fillAmount = progress;
                yield return new WaitForEndOfFrame();
            }
         }
@@ -71,9 +71,7 @@ public class LoadingScreenEx : MonoBehaviour {
         while (!asyncOperation.isDone)
         {
            // progress += 0.01f;
-           // slider.value = asyncOperation.progress;
-               text.text = "Loading " + (asyncOperation.progress*100).ToString("f0") + "%";
-           
+           loading.fillAmount = asyncOperation.progress;
            yield return new WaitForEndOfFrame();
         }
     }

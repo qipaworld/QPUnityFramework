@@ -24,7 +24,8 @@ public class GameBaseStatus {
         instance = new GameBaseStatus();
         instance.gameBaseStatusData = DataManager.Instance.addData("GameBaseStatus");
         instance.gameBaseStatusData.SetNumberValue("pauseGame", 0);
-        instance.gameBaseStatusData.SetStringValue("GameScreenName", "StartScene");
+        instance.gameBaseStatusData.SetStringValue("GameSceneName", "StartScene");
+        instance.gameBaseStatusData.SetStringValue("StartGameSceneName", "StartScene");
         instance.gameBaseStatusData.SetNumberValue("GameError", 0);
         instance.gameBaseStatusData.SetNumberValue("isUpdateGame", 0);
 
@@ -56,13 +57,21 @@ public class GameBaseStatus {
     {
         return pauseKey.Contains(key);
     }
-    public string GetRunScreenName()
+    public string GetRunSceneName()
     {
-        return gameBaseStatusData.GetStringValue("GameScreenName");
+        return gameBaseStatusData.GetStringValue("GameSceneName");
     }
-    public void SetRunScreenName(string key)
+    public void SetRunSceneName(string key)
     {
-        gameBaseStatusData.SetStringValue("GameScreenName",key);
+        gameBaseStatusData.SetStringValue("GameSceneName",key);
+    }
+    public string GetStartSceneName()
+    {
+        return gameBaseStatusData.GetStringValue("StartGameSceneName");
+    }
+    public void SetStartSceneName(string key)
+    {
+        gameBaseStatusData.SetStringValue("StartGameSceneName", key);
     }
     public void SetGameError(int key)
     {
