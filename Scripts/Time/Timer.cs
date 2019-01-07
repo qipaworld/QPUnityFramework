@@ -4,7 +4,7 @@ using System.Collections;
 using System;
 public class Timer : MonoBehaviour
 {
-    
+    public Action updateAction = null;
     public static Timer instance = null;
     //获得Manager 实例
     static public Timer Instance
@@ -19,7 +19,7 @@ public class Timer : MonoBehaviour
         set {instance = value; }
     }
     static public void Init () {
-        
+       
     }
 
     /// <summary>
@@ -39,5 +39,27 @@ public class Timer : MonoBehaviour
         }
         callback();
         yield break;
+    }
+    private void Update()
+    {
+        if (updateAction != null)
+        {
+            updateAction.Invoke();
+        }
+    }
+    public void BindUpdate(Action a)
+    {
+        if(updateAction == null)
+        {
+            updateAction = a;
+        }
+        else
+        {
+            updateAction += a;
+        }
+    }
+    public void UnbindUpdate(Action a)
+    {
+         updateAction -= a;
     }
 }

@@ -73,6 +73,14 @@ public class GameBaseStatus {
     {
         gameBaseStatusData.SetStringValue("StartGameSceneName", key);
     }
+    public string GetGBMusicName()
+    {
+        return gameBaseStatusData.GetStringValue("GBMusicName");
+    }
+    public void SetGBMusicName(string key)
+    {
+        gameBaseStatusData.SetStringValue("GBMusicName", key);
+    }
     public void SetGameError(int key)
     {
         instance.gameBaseStatusData.SetNumberValue("GameError", key);

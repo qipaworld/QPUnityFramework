@@ -56,11 +56,23 @@ public class AudioManagerBase : MonoBehaviour {
 			music.Pause();
 		}
 	}
-    virtual public void setVolume(float musicVolume){
+    virtual public void SetVolume(float musicVolume){
 		music.volume = musicVolume;
 	}
+    virtual public float GetVolume()
+    {
+        return music.volume;
+    }
     public bool IsLoop()
     {
         return music.loop;
+    }
+    public void SetClip(AudioClip clip)
+    {
+        music.clip = clip;
+    }
+    public bool IsPlaying()
+    {
+        return music.isPlaying;
     }
 }
