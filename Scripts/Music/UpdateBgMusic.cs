@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpdateBgMusic : MonoBehaviour
+public class UpdateBgMusic : TriggerUpdateBgMusic
 {
     
-    public AudioClip clip;
-    public float time = 1;
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         BgMusicManager.Instance.UpdateMusic(clip, time);
     }
 }

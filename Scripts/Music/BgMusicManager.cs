@@ -6,6 +6,7 @@ public class BgMusicManager
 {
     public static BgMusicManager instance = null;
     AudioManagerBase audioManager;
+    Dictionary<string,AudioClip> clipDic = new Dictionary<string, AudioClip>();
     float time = 0;
     float maxTime = 0;
     AudioClip clip;
@@ -28,18 +29,37 @@ public class BgMusicManager
             Timer.Instance.BindUpdate(instance.Update);
         }
     }
-    public void UpdateMusic(AudioClip clip,float t)
+    public void UpdateMusic(AudioClip clip,float t,bool b = false)
     {
         
         if (clip!=null&&GameBaseStatus.Instance.GetGBMusicName() == clip.name)
         {
             return;
         }
+        if (clip != null)
+        {
+            GameBaseStatus.Instance.SetGBMusicName(clip.name);
+        }
+        else
+        {
+            GameBaseStatus.Instance.SetGBMusicName("Null");
+        }
         this.clip = clip;
         this.time = 0;
         this.maxTime = t;
         this.isFadeOut = true;
         this.isUptate = true;
+    }
+    public void UpdateMusic(string clip, float t)
+    {
+        if (clipDic.ContainsKey(clip))
+        {
+            UpdateMusic(clipDic[clip], t);
+        }
+        else if(clip == "Null")
+        {
+            UpdateMusic(null,t,true);
+        }
     }
     public void Update()
     {
@@ -56,11 +76,9 @@ public class BgMusicManager
                     {
                         audioManager.SetClip(clip);
                         audioManager.play();
-                        GameBaseStatus.Instance.SetGBMusicName(clip.name);
                     }
                     else
                     {
-                        GameBaseStatus.Instance.SetGBMusicName("");
                         audioManager.stop();
                     }
                     
@@ -76,6 +94,20 @@ public class BgMusicManager
                 }
             }
             audioManager.SetVolume((maxTime - time) / maxTime);
+        }
+    }
+    public void AddClip(string k,AudioClip a)
+    {
+        if (!clipDic.ContainsKey(k))
+        {
+            clipDic.Add(k, a);
+        }
+    }
+    public void RemoveClip(string k)
+    {
+        if (clipDic.ContainsKey(k))
+        {
+            clipDic.Remove(k);
         }
     }
 }

@@ -85,22 +85,22 @@ public class GameBaseStatus {
     {
         instance.gameBaseStatusData.SetNumberValue("GameError", key);
     }
-    public void BindError(ChangeDataDelegate change)
+    public void Bind(ChangeDataDelegate change)
     {
         instance.gameBaseStatusData.Bind(change);
     }
-    public void UnbindError(ChangeDataDelegate change)
+    public void Unbind(ChangeDataDelegate change)
     {
         instance.gameBaseStatusData.Unbind(change);
     }
-    public void BindGameUpdate(ChangeDataDelegate change)
-    {
-        instance.gameBaseStatusData.Bind(change);
-    }
-    public void UnbindGameUpdate(ChangeDataDelegate change)
-    {
-        instance.gameBaseStatusData.Unbind(change);
-    }
+    //public void BindGameUpdate(ChangeDataDelegate change)
+    //{
+    //    instance.gameBaseStatusData.Bind(change);
+    //}
+    //public void UnbindGameUpdate(ChangeDataDelegate change)
+    //{
+    //    instance.gameBaseStatusData.Unbind(change);
+    //}
     public bool IsReadyUpdate()
     {
         return gameBaseStatusData.GetNumberValue("isUpdateGame") == 1;

@@ -6,12 +6,12 @@ public class GameErrorBind : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        GameBaseStatus.Instance.BindError(ChangeStatus);
+        GameBaseStatus.Instance.Bind(ChangeStatus);
         //GameBaseDataManager.Instance.GetBaseData().Bind(ChangeStatus);
 	}
     private void OnDestroy()
     {
-        GameBaseStatus.Instance.UnbindError(ChangeStatus);
+        GameBaseStatus.Instance.Unbind(ChangeStatus);
 
         //GameBaseDataManager.Instance.GetBaseData().Unbind(ChangeStatus);
     }
