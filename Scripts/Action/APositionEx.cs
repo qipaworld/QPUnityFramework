@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class APositionEx : MonoBehaviour {
 	
     public Vector3 speed;
@@ -12,9 +11,11 @@ public class APositionEx : MonoBehaviour {
     float dX = 1;
     float dY = 1;
     float dZ = 1;
+    [HideInInspector]
+    public Vector3 originPosition;
     // Use this for initialization
     void Start () {
-		
+        originPosition = transform.position;
 	}
 	void setSpeed(float _speedX,float _speedY,float _speedZ){
         speed = new Vector3(_speedX, _speedY, _speedZ);
