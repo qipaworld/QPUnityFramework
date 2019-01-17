@@ -19,6 +19,12 @@ public class APositionExEditor : Editor
         }
         else
         {
+            Vector3 point = Handles.PositionHandle(aPositionEx.transform.position + aPositionEx.distance, Quaternion.identity) - aPositionEx.transform.position;
+            if(point != aPositionEx.distance)
+            {
+                Undo.RecordObject(target, "moved point");
+                aPositionEx.distance = point;
+            }
             Handles.DrawDottedLine(aPositionEx.transform.position - aPositionEx.distance, aPositionEx.transform.position + aPositionEx.distance, 10);
         }
     }
