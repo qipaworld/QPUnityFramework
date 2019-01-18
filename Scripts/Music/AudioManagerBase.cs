@@ -40,6 +40,17 @@ public class AudioManagerBase : MonoBehaviour {
     public virtual void Change(DataBase data)
     {
 		isPlay = (data.GetNumberValue ("musicStatus") == 1);
+        if (music.loop)
+        {
+            if (isPlay)
+            {
+                play();
+            }
+            else
+            {
+                stop();
+            }
+        }
 	}
     virtual public void play(){
 		if ((!music.isPlaying|| repeat) && isPlay){

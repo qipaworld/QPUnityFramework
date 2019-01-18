@@ -65,6 +65,14 @@ public class GameBaseStatus {
     {
         gameBaseStatusData.SetStringValue("GameSceneName",key);
     }
+    public string GetEditorSceneName()
+    {
+        return gameBaseStatusData.GetStringValue("EditorGameSceneName");
+    }
+    public void SetEditorSceneName(string key)
+    {
+        gameBaseStatusData.SetStringValue("EditorGameSceneName", key);
+    }
     public string GetStartSceneName()
     {
         return gameBaseStatusData.GetStringValue("StartGameSceneName");
