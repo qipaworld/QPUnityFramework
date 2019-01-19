@@ -10,7 +10,8 @@ public class AudioManagerBase : MonoBehaviour {
     public MusicEnum musicType;
 	public bool isPlay = true;
 	public bool repeat = false;
-    
+    protected bool isReady = false;
+
     //音量
     void Start() {
     	DataBase dataBase = DataManager.Instance.getData("musicData").GetDataValue(musicType.ToString());
@@ -40,33 +41,40 @@ public class AudioManagerBase : MonoBehaviour {
     public virtual void Change(DataBase data)
     {
 		isPlay = (data.GetNumberValue ("musicStatus") == 1);
-        if (music.loop)
+        
+        if (isPlay)
         {
-            if (isPlay)
+            if (music.loop&& isReady)
             {
                 play();
             }
-            else
-            {
-                stop();
-            }
+        }
+        else
+        {
+            stop();
         }
 	}
     virtual public void play(){
 		if ((!music.isPlaying|| repeat) && isPlay){
 			music.Play();
 		}
-	}
+        isReady = true;
+
+    }
     virtual public void stop(){
 		if (music.isPlaying){
 			music.Stop();
 		}
-	}
+        isReady = false;
+
+    }
     virtual public void pause(){
 		if (music.isPlaying){
 			music.Pause();
 		}
-	}
+        isReady = false;
+
+    }
     virtual public void SetVolume(float musicVolume){
 		music.volume = musicVolume;
 	}

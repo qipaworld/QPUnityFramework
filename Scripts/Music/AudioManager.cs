@@ -2,11 +2,10 @@
 
 public class AudioManager : AudioManagerBase {
     public bool isAudioPlay = true;
-    bool isReady = false;
 	public override void Change(DataBase data)
     {
         
-    	base.Change(data);
+    	//base.Change(data);
 		isPlay = (data.GetNumberValue ("musicStatus") == 1);
         
         
@@ -23,14 +22,12 @@ public class AudioManager : AudioManagerBase {
         }
         
 	}
-    override public void play()
-    {
-        base.play();
-        isReady = true;
-    }
-    override public void stop()
-    {
-        base.stop();
-        isReady = false;
-    }
+    //override public void play()
+    //{
+    //    base.play();
+    //}
+    //override public void stop()
+    //{
+    //    base.stop();
+    //}
 }
