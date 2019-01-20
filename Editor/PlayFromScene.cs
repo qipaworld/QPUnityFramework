@@ -28,7 +28,7 @@ public class PlayFromScene : EditorWindow
     //    EditorSceneManager.OpenScene(EditorBuildSettings.scenes[0].path);
     //    EditorApplication.isPlaying = true;
     //}
-    [SerializeField] string lastScene = "";
+    [SerializeField] string lastScene = null;
     [SerializeField] int targetScene = 0;
     [SerializeField] string waitScene = null;
     [SerializeField] bool hasPlayed = false;
