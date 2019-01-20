@@ -10,7 +10,8 @@ public class Guide : MonoBehaviour {
     public string hintNumNext = "";
     public PlatformEnum platform = PlatformEnum.Any;
     PlatformEnum runTimePlatform = PlatformEnum.Any;
-    void Start () {
+
+    public virtual void Start () {
         if (QipaWorld.Utils.IsPhone())
         {
             runTimePlatform = PlatformEnum.Phone;
@@ -27,11 +28,11 @@ public class Guide : MonoBehaviour {
         GuideManager.Instance.BindGuide(Change);
     }
 	
-    private void OnDestroy()
+    public virtual void OnDestroy()
     {
         GuideManager.Instance.UnbindGuide(Change);
     }
-    bool CheckPlatform()
+    public bool CheckPlatform()
     {
         if(platform == PlatformEnum.Any || platform == runTimePlatform )
         {
@@ -39,7 +40,7 @@ public class Guide : MonoBehaviour {
         }
         return false;
     }
-    void Change(DataBase data)
+    public virtual void Change(DataBase data)
     {
         if (GuideManager.Instance.GetGuideNum()== hintNum&& CheckPlatform())
         {

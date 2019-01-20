@@ -19,6 +19,7 @@ public class IAPManager : IStoreListener
     private bool notInitSotre = false;
     private string productIdEx = "";
     bool isReady = false;
+    public bool isTapTap = false;
     static public IAPManager Instance
     {
         get
@@ -45,12 +46,18 @@ public class IAPManager : IStoreListener
     ProductType[] productType = { ProductType.Consumable, ProductType.NonConsumable, ProductType.Subscription };
     public IAPManager()
     {
-        if (QipaWorld.Utils.IsPhone())
+        if (QipaWorld.Utils.IsPhone()&&!isTapTap)
         {
             initStore();
         }
     }
     void initStore(){
+#if !(UNITY_IOS || UNITY_ANDROID)
+               return;
+#endif
+#if QIPAWORLD_NOTIAP
+            return;
+#endif
         isReady = true;
         if (initNum>=initNumMax || notInitSotre){
             isFailed = true;

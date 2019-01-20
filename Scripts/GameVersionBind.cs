@@ -7,11 +7,11 @@ public class GameVersionBind : MonoBehaviour {
     // Use this for initialization
     void Start () {
         //GameBaseDataManager.Instance.GetBaseData().Bind(ChangeStatus);
-        GameBaseStatus.Instance.BindGameUpdate(ChangeStatus);
+        GameBaseStatus.Instance.Bind(ChangeStatus);
 	}
     private void OnDestroy()
     {
-        GameBaseStatus.Instance.UnbindGameUpdate(ChangeStatus);
+        GameBaseStatus.Instance.Unbind(ChangeStatus);
         //GameBaseDataManager.Instance.GetBaseData().Unbind(ChangeStatus);
     }
     // Update is called once per frame

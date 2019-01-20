@@ -10,6 +10,7 @@ public class UIController {
 
     DataBase uiDatas;
 	DataBase uiLoadingLayerDatas;
+    List<string> uiNameList = new List<string>();
 	int loadingLayerNum = 0;
     
     GameObject hintLayerLast;
@@ -32,10 +33,11 @@ public class UIController {
 			instance.uiLoadingLayerDatas = DataManager.Instance.addData("uiLoadingLayerDatas");
         }
     }
-	public GameObject Push(string name,UIChangeDelegate callback = null){
-        return PushRepeatableLayer(name,name,callback);
+	public GameObject Push(string name,UIChangeDelegate callback = null, bool isFreePop = true)
+    {
+        return PushRepeatableLayer(name,name,callback,isFreePop);
 	}
-	private GameObject PushRepeatableLayer(string name,string fileName,UIChangeDelegate callback = null){
+	private GameObject PushRepeatableLayer(string name,string fileName,UIChangeDelegate callback = null,bool isFreePop = true){
 		
 		if (uiDatas.GetObjectValue(name)!=null){
 			Debug.LogWarning("QIPAWORLD:重复添加UI--"+name);
@@ -49,7 +51,9 @@ public class UIController {
 		uiData.uiName = name;
 		uiData.changeCallback = callback;
 		uiDatas.SetObjectValue(name,ui);
-		return ui;
+        uiNameList.Add(name);
+        uiData.SetFreePop(isFreePop);
+        return ui;
 	}
 	/// <summary>
     /// 添加一个提示layer
@@ -60,7 +64,7 @@ public class UIController {
     /// <value>log 是否是调试信息.</value>
     /// <value>callback 操作UI时的回掉方法.</value>
     /// <value>outTime 自动关闭UI的时间，不传为手动关闭.</value>
-	public GameObject PushHint(string name,string key = null,string[] value = null,bool log = false,UIChangeDelegate callback = null,float outTime = 0f){
+	public GameObject PushHint(string name,string key = null,string[] value = null,bool log = false,UIChangeDelegate callback = null,float outTime = 0f,bool quickPop = false){
 		GameObject ui = PushRepeatableLayer (name,"hintLayer",callback);
 		if (ui!=null){
 			if(log){
@@ -90,7 +94,14 @@ public class UIController {
             if(outTime != 0){
             	Timer.Instance.DelayInvoke(outTime,()=>{Pop(name);});
             }
-		}
+        }
+        else
+        {
+            if (quickPop)
+            {
+                Pop(name);
+            }
+        }
 		return ui;
 	}
     /// <summary>
@@ -198,11 +209,17 @@ public class UIController {
 				ui.GetComponentInChildren<Text>().text = LocalizationManager.Instance.GetLocalizedValue(key,value);
 			}
 		}
-		return ui;
+        ui.GetComponent<UIData>().SetFreePop(false);
+
+        return ui;
 	}
     public void Pop(string name)	{
 		GameObject ui = uiDatas.GetObjectValue(name) as GameObject;
-        if(ui!=null){
+        if (uiNameList.Contains(name))
+        {
+            uiNameList.Remove(name);
+        }
+        if (ui!=null){
             uiDatas.RemoveObjectValue (name);
 			if(uiLoadingLayerDatas.GetStringValue(name)!=null){
 				loadingLayerNum--;
@@ -234,6 +251,23 @@ public class UIController {
 			ui.transform.position = new Vector3 (ui.transform.position.x, ui.transform.position.y, -1);
         }else{
             Debug.LogWarning("QIPAWORLD:没有这个UI--"+name);
+        }
+    }
+    public void PopTop()
+    {
+        int num = uiNameList.Count;
+        if(num > 0)
+        {
+            string name = uiNameList[uiNameList.Count - 1];
+            GameObject ui = getLayer(name);
+            if (ui != null)
+            {
+                UIData data = ui.GetComponent<UIData>();
+                if (data.GetFreePop() && data.GetOnClickPop())
+                {
+                    Pop(name);
+                }
+            }
         }
     }
 }

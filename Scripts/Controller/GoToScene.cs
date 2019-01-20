@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using QipaWorld;
 
-public class GoToScreen : MonoBehaviour {
+public class GoToScene : MonoBehaviour {
 
-    public string screenName;
+    public string SceneName;
     public string popName = "";
     public bool force = false;
     // Update is called once per frame
@@ -14,6 +14,6 @@ public class GoToScreen : MonoBehaviour {
     	if(popName != ""){
 	        UIController.Instance.Pop(popName);
     	}
-    	Utils.GoToScreen(screenName,force);
+    	Utils.GoToScene(SceneName,force);
     }
 }

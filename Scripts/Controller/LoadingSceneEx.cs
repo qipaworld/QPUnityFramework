@@ -5,10 +5,11 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 
-public class LoadingScreen : MonoBehaviour {
+public class LoadingSceneEx : MonoBehaviour {
 
     
-    public Image loading;
+    public Slider slider;
+    public Text text;
     //public 
     void Start()
     {
@@ -23,13 +24,11 @@ public class LoadingScreen : MonoBehaviour {
 
         if (DataManager.instance == null)
         {
-            asyncOperation = SceneManager.LoadSceneAsync("StartScene");
-            
-            
+            asyncOperation = SceneManager.LoadSceneAsync(GameBaseStatus.Instance.GetStartSceneName());
+
         }
         else {
-            
-            asyncOperation = SceneManager.LoadSceneAsync(GameBaseStatus.Instance.GetRunScreenName());
+            asyncOperation = SceneManager.LoadSceneAsync(GameBaseStatus.Instance.GetRunSceneName());
         }
         // u3d 5.3之后使用using UnityEngine.SceneManagement;加载场景
         // 不允许加载完毕自动切换场景，因为有时候加载太快了就看不到加载进度条UI效果了
@@ -51,7 +50,7 @@ public class LoadingScreen : MonoBehaviour {
         //     //{
         //     //    progress += 0.001f;
         //     //}
-        //     loading.fillAmount = asyncOperation.progress;
+        //     slider.value = asyncOperation.progress;
         //     yield return new WaitForEndOfFrame();
         // }
 
@@ -62,7 +61,8 @@ public class LoadingScreen : MonoBehaviour {
            while (progress < asyncOperation.progress)
            {
                progress += 0.05f;
-               loading.fillAmount = progress;
+               text.text = "Loading " + (progress*100).ToString("f0") + "%";
+               // slider.value = progress;
                yield return new WaitForEndOfFrame();
            }
         }
@@ -71,7 +71,9 @@ public class LoadingScreen : MonoBehaviour {
         while (!asyncOperation.isDone)
         {
            // progress += 0.01f;
-           loading.fillAmount = asyncOperation.progress;
+           // slider.value = asyncOperation.progress;
+               text.text = "Loading " + (asyncOperation.progress*100).ToString("f0") + "%";
+           
            yield return new WaitForEndOfFrame();
         }
     }

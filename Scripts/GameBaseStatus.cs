@@ -24,7 +24,8 @@ public class GameBaseStatus {
         instance = new GameBaseStatus();
         instance.gameBaseStatusData = DataManager.Instance.addData("GameBaseStatus");
         instance.gameBaseStatusData.SetNumberValue("pauseGame", 0);
-        instance.gameBaseStatusData.SetStringValue("GameScreenName", "StartScene");
+        instance.gameBaseStatusData.SetStringValue("GameSceneName", "StartScene");
+        instance.gameBaseStatusData.SetStringValue("StartGameSceneName", "StartScene");
         instance.gameBaseStatusData.SetNumberValue("GameError", 0);
         instance.gameBaseStatusData.SetNumberValue("isUpdateGame", 0);
 
@@ -56,34 +57,58 @@ public class GameBaseStatus {
     {
         return pauseKey.Contains(key);
     }
-    public string GetRunScreenName()
+    public string GetRunSceneName()
     {
-        return gameBaseStatusData.GetStringValue("GameScreenName");
+        return gameBaseStatusData.GetStringValue("GameSceneName");
     }
-    public void SetRunScreenName(string key)
+    public void SetRunSceneName(string key)
     {
-        gameBaseStatusData.SetStringValue("GameScreenName",key);
+        gameBaseStatusData.SetStringValue("GameSceneName",key);
+    }
+    public string GetEditorSceneName()
+    {
+        return gameBaseStatusData.GetStringValue("EditorGameSceneName");
+    }
+    public void SetEditorSceneName(string key)
+    {
+        gameBaseStatusData.SetStringValue("EditorGameSceneName", key);
+    }
+    public string GetStartSceneName()
+    {
+        return gameBaseStatusData.GetStringValue("StartGameSceneName");
+    }
+    public void SetStartSceneName(string key)
+    {
+        gameBaseStatusData.SetStringValue("StartGameSceneName", key);
+    }
+    public string GetGBMusicName()
+    {
+        return gameBaseStatusData.GetStringValue("GBMusicName");
+    }
+    public void SetGBMusicName(string key)
+    {
+        gameBaseStatusData.SetStringValue("GBMusicName", key);
     }
     public void SetGameError(int key)
     {
         instance.gameBaseStatusData.SetNumberValue("GameError", key);
     }
-    public void BindError(ChangeDataDelegate change)
+    public void Bind(ChangeDataDelegate change)
     {
         instance.gameBaseStatusData.Bind(change);
     }
-    public void UnbindError(ChangeDataDelegate change)
+    public void Unbind(ChangeDataDelegate change)
     {
         instance.gameBaseStatusData.Unbind(change);
     }
-    public void BindGameUpdate(ChangeDataDelegate change)
-    {
-        instance.gameBaseStatusData.Bind(change);
-    }
-    public void UnbindGameUpdate(ChangeDataDelegate change)
-    {
-        instance.gameBaseStatusData.Unbind(change);
-    }
+    //public void BindGameUpdate(ChangeDataDelegate change)
+    //{
+    //    instance.gameBaseStatusData.Bind(change);
+    //}
+    //public void UnbindGameUpdate(ChangeDataDelegate change)
+    //{
+    //    instance.gameBaseStatusData.Unbind(change);
+    //}
     public bool IsReadyUpdate()
     {
         return gameBaseStatusData.GetNumberValue("isUpdateGame") == 1;

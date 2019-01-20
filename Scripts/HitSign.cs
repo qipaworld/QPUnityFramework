@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//渐渐消失然后删除自己
 public class HitSign : CountDownRecycleBase {
     public SpriteRenderer sp = null;
     private void Awake()
