@@ -74,6 +74,7 @@ public class SplitAtlas
             AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
         }
     }
+    //这个是复制sprite原有属性的。可能不全面
     static void SpriteDataCopy(SpriteMetaData metaData,string path, TextureImporter rootTexture)
     {
         TextureImporter texImp3 = AssetImporter.GetAtPath(path) as TextureImporter;
