@@ -253,7 +253,7 @@ public class UIController {
             Debug.LogWarning("QIPAWORLD:没有这个UI--"+name);
         }
     }
-    public void PopTop()
+    public bool PopTop()
     {
         int num = uiNameList.Count;
         if(num > 0)
@@ -266,8 +266,10 @@ public class UIController {
                 if (data.GetFreePop() && data.GetOnClickPop())
                 {
                     Pop(name);
+                    return true;
                 }
             }
         }
+        return false;
     }
 }

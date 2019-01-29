@@ -1,26 +1,40 @@
 ﻿using UnityEngine;
 
 public class AudioManager : AudioManagerBase {
-	// public override void Change(DataBase data)
- //    {
-        
- //    	//base.Change(data);
-	// 	isPlay = (data.GetNumberValue ("musicStatus") == 1);
-        
-        
- //        if (isPlay)
- //        {
- //            if (!isAudioPlay && isReady)
- //            {
- //                play();
- //            }
- //        }
- //        else
- //        {
- //            pause();
- //        }
-        
-	// }
+    // public override void Change(DataBase data)
+    //    {
+
+    //    	//base.Change(data);
+    // 	isPlay = (data.GetNumberValue ("musicStatus") == 1);
+
+
+    //        if (isPlay)
+    //        {
+    //            if (!isAudioPlay && isReady)
+    //            {
+    //                play();
+    //            }
+    //        }
+    //        else
+    //        {
+    //            pause();
+    //        }
+    public override void Change(DataBase data)
+    {
+        UpdateStatus(data);
+        if (isPlay)
+        {
+            if (music.loop && (isAudioPlay || isReady))
+            {
+                PlayEx();
+            }
+        }
+        else
+        {
+            PauseEx();
+        }
+    }
+    // }
     //override public void play()
     //{
     //    base.play();

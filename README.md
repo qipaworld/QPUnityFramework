@@ -44,7 +44,7 @@
 
 **Qipa World**
 
-Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.qipaworld
+Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.qipaworld2
 
 ios: http://itunes.apple.com/cn/app/id1289628445
 
