@@ -8,30 +8,9 @@ using UnityEditor.SceneManagement;
 [ExecuteInEditMode]
 public class PlayFromScene : EditorWindow
 {
-    //[MenuItem("QP/Play From Scene")]
-    //public static void Run()
-    //{
-    //    if (EditorApplication.isPlaying == true)
-    //    {
-    //        EditorApplication.isPlaying = false;
-    //        if (PlayerPrefs.GetString("EditorScenePath","") != "")
-    //        {
-
-    //            //EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-    //            EditorSceneManager.OpenScene(PlayerPrefs.GetString("EditorScenePath"));
-    //        }
-    //        return;
-    //    }
-    //    PlayerPrefs.SetString("EditorScenePath", EditorSceneManager.GetActiveScene().path);
-    //    PlayerPrefs.Save();
-    //    EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-    //    EditorSceneManager.OpenScene(EditorBuildSettings.scenes[0].path);
-    //    EditorApplication.isPlaying = true;
-    //}
     [SerializeField] string lastScene = null;
     [SerializeField] int targetScene = 0;
-    [SerializeField] string waitScene = null;
-    [SerializeField] bool hasPlayed = false;
+    [SerializeField] string waitScene = "QPNullScenePlay";
 
     [MenuItem("QP/Play From Scene")]
     public static void Run()
@@ -51,8 +30,15 @@ public class PlayFromScene : EditorWindow
     {
         if (!EditorApplication.isPlaying)
         {
-            if (null == waitScene && !string.IsNullOrEmpty(lastScene))
+            if (EditorSceneManager.GetActiveScene().path == waitScene)
             {
+                EditorApplication.isPlaying = true;
+                waitScene = "QPNullScenePlay";
+                return;
+            }
+            else if ("QPNullScenePlay" == waitScene && scenes[targetScene].path == EditorSceneManager.GetActiveScene().path && !string.IsNullOrEmpty(lastScene))
+            {
+                EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
                 EditorSceneManager.OpenScene(lastScene);
                 lastScene = null;
             }
@@ -63,18 +49,17 @@ public class PlayFromScene : EditorWindow
     {
         if (EditorApplication.isPlaying)
         {
-            if (EditorSceneManager.GetActiveScene().path == waitScene)
-            {
-                waitScene = null;
-            }
             return;
         }
-
-        if (EditorSceneManager.GetActiveScene().path == waitScene)
+        
+        if(waitScene != "QPNullScenePlay")
         {
-            EditorApplication.isPlaying = true;
+            return;
         }
-        if (null == sceneNames) return;
+        if (null == sceneNames)
+        {
+            return;
+        };
         targetScene = EditorGUILayout.Popup(targetScene, sceneNames);
         if (GUILayout.Button("Play"))
         {

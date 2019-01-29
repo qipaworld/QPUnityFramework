@@ -11,6 +11,7 @@ public class AudioManagerBase : MonoBehaviour {
 	public bool isPlay = true;
 	public bool repeat = false;
     protected bool isReady = false;
+    public bool isAudioPlay = false;
 
     //音量
     void Start() {
@@ -23,6 +24,10 @@ public class AudioManagerBase : MonoBehaviour {
 		{
 			music = dataBase.GetObjectValue("defaultMusic") as AudioSource;
 		}
+        if (music)
+        {
+            isAudioPlay = IsPlaying();
+        }
 		if(musicType.ToString()=="bgm"){
 	        dataBase.Bind(Change);
 		}else{
@@ -40,40 +45,58 @@ public class AudioManagerBase : MonoBehaviour {
     }
     public virtual void Change(DataBase data)
     {
-		isPlay = (data.GetNumberValue ("musicStatus") == 1);
-        
+        UpdateStatus(data);
         if (isPlay)
         {
-            if (music.loop&& isReady)
+            if (music.loop&&(isAudioPlay||isReady))
             {
-                play();
+                PlayEx();
             }
         }
         else
         {
-            stop();
+            StopEx();
         }
 	}
+    virtual public void UpdateStatus(DataBase data)
+    {
+        isPlay = (data.GetNumberValue ("musicStatus") == 1);
+    }
+    virtual public void PlayEx()
+    {
+        if ((!music.isPlaying || repeat) && isPlay)
+        {
+            music.Play();
+        }
+
+    }
     virtual public void play(){
-		if ((!music.isPlaying|| repeat) && isPlay){
-			music.Play();
-		}
+        PlayEx();
         isReady = true;
 
     }
+    virtual public void StopEx()
+    {
+        if (music.isPlaying)
+        {
+            music.Stop();
+        }
+    }
     virtual public void stop(){
-		if (music.isPlaying){
-			music.Stop();
-		}
+        StopEx();
         isReady = false;
 
     }
+    virtual public void PauseEx()
+    {
+        if (music.isPlaying)
+        {
+            music.Pause();
+        }
+    }
     virtual public void pause(){
-		if (music.isPlaying){
-			music.Pause();
-		}
+        PauseEx();
         isReady = false;
-
     }
     virtual public void SetVolume(float musicVolume){
 		music.volume = musicVolume;
