@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-public class AudioManagerBase : MonoBehaviour {
+public class AudioStatusBase : MonoBehaviour {
 
 	//音乐文件
 	public AudioSource music;
@@ -12,7 +12,9 @@ public class AudioManagerBase : MonoBehaviour {
 	public bool repeat = false;
     protected bool isReady = false;
     public bool isAudioPlay = false;
-
+    float maxVolume = -1;
+    float nowVolume = 1;
+    //
     //音量
     void Start() {
     	DataBase dataBase = DataManager.Instance.getData("musicData").GetDataValue(musicType.ToString());
@@ -22,17 +24,26 @@ public class AudioManagerBase : MonoBehaviour {
 		}
 		if (!music)
 		{
+            
 			music = dataBase.GetObjectValue("defaultMusic") as AudioSource;
-		}
+            maxVolume = (dataBase.GetObjectValue("defaultAudioStatusBase") as AudioStatusBase).maxVolume;
+
+        }
         if (music)
         {
             isAudioPlay = IsPlaying();
+            if (maxVolume == -1)
+            {
+                maxVolume = music.volume;
+            }
         }
 		if(musicType.ToString()=="bgm"){
 	        dataBase.Bind(Change);
-		}else{
+        }
+        else
+        {
 			DataManager.Instance.getData("musicData").GetDataValue("sound").Bind(Change);
-		}
+        }
     }
     private void OnDestroy()
     {
@@ -48,7 +59,7 @@ public class AudioManagerBase : MonoBehaviour {
         UpdateStatus(data);
         if (isPlay)
         {
-            if (music.loop&&(isAudioPlay||isReady))
+            if (!IsPlaying()&&music.loop&&(isAudioPlay||isReady))
             {
                 PlayEx();
             }
@@ -57,9 +68,13 @@ public class AudioManagerBase : MonoBehaviour {
         {
             StopEx();
         }
+        //SetVolume();
 	}
     virtual public void UpdateStatus(DataBase data)
     {
+        nowVolume = (float)data.GetNumberValue("musicVolume");
+        SetVolume(1);
+
         isPlay = (data.GetNumberValue ("musicStatus") == 1);
     }
     virtual public void PlayEx()
@@ -99,7 +114,7 @@ public class AudioManagerBase : MonoBehaviour {
         isReady = false;
     }
     virtual public void SetVolume(float musicVolume){
-		music.volume = musicVolume;
+		music.volume = musicVolume * maxVolume*nowVolume;
 	}
     virtual public float GetVolume()
     {

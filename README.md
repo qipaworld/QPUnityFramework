@@ -25,7 +25,7 @@
 
 ## 需要插件 ##
 1.DOTween
-2.YamlDoNet for Unity
+2.YamlDotNet for Unity
 3.Native Gallery for Android 
 4.Steamworks.net
 5.firebase

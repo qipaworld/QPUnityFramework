@@ -42,6 +42,8 @@ public class GameBaseDataManager {
             instance.gameBaseData.SetStringValue("iosId", dic["iosId"]);
             instance.gameBaseData.SetStringValue("steamId", dic["steamId"]);
             instance.gameBaseData.SetStringValue("firebaseUrl", dic["firebaseUrl"]);
+            instance.gameBaseData.SetNumberValue("FullSceen", instance.IsFullScene() ? 1 : 0);
+
         }
     }
     public string GetIosId()
@@ -75,5 +77,18 @@ public class GameBaseDataManager {
         url = "https://store.steampowered.com/app/" + GameBaseDataManager.Instance.GetSteamId();
 #endif
         return url;
+    }
+    public bool IsFullScene()
+    {
+        return Screen.fullScreen;
+    }
+    public bool ChangeFullScene()
+    {
+        gameBaseData.SetNumberValue("FullSceen", QipaWorld.Utils.ChangeFullSceen() ? 1:0);
+        return Screen.fullScreen;
+    }
+    public void UpdateFullSceneData()
+    {
+        gameBaseData.SetNumberValue("FullSceen", instance.IsFullScene() ? 1 : 0);
     }
 }

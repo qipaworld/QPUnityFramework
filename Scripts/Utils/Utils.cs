@@ -237,7 +237,14 @@ namespace QipaWorld
 #endif
             return false;
         }
-        
+        static public bool ChangeFullSceen()
+        {
+            bool full = !Screen.fullScreen;
+#if !UNITY_IOS && !UNITY_ANDROID
+            Screen.fullScreen = full;
+#endif
+            return full;
+        }
     }
     
 }
