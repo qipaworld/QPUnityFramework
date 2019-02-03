@@ -47,6 +47,7 @@ public class AudioManager
                 audio.music = music[musicId];
                 muiscData.SetObjectValue("defaultAudioStatusBase", audio);
                 muiscData.SetObjectValue("defaultMusic", music[musicId]);
+                muiscData.Sync = true;
                 instance.muiscDataBase.SetDataValue(key.ToString(), muiscData);
                 musicId++;
             }
