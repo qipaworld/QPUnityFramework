@@ -83,7 +83,7 @@ public class TouchMove : MonoBehaviour {
             }
 
         }
-        else if(Event.current.type == EventType.mouseUp)
+        else if(Event.current.type == EventType.MouseUp)
         {
             MoveEnd();
         }
