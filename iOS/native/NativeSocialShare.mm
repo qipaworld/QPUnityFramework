@@ -158,4 +158,9 @@ extern "C" {
           
         [[NativeSocialShare Instance] nativeShare:status media:media];   
     }  
+    void IOS_PopScoreBox() {
+        if([SKStoreReviewController respondsToSelector:@selector(requestReview)]){
+            [SKStoreReviewController requestReview];
+        }
+    }
 }  

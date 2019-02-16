@@ -11,23 +11,24 @@ public class AutoPopAds : MonoBehaviour {
 
     }
     public void change(DataBase data)
-{
-    if (data.GetIntValue("popAdStatus") == 1)
     {
-            isPop = false;
+        if (data.GetIntValue("popAdStatus") == 1)
+        {
+                isPop = false;
+        }
+        else
+        {
+            isPop = true;
+        }
     }
-    else
-    {
-        isPop = true;
-    }
-}
 // Update is called once per frame
-void Update () {
+    void Update () {
         if (isPop)
         {
             popTime -= Time.deltaTime;
             if (popTime <= 0)
             {
+                isPop = false;
                 StartCoroutine(PopAd());
             }
         }
@@ -35,7 +36,6 @@ void Update () {
     
     private IEnumerator PopAd()
     {
-        isPop = false;
 		while (true) {
 			if (UIController.Instance.getLayerNum() != 0)
 				yield return new WaitForSeconds (1f);
