@@ -40,6 +40,9 @@ public class FireBaseManager  {
         //    instance.gameBaseData.SetStringValue("iosId", dic["iosId"]);
         //    instance.gameBaseData.SetStringValue("firebaseUrl", dic["firebaseUrl"]);
         //}
+#if QIPAWORLD_NOTFIREBASE
+            return;
+#endif
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
 
         try
@@ -71,6 +74,9 @@ public class FireBaseManager  {
     //检测farebase是否可用
     bool CheckReady(bool isLog = false)
     {
+#if QIPAWORLD_NOTFIREBASE
+            return false;
+#endif
         if (!isReady)
         {
             if (isLog)
