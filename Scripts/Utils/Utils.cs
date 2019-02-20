@@ -247,7 +247,7 @@ namespace QipaWorld
         }
         static public Vector3 GetObjectMeshSize(GameObject obj)
         {
-            Vector3 meshSize = obj.GetComponent<MeshFilter>().mesh.bounds.size;
+            Vector3 meshSize = obj.GetComponent<MeshFilter>().sharedMesh.bounds.size;
             // 它的放缩  
             Vector3 scale = obj.transform.localScale;
 
