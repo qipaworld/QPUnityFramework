@@ -14,7 +14,7 @@ public class RandomColor : MonoBehaviour
         
         if (isBright)
         {
-            int k = (int)(c.Length * Random.value);
+            int k = (int)((c.Length-1) * Random.value);
             c[k] = maxColor[k];
             if (k != 0)
             {
@@ -22,7 +22,7 @@ public class RandomColor : MonoBehaviour
             }
             else
             {
-                c[k + 1] = 0;
+                c[2] = 0;
             }
         }
         GetComponent<Renderer>().material.color = new Color(c[0]<=maxColor.r? c[0] : maxColor.r,

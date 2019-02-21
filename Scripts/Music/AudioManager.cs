@@ -29,8 +29,9 @@ public class AudioManager
             {
                 
                 DataBase muiscData = new DataBase();
-                muiscData.SetNumberValue("musicStatus", EncryptionManager.GetInt(key.ToString() + "AudioController", 1));
-                muiscData.SetNumberValue("musicVolume", EncryptionManager.GetDouble(key.ToString() + "musicVolume", 1));
+                double musicVolume = EncryptionManager.GetDouble(key.ToString() + "musicVolume", 1);
+                muiscData.SetNumberValue("musicStatus", musicVolume>0?1:0);
+                muiscData.SetNumberValue("musicVolume", musicVolume);
                 AudioStatusBase audio = null;
                 
                 if (key != MusicEnum.bgm)

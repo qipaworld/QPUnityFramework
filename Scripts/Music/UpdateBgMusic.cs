@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class UpdateBgMusic : TriggerUpdateBgMusic
 {
-    
     // Start is called before the first frame update
     protected override void Start()
     {
