@@ -18,8 +18,15 @@ public class PhoneGravityController : MonoBehaviour
         {
 #if !UNITY_EDITOR
             if(is2D){
-
-                Physics.gravity = new Vector3(Input.acceleration.x*2,Input.acceleration.y*2,0);
+                float y = Input.acceleration.y;
+                if (y > 0.15f)
+                {
+                    y = 1;
+                }else if (y < -0.15f)
+                {
+                    y = -1;
+                }
+                Physics.gravity = new Vector3(Input.acceleration.x*2,y,0);
             }else{
                 Physics.gravity = Input.acceleration;
             }
