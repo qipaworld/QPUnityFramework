@@ -45,9 +45,7 @@ public class UpdateBgMusices : TriggerUpdateBgMusic
         {
             BgMusicManager.Instance.RemoveClip(ac.name);
         }
-        string key = GameBaseStatus.Instance.GetRunSceneName();
-        EncryptionManager.SetString(key + "bgMusicName", GameBaseStatus.Instance.GetGBMusicName());
-        EncryptionManager.Save();
+        
     }
     public void NextMusic() {
         musicIndex++;
@@ -75,6 +73,9 @@ public class UpdateBgMusices : TriggerUpdateBgMusic
             nameTex.text = musicName.Replace('_',' ');
         }
         musicIndex = index;
+        string key = GameBaseStatus.Instance.GetRunSceneName();
+        EncryptionManager.SetString(key + "bgMusicName", GameBaseStatus.Instance.GetGBMusicName());
+        EncryptionManager.Save();
     }
     public void PlayMusic(string name)
     {
