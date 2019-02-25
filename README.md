@@ -50,6 +50,12 @@ ios: http://itunes.apple.com/cn/app/id1289628445
 
 steam: https://store.steampowered.com/app/975710/Qipa_WorldHello_Big_Adventure
 
+**水压套圈游戏机**
+
+Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.waterpressure
+
+ios: http://itunes.apple.com/cn/app/id1453661244
+
 **Jigsaw puzzle - Evolution**
 
 Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.puzzle
