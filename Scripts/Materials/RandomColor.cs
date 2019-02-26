@@ -10,11 +10,15 @@ public class RandomColor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        float[] c = { Random.value + minColor.r , Random.value + minColor.g, Random.value + minColor.b, Random.value + minColor.a };
-        
+        ResetColor();
+    }
+    public void ResetColor()
+    {
+        float[] c = { Random.value + minColor.r, Random.value + minColor.g, Random.value + minColor.b, Random.value + minColor.a };
+
         if (isBright)
         {
-            int k = (int)((c.Length-1) * Random.value);
+            int k = (int)((c.Length - 1) * Random.value);
             c[k] = maxColor[k];
             if (k != 0)
             {
@@ -25,12 +29,10 @@ public class RandomColor : MonoBehaviour
                 c[2] = 0;
             }
         }
-        GetComponent<Renderer>().material.color = new Color(c[0]<=maxColor.r? c[0] : maxColor.r,
+        GetComponent<Renderer>().material.color = new Color(c[0] <= maxColor.r ? c[0] : maxColor.r,
             c[1] <= maxColor.g ? c[1] : maxColor.g,
             c[2] <= maxColor.b ? c[2] : maxColor.b,
             c[3] <= maxColor.a ? c[3] : maxColor.a);
-        
     }
-
 
 }
