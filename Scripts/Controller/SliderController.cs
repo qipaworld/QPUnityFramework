@@ -17,7 +17,11 @@ public class SliderController : MonoBehaviour
     private void Start()
     {
         sliderData = DataManager.Instance.getData(dataKeys);
-        GetComponent<UIData>().changeCallback = UIStatus;
+        UIData uiData = GetComponent<UIData>();
+        if (uiData)
+        {
+            uiData.changeCallback = UIStatus;
+        }
         slider.value = (float)sliderData.GetNumberValue(dataValueKey);
 
         //sliderData.Bind(Change);

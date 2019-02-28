@@ -7,7 +7,21 @@ public class PhoneGravityController : MonoBehaviour
 {
     public Text testTex  = null;
     public bool is2D = true;
+    float gravityScale = 1;
+    public float scale = 9.81f;
     // Update is called once per frame
+    private void Start()
+    {
+        GravityManager.Instance.Bind(ChangeStatus);
+    }
+    private void OnDestroy()
+    {
+        GravityManager.Instance.Unbind(ChangeStatus);
+    }
+    void ChangeStatus(DataBase data)
+    {
+        gravityScale = (float)data.GetNumberValue("gravityScale");
+    }
     void Update()
     {
         if(testTex != null)
@@ -26,7 +40,8 @@ public class PhoneGravityController : MonoBehaviour
                 {
                     y = -1;
                 }
-                Physics.gravity = new Vector3(Input.acceleration.x*2,y,0);
+                
+                Physics.gravity = new Vector3(Input.acceleration.x*scale*gravityScale,y*scale*gravityScale,0);
             }else{
                 Physics.gravity = Input.acceleration;
             }
