@@ -9,9 +9,10 @@ using System.Collections;
 using YamlDotNet.Serialization;
 using System.Collections.Generic;
 using System.IO;
+
 #if UNITY_IOS || UNITY_ANDROID
 using UnityEngine.Advertisements;
-#endif
+
 public delegate void HandleShowResultDelegate(ShowResult result);
 
 public class UADManager
@@ -34,7 +35,6 @@ public class UADManager
        }
    }
    
-#if UNITY_IOS || UNITY_ANDROID
 
    //--- Unity Ads Setup and Initialization
 
@@ -138,7 +138,26 @@ public class UADManager
 			break;
 		}
 	}
-	
-
-#endif
 }
+#else
+public class UADManager
+{
+    public static UADManager instance = null;
+    static public void Init()
+    {
+        instance = new UADManager();
+    }
+    static public UADManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                Init();
+            }
+            return instance;
+        }
+    }
+    
+}
+#endif
