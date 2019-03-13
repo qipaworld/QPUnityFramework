@@ -1,7 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+public interface BoxListGenerateInterface
+{
+    void Init(Vector3 v);
+    //void EndAttack();
+}
 public class BoxListGenerate : MonoBehaviour
 {
     public BoxCollider box;
@@ -18,13 +22,29 @@ public class BoxListGenerate : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        objData = DataManager.Instance.addData(objKey);
+        if (DataManager.Instance.getData(objKey) == null)
+        {
+            objData = DataManager.Instance.addData(objKey);
+        }
+        else
+        {
+            objData = DataManager.Instance.getData(objKey);
+
+        }
         objData.SetObjectValue("BoxListGenerate", this);
         StartCoroutine(Generate());
     }
-
+    public void Reset()
+    {
+        objList.Clear();
+        GameObjManager.Instance.RecycleObjAllByKey(objPath);
+        StartCoroutine(Generate());
+    }
     public IEnumerator Generate()
     {
+        yield return null;
+        yield return null;
+
         for (int i = 0; i < num; i++)
         {
             GameObject obj = GameObjManager.Instance.GetGameObj(objPath, target);
@@ -33,9 +53,14 @@ public class BoxListGenerate : MonoBehaviour
             {
                 objSize = QipaWorld.Utils.GetObjectMeshSize(obj);
             }
-            
-            Vector3 position = GetPositionByIndex();
-            obj.transform.position = position;
+            BoxListGenerateInterface gInterface = obj.GetComponent<BoxListGenerateInterface>();
+            if (gInterface!=null)
+            {
+                Vector3 position = GetPositionByIndex();
+                //obj.transform.position = position;
+                gInterface.Init(position);
+            }
+           
             if (i % maxNum == 0)
             {
                 yield return null;
