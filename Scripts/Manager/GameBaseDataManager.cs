@@ -43,8 +43,13 @@ public class GameBaseDataManager {
             instance.gameBaseData.SetStringValue("steamId", dic["steamId"]);
             instance.gameBaseData.SetStringValue("firebaseUrl", dic["firebaseUrl"]);
             instance.gameBaseData.SetNumberValue("FullSceen", instance.IsFullScene() ? 1 : 0);
+            instance.gameBaseData.SetStringValue("gameName", dic["gameName"]);
 
         }
+    }
+    public string GetGameName()
+    {
+        return gameBaseData.GetStringValue("gameName");
     }
     public string GetIosId()
     {

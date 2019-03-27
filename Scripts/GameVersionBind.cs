@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class GameVersionBind : MonoBehaviour {
 
@@ -8,12 +9,36 @@ public class GameVersionBind : MonoBehaviour {
     void Start () {
         //GameBaseDataManager.Instance.GetBaseData().Bind(ChangeStatus);
         GameBaseStatus.Instance.Bind(ChangeStatus);
-	}
+        StartCoroutine(DownloadGameVersion());
+    }
     private void OnDestroy()
     {
         GameBaseStatus.Instance.Unbind(ChangeStatus);
         //GameBaseDataManager.Instance.GetBaseData().Unbind(ChangeStatus);
     }
+    
+    public IEnumerator DownloadGameVersion()
+    {
+        string url = "http://nodeserver.qipa.world:3150?eventType=getVersion&gameName=" + GameBaseDataManager.Instance.GetGameName() + "&runPlatform=" + QipaWorld.Utils.GetDeviceStr();
+        UnityWebRequest webRequest = UnityWebRequest.Get(url);
+        yield return webRequest.SendWebRequest();
+
+        //异常处理，很多博文用了error!=null这是错误的，请看下文其他属性部分
+        if (webRequest.isHttpError || webRequest.isNetworkError)
+        {
+            Debug.Log(webRequest.error);
+        }
+           
+        else if(webRequest.responseCode==200)
+        {
+            if (int.Parse(GameBaseDataManager.Instance.GetGameVersion()) < int.Parse(webRequest.downloadHandler.text))
+            {
+                GameBaseStatus.Instance.SetReadyUpdate(true);
+            }
+        }
+        
+    }
+
     // Update is called once per frame
     void ChangeStatus (DataBase data) {
         if (GameBaseStatus.Instance.IsReadyUpdate())
@@ -32,12 +57,14 @@ public class GameVersionBind : MonoBehaviour {
         if (b == SelectStatus.YES)
         {
             ScoreTheGameManager.Instance.GoToStoreScore();
+
         }
         //else if (b == SelectStatus.NO)
         //{
 
         //}
+        //GameBaseStatus.Instance.SetReadyUpdate(false);
     }
-    
+
 
 }
