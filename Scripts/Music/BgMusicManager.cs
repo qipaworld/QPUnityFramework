@@ -54,13 +54,18 @@ public class BgMusicManager
     }
     public void UpdateMusic(string clip, float t)
     {
-        if (clipDic.ContainsKey(clip))
+        if (clipDic.ContainsKey(clip)&&clipDic[clip]!=null)
         {
             UpdateMusic(clipDic[clip], t);
         }
         else if(clip == "Null")
         {
             UpdateMusic(null,t,true);
+        }
+        else
+        {
+            UpdateMusic(LoadObjManager.Instance.GetLoadObj<AudioClip>("Music/" + clip), t);
+            
         }
     }
     public void Update()

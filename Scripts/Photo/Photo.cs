@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class Photo : MonoBehaviour {
@@ -161,12 +162,12 @@ public class Photo : MonoBehaviour {
     private IEnumerator LoadPhoto(string path)
     {
 
-        WWW www = new WWW("file://" + path);//只能放URL
-        yield return www;
+        UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + path);//只能放URL
+        yield return www.SendWebRequest();
         if (www != null && string.IsNullOrEmpty(www.error))
         {
 
-            Texture2D texture = www.texture;
+            Texture2D texture = DownloadHandlerTexture.GetContent(www);
             //创建 Sprite
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
 
