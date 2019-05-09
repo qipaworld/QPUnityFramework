@@ -35,8 +35,15 @@ public class GameVersionBind : MonoBehaviour {
             {
                 GameBaseStatus.Instance.SetReadyUpdate(true);
             }
+            Debug.Log(webRequest.responseCode + "version update ok");
+
         }
-        
+        else
+        {
+            Debug.Log(webRequest.responseCode + "version update Lost");
+
+        }
+
     }
 
     // Update is called once per frame
