@@ -21,7 +21,7 @@ public class GravityManager
             instance = new GravityManager();
             instance.dataBase = DataManager.Instance.addData("GravityControllerData");
             instance.Bind(instance.ChangeStatus);
-            instance.dataBase.SetNumberValue("gravityScale", EncryptionManager.GetDouble("gravityScale", 1));
+            instance.dataBase.SetNumberValue("gravityScale", EncryptionManager.GetDouble("gravityScale", 0.5));
         }
     }
     public float GetGravityScale()
