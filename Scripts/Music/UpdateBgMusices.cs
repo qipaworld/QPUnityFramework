@@ -50,7 +50,7 @@ public class UpdateBgMusices : TriggerUpdateBgMusic
     }
     public void NextMusic() {
         musicIndex++;
-        if(musicIndex >= clips.Count)
+        if (musicIndex >= clips.Count)
         {
             musicIndex = 0;
         }
