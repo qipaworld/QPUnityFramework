@@ -71,6 +71,13 @@ namespace QipaWorld
             }
             return false;
         }
+        static public bool IsPhone()
+        {
+#if UNITY_IOS || UNITY_ANDROID
+            return true;
+#endif
+            return false;
+        }
         static public bool GetTouchByFingerId(int fingerId, out Touch t)
         {
             t = Input.GetTouch(0);

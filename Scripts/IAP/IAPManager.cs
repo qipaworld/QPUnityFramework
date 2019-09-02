@@ -47,7 +47,11 @@ public class IAPManager : IStoreListener
         initStore();   
     }
     void initStore(){
-    
+        if (!QipaWorld.Utils.IsPhone())
+        {
+            isFailed = true;
+            return;
+        }
         if (initNum>=initNumMax || notInitSotre){
             isFailed = true;
             return;
