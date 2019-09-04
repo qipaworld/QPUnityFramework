@@ -26,15 +26,15 @@ public class HintManager {
     
     public void RemoveHint(string k)
     {
-        data.SetStringValue(k,"0");
+        data.SetNumberValue(k,0);
     }
     public void AddHint(string k)
     {
-        data.SetStringValue(k, "1");
+        data.SetNumberValue(k, 1);
     }
     public bool IsHint(string k)
     {
-        return data.GetStringValue(k) == "1";
+        return data.GetNumberValue(k) >0.5f;
     }
     public void BindHint(ChangeDataDelegate change)
     {

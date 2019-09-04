@@ -15,14 +15,14 @@ public class TouchAttackBase : TouchBase
     public bool isDouble = false; // 是否可以持续攻击
     public bool isStartAtk = true;
     //public bool isEndAtk = false;
-    AudioManagerBase audioManager;
+    AudioStatusBase audioManager;
     void Start()
     {
         if (eyeCamera == null)
         {
             eyeCamera = Camera.main;
         }
-        audioManager = transform.GetComponent<AudioManagerBase>();
+        audioManager = transform.GetComponent<AudioStatusBase>();
     }
 
     // Update is called once per frame

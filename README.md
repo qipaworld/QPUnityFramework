@@ -4,11 +4,11 @@
 
 官网: http://qipa.world
 
-<hr>
+<!-- <hr>
 
 **Demo仓库 git@gitee.com:qipaworld/QPUnityFrameWorkTest.git**
 
-<hr>
+<hr> -->
 
 <hr>
 
@@ -25,7 +25,7 @@
 
 ## 需要插件 ##
 1.DOTween
-2.YamlDoNet for Unity
+2.YamlDotNet for Unity
 3.Native Gallery for Android 
 4.Steamworks.net
 5.firebase
@@ -50,17 +50,31 @@ ios: http://itunes.apple.com/cn/app/id1289628445
 
 steam: https://store.steampowered.com/app/975710/Qipa_WorldHello_Big_Adventure
 
+**水压套圈游戏机**
+
+Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.waterpressure
+
+ios: http://itunes.apple.com/cn/app/id1453661244
+
 **Jigsaw puzzle - Evolution**
 
 Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.puzzle
 
 ios: http://itunes.apple.com/cn/app/id1360613396
 
+steam: https://store.steampowered.com/app/1153030/Jigsaw_puzzle__Evolution
+
 **Mushroom Farm**
 
 Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.farm
 
 ios: http://itunes.apple.com/cn/app/id1390316452
+
+**Vent Sandbag - Relieve Stress**
+
+Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.relax
+
+ios: http://itunes.apple.com/cn/app/id1436599130
 
 **Living Time**
 

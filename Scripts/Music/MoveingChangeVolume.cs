@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MoveingChangeVolume : MonoBehaviour
 {
-    public AudioManagerBase music;
+    public AudioStatusBase music;
     public Transform target;
     Vector3 lastPosition;
     public float maxDistance = 1;
@@ -13,7 +13,7 @@ public class MoveingChangeVolume : MonoBehaviour
     {
         if(music == null)
         {
-            music = GetComponent<AudioManagerBase>();
+            music = GetComponent<AudioStatusBase>();
             target = transform;
         }
         lastPosition = target.position;

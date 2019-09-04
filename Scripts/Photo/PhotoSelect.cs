@@ -13,7 +13,7 @@ public class PhotoSelect : MonoBehaviour {
         QipaWorld.Utils.CheckDirectory(Application.persistentDataPath + "/Photo");
 
         // 获取Application.dataPath文件夹下所有的图片路径
-        string[] dirs = Directory.GetFiles((Application.persistentDataPath + "/Photo"), "*.png");
+        string[] dirs = Directory.GetFiles((Application.persistentDataPath + "/Photo"));
         for (int j = 0; j < dirs.Length; j++)
         {
             GameObjManager.Instance.GetGameObj("UIPrefabs/PhotoButton", target).GetComponent<Photo>().SetPhoto(dirs[j]);

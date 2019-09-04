@@ -53,6 +53,8 @@ public class PhotoSetting : MonoBehaviour {
         DataManager.Instance.getData("GameStatus").SetStringValue("PhotoName", saveImageKey);
         UIController.Instance.Pop("PhotoSelect");
         EncryptionManager.SetString("PhotoName", saveImageKey);
+        EncryptionManager.Save();
+
         Cancel();
 
         //        if (screenshotCamera != null)

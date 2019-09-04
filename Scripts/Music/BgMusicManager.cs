@@ -5,13 +5,14 @@ using UnityEngine;
 public class BgMusicManager
 {
     public static BgMusicManager instance = null;
-    AudioManagerBase audioManager;
+    AudioStatusBase audioManager;
     Dictionary<string,AudioClip> clipDic = new Dictionary<string, AudioClip>();
     float time = 0;
     float maxTime = 0;
     AudioClip clip;
     bool isFadeOut = false;
     bool isUptate = false;
+    //float maxVolume = 1;
     static public BgMusicManager Instance
     {
         get
@@ -20,12 +21,13 @@ public class BgMusicManager
         }
     }
 
-    static public void Init(AudioManagerBase audio)
+    static public void Init(AudioStatusBase audio)
     {
         if (instance == null)
         {
             instance = new BgMusicManager();
             instance.audioManager = audio;
+            //instance.maxVolume = AudioManager.Instance.GetBGVolume();
             Timer.Instance.BindUpdate(instance.Update);
         }
     }
@@ -52,13 +54,18 @@ public class BgMusicManager
     }
     public void UpdateMusic(string clip, float t)
     {
-        if (clipDic.ContainsKey(clip))
+        if (clipDic.ContainsKey(clip)&&clipDic[clip]!=null)
         {
             UpdateMusic(clipDic[clip], t);
         }
         else if(clip == "Null")
         {
             UpdateMusic(null,t,true);
+        }
+        else
+        {
+            UpdateMusic(LoadObjManager.Instance.GetLoadObj<AudioClip>("Music/" + clip), t);
+            
         }
     }
     public void Update()
@@ -110,4 +117,10 @@ public class BgMusicManager
             clipDic.Remove(k);
         }
     }
+    //public void SetVolume(float f)
+    //{
+    //    //maxVolume = f;
+    //    audioManager.SetVolume(f);
+        
+    //}
 }

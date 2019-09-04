@@ -23,12 +23,12 @@ public class GameBaseStatus {
     {
         instance = new GameBaseStatus();
         instance.gameBaseStatusData = DataManager.Instance.addData("GameBaseStatus");
+        instance.gameBaseStatusData.Sync = true;
         instance.gameBaseStatusData.SetNumberValue("pauseGame", 0);
         instance.gameBaseStatusData.SetStringValue("GameSceneName", "StartScene");
         instance.gameBaseStatusData.SetStringValue("StartGameSceneName", "StartScene");
         instance.gameBaseStatusData.SetNumberValue("GameError", 0);
         instance.gameBaseStatusData.SetNumberValue("isUpdateGame", 0);
-
     }
     public void PauseGame(string key)
     {

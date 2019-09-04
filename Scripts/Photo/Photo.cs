@@ -1,13 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class Photo : MonoBehaviour {
 
+    public static bool isSave = false;
     public Image image = null;
     public Sprite originSp = null;
     string key = "";
+    int maxSize = 2048;
     public void Start()
     {
         if(originSp == null)
@@ -21,18 +25,19 @@ public class Photo : MonoBehaviour {
     }
     public void OnClick()
     {
-        if(key == ""){
+        if (key == "")
+        {
             //UIController.Instance.Push(uiName);
             NativeGallery.Permission p = NativeGallery.CheckPermission();
             // Debug.Log(p);
             if (p == NativeGallery.Permission.Granted){
-                PickImage(512);
+                PickImage(maxSize);
             }
             else if(p == NativeGallery.Permission.ShouldAsk)
             {
                 if (NativeGallery.RequestPermission() == NativeGallery.Permission.Granted)
                 {
-                    PickImage(512);
+                    PickImage(maxSize);
                 }
             }
             else{
@@ -51,12 +56,15 @@ public class Photo : MonoBehaviour {
             DataManager.Instance.getData("GameStatus").SetStringValue("PhotoName", "");
             UIController.Instance.Pop("PhotoSelect");
             EncryptionManager.SetString("PhotoName", "");
+            EncryptionManager.Save();
         }
         else
         {
             DataManager.Instance.getData("GameStatus").SetStringValue("PhotoName", key);
             UIController.Instance.Pop("PhotoSelect");
             EncryptionManager.SetString("PhotoName", key);
+            EncryptionManager.Save();
+
         }
     }
    
@@ -80,15 +88,38 @@ public class Photo : MonoBehaviour {
             if (path != null)
             {
                 // Create Texture from selected image
-                Texture2D texture = NativeGallery.LoadImageAtPath(path, maxSize);
-                if (texture == null)
+                //NativeGallery.cop
+                
+                if (!isSave)
                 {
-                    Debug.Log("Couldn't load texture from " + path);
-                    return;
+                    Texture2D texture = NativeGallery.LoadImageAtPath(path, maxSize);
+                    if (texture == null)
+                    {
+                        Debug.Log("Couldn't load texture from " + path);
+                        return;
+                    }
+                    Sprite sp = Sprite.Create(texture, new Rect(Vector2.zero, new Vector2(texture.width, texture.height)), Vector2.zero);
+                    GameObject ui = UIController.Instance.Push("PhotoSetting");
+                    ui.GetComponentInChildren<PhotoSetting>().Init(sp);
                 }
-                Sprite sp = Sprite.Create(texture, new Rect(Vector2.zero, new Vector2(texture.width, texture.height)), Vector2.zero);
-                GameObject ui = UIController.Instance.Push("PhotoSetting");
-                ui.GetComponentInChildren<PhotoSetting>().Init(sp);
+                else
+                {
+                    QipaWorld.Utils.CheckDirectory(Application.persistentDataPath + "/Photo");
+                    string saveImageKey = Application.persistentDataPath + "/Photo/" + QipaWorld.Utils.GetTimeStamp() + Path.GetExtension(path);
+                    File.Copy(path, saveImageKey);
+                    //byte[] bytes = texture.EncodeToPNG();
+                    ////保存
+                    //System.IO.File.WriteAllBytes(saveImageKey, bytes);
+                    //File.c
+                    //FileUtil.CopyFileOrDirectory(path, "destpath/YourFileOrFolder");
+                    DataManager.Instance.getData("GameStatus").SetStringValue("PhotoName", saveImageKey);
+                    //UIController.Instance.Pop("PhotoSelect");
+                    EncryptionManager.SetString("PhotoName", saveImageKey);
+                    EncryptionManager.Save();
+                    UIController.Instance.Pop("PhotoSelect");
+
+                }
+
 
 
                 // Assign texture to a temporary quad and destroy it after 5 seconds
@@ -112,14 +143,15 @@ public class Photo : MonoBehaviour {
         if(key == ""){
             image.sprite = originSp;
             image.SetNativeSize();
-            image.transform.localScale = new Vector3(1f, 1f, 1);
+            //image.transform.localScale = new Vector3(1f, 1f, 1);
             image.color = new Color(1, 1, 1, 0.72f);
         }else if (key == "origin")
         {
-            image.sprite = LoadObjManager.Instance.GetLoadObj<Sprite>("bzbq/shadait0_32");
+            image.sprite = LoadObjManager.Instance.GetLoadObj<Sprite>("originPhoto");
             //image.sprite = sprite;
-            image.SetNativeSize();
-            image.transform.localScale = new Vector3(1.3f, 1.3f, 1);
+            image.rectTransform.sizeDelta = GetComponent<RectTransform>().sizeDelta*0.85f;
+            //image.SetNativeSize();
+            //image.transform.localScale = new Vector3(1.3f, 1.3f, 1);
             image.color = new Color(1, 1, 1, 1);
         }
         else{
@@ -130,18 +162,21 @@ public class Photo : MonoBehaviour {
     private IEnumerator LoadPhoto(string path)
     {
 
-        WWW www = new WWW("file://" + path);//只能放URL
-        yield return www;
+        UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + path);//只能放URL
+        yield return www.SendWebRequest();
         if (www != null && string.IsNullOrEmpty(www.error))
         {
 
-            Texture2D texture = www.texture;
+            Texture2D texture = DownloadHandlerTexture.GetContent(www);
             //创建 Sprite
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
 
             image.sprite = sprite;
-            image.SetNativeSize();
-            image.transform.localScale = new Vector3(1.3f, 1.3f, 1);
+
+            image.rectTransform.sizeDelta = GetComponent<RectTransform>().sizeDelta * 0.85f;
+
+            //image.SetNativeSize();
+            //image.transform.localScale = new Vector3(1.3f, 1.3f, 1);
             image.color = new Color(1, 1, 1, 1);
         }
     }

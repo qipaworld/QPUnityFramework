@@ -568,6 +568,8 @@ public class WebViewObject : MonoBehaviour
         if (webView == null)
             return 0;
         return webView.Get<int>("progress");
+#elif UNITY_STANDALONE_LINUX
+        return 0;
 #endif
     }
 
@@ -587,6 +589,8 @@ public class WebViewObject : MonoBehaviour
         if (webView == null)
             return false;
         return webView.Get<bool>("canGoBack");
+#elif UNITY_STANDALONE_LINUX
+        return false;
 #endif
     }
 
@@ -606,6 +610,8 @@ public class WebViewObject : MonoBehaviour
         if (webView == null)
             return false;
         return webView.Get<bool>("canGoForward");
+#elif UNITY_STANDALONE_LINUX
+        return false;
 #endif
     }
 
@@ -722,6 +728,8 @@ public class WebViewObject : MonoBehaviour
         if (webView == null)
             return null;
         return webView.Call<string>("GetCustomHeaderValue", headerKey);
+#elif UNITY_STANDALONE_LINUX
+        return null;
 #endif
     }
 

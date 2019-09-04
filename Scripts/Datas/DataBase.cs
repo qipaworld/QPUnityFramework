@@ -103,6 +103,11 @@ public class DataBase {
 	public void AddValueToDic<T,V>(T dic,string key,V value)where T: Dictionary<string,V>{
 		if (dic.ContainsKey(key))
 		{
+            
+            if(dic[key].Equals(value))
+            {
+                return;
+            }
 			AddToChangeDic (key,ChangeType.Update);
 			dic[key] = value;
 		}

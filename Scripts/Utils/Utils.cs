@@ -237,7 +237,36 @@ namespace QipaWorld
 #endif
             return false;
         }
-        
+        static public bool ChangeFullSceen()
+        {
+            bool full = !Screen.fullScreen;
+#if !UNITY_IOS && !UNITY_ANDROID
+            Screen.fullScreen = full;
+#endif
+            return full;
+        }
+        static public Vector3 GetObjectMeshSize(GameObject obj)
+        {
+            Vector3 meshSize = obj.GetComponent<MeshFilter>().sharedMesh.bounds.size;
+            // 它的放缩  
+            Vector3 scale = obj.transform.localScale;
+
+            return new Vector3(meshSize.x * scale.x, meshSize.y * scale.y, meshSize.z * scale.z);
+
+
+        }
+        static public float GetTouchPressure(Vector2 point,float dis = 5)
+        {
+            for (int i = 0; i < Input.touchCount; ++i)
+            {
+                Touch t = Input.GetTouch(i);
+                if ((t.position - point).magnitude<=dis)
+                {
+                    return t.pressure;
+                }
+            }
+            return 1;
+        }
     }
     
 }

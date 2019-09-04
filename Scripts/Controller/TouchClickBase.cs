@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 /// 添加这个组件后，就可以点击到对应layerId 的物体了。
 /// 可以自己写一个类继承该组件重写OnClick方法
 /// </summary>
-[RequireComponent(typeof(AudioManagerBase))]
+[RequireComponent(typeof(AudioStatusBase))]
 public class TouchClickBase :  TouchBase
 {
 
@@ -19,7 +19,7 @@ public class TouchClickBase :  TouchBase
     
     public bool isAudio = false;
     float onlickTime;
-    AudioManagerBase audioManager;
+    AudioStatusBase audioManager;
     void Start()
     {
         if (eyeCamera == null)
@@ -27,7 +27,7 @@ public class TouchClickBase :  TouchBase
             eyeCamera = Camera.main;
         }
         //layerMask = (1 << layerId);
-        audioManager = transform.GetComponent<AudioManagerBase>();
+        audioManager = transform.GetComponent<AudioStatusBase>();
     }
 
     // Update is called once per frame

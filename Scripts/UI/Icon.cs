@@ -17,10 +17,10 @@ public class Icon : MonoBehaviour {
     public Image boarderImage = null;
     public string key;
     public  bool isAudio = true;
-    AudioManagerBase audioManager;
+    AudioStatusBase audioManager;
     public void Start()
     {
-        audioManager = transform.GetComponent<AudioManagerBase>();
+        audioManager = transform.GetComponent<AudioStatusBase>();
     }
     public void Reset(string key, Action<Icon> callback = null,string num = null){
         // this.iconType = iconType;

@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ButtonAudio : AudioManagerBase, IPointerDownHandler {
+public class ButtonAudio : MonoBehaviour, IPointerDownHandler {
 
-	public void OnPointerDown(PointerEventData eventData)
+    public AudioStatusBase audioStatusBase = null;
+    private void Start()
+    {
+        if (!audioStatusBase)
+        {
+            audioStatusBase = AudioManager.Instance.GetDefaultSoundAudio();
+        }
+    }
+    public void OnPointerDown(PointerEventData eventData)
 	{
-		if (isPlay && music) {
-			//播放音乐
-			music.Play();
-		}
-	}
+        audioStatusBase.play();
+
+    }
 
 }
