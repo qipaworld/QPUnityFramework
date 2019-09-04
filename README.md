@@ -4,11 +4,11 @@
 
 官网: http://qipa.world
 
-<hr>
+<!-- <hr>
 
 **Demo仓库 git@gitee.com:qipaworld/QPUnityFrameWorkTest.git**
 
-<hr>
+<hr> -->
 
 <hr>
 
@@ -62,11 +62,19 @@ Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.puzzle
 
 ios: http://itunes.apple.com/cn/app/id1360613396
 
+steam: https://store.steampowered.com/app/1153030/Jigsaw_puzzle__Evolution
+
 **Mushroom Farm**
 
 Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.farm
 
 ios: http://itunes.apple.com/cn/app/id1390316452
+
+**Vent Sandbag - Relieve Stress**
+
+Android: https://play.google.com/store/apps/details?id=com.qipaworld.game.relax
+
+ios: http://itunes.apple.com/cn/app/id1436599130
 
 **Living Time**
 
