@@ -1,5 +1,5 @@
-﻿using Firebase;
-using Firebase.Unity.Editor;
+﻿//using Firebase;
+//using Firebase.Unity.Editor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -228,7 +228,7 @@ public class FireBaseManager  {
         {
             return;
         }
-        try { Firebase.Analytics.FirebaseAnalytics.LogEvent(key); } catch (Exception e) { }
+        //try { Firebase.Analytics.FirebaseAnalytics.LogEvent(key); } catch (Exception e) { }
 
     }
 }
