@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace QipaWorld
-{
 
 public class AudioManager
 {
@@ -82,5 +80,4 @@ public class AudioManager
     {
         return GetVolume(MusicEnum.sound.ToString());
     }
-}
 }

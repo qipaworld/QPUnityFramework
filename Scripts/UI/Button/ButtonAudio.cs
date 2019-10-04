@@ -10,7 +10,7 @@ public class ButtonAudio : MonoBehaviour, IPointerDownHandler {
     {
         if (!audioStatusBase)
         {
-            audioStatusBase = QipaWorld.AudioManager.Instance.GetDefaultSoundAudio();
+            audioStatusBase = AudioManager.Instance.GetDefaultSoundAudio();
         }
     }
     public void OnPointerDown(PointerEventData eventData)
